@@ -16,6 +16,7 @@ islem_turlerı = """
     1.6- ÇOKLU POLİGON OLUŞTURMA
 2- SHAPEFILE AÇMA
 3- SHAPEFILE AKTARMA
+
 """
 while True:
     secim = input("Lütfen bir işlem türü seçiniz.Çıkış yapmak için 0 diyebilirsiniz.\nCevap:")
