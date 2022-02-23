@@ -1,11 +1,27 @@
 from shapely.geometry import Point   #gerekli kütüphane
 
+"""         OLUŞTURULACAK POİNTLER İÇİN ÖZNİTELİK BİLGİLERİNİ İÇEREN CLASSLARIM         """
+class point2d():
+    geometri_tip = "Point"
+    def __init__(self):
+        nokta_adi = str()
+        x_koordinati = float()
+        y_koordinati = float()
+class point3d():
+    geometri_tip = "Point Z"
+    def __init__(self):
+        nokta_adi = str()
+        x_koordinati = float()
+        y_koordinati = float()
+        z_koordinati = float()
+"""         NOKTA OLUŞTURMA         """
 def nokta_olustur():
     for i in range(1):  #hatalı durumlarda break kullanılması için 1 döngülük for kullanıyoruz.
         ikid_nokta = "" #z bilgisi içermeyen nokta için ön tanımlı değişken
         ucd_nokta = ""  #z bilgisi içeren nokta için ön tanımlı değişken
         print("İşleme devam edebilirsiniz.\nSırasıyla noktalnın x,y ve varsa z değerini giriniz. z değeri yoksa eğer, boş bırakabilir veya 0 girebilirsiniz.")
         try:
+            nokta_adi = input("Nokta Adı:")
             x_degeri = float((input("Nokta-x:")).replace(",", ".")) #kullanıcıdan x değeri alma
             y_degeri = float((input("Nokta-y:")).replace(",", ".")) #kullanıcıdan y değeri alma
             z_degeri = input("Nokta-z:")     #kullanıcıdan z değeri alma
@@ -17,6 +33,7 @@ def nokta_olustur():
             print(f"Hata metni\n{hata}")
             print(f"Yanlış bir seçim yaptınız. Lütfen bir sayı değeri giriniz.")    #2. kez veri istenecek
             try:
+                
                 x_degeri = float((input("Nokta-x:")).replace(",", ".")) #kullanıcıdan x değeri alma
                 y_degeri = float((input("Nokta-y:")).replace(",", ".")) #kullanıcıdan y değeri alma
                 z_degeri = input("Nokta-z:")    #kullanıcıdan z değeri alma
@@ -33,14 +50,14 @@ def nokta_olustur():
             print("Girmiş olduğunuz koordinatlara göre nokta oluşturulmuştur.Lütfen koordinat bilgilerini kontrol ediniz ve onaylayarak işleme devam ediniz.")
             if z_degeri>0 or z_degeri<0:    
                 ucd_nokta = "var"       #kullanıcı z değeri vermiş ise ön tanım olarak yapılan ucd_nokta değişkenine veri atayacak
-                nokta3d= Point([x_degeri,y_degeri,z_degeri])    #z değeri olduğu için point objesine z değeri aktarılacak
-                print(ucd_nokta)    #z değeri varsa z değeri içeren pointler ekranda gösterilecek
-                ucd_nokta_tuple=(nokta3d)   #dosya çıktı işlemi için point objesi 3d tuple içine aktarılacak
-            if z_degeri == 0:   #kullanıcı z değeri vermemişse point 2d olarak aktarılacak
+                nokta1 = point3d()      #z değeri var ise point3d classında bir değişken tanımlıyoruz
+                nokta1.nokta_adi, nokta1.x_koordinati,nokta1.y_koordinati,nokta1.z_koordinati = nokta_adi,x_degeri,y_degeri,z_degeri   #değişkenimize kullanıcının verdiği bilgileri giriyoruz.
+                print("Gometri Tipi",nokta1.geometri_tip,"\nNokta Adı",nokta1.nokta_adi,"\nX Koordinatı", nokta1.x_koordinati,"\nY Koordinatı",nokta1.y_koordinati,"\nZ Koordinatı",nokta1.z_koordinati)    #ekranda girilen değerleri gösteriyoruz
+            elif z_degeri == 0:   #kullanıcı z değeri vermemişse point 2d olarak aktarılacak
+                nokta1 = point2d()  # z değeri olmadığı için point2d sınıfnda bir değişken oluşturuyoruz
+                nokta1.nokta_adi, nokta1.x_koordinati,nokta1.y_koordinati = nokta_adi ,x_degeri,y_degeri    #kullanıcıdan gelen bilgileri tanımladığımız değişkene veriyoruz
+                print("Gometri Tipi",nokta1.geometri_tip,"\nNokta Adı",nokta1.nokta_adi,"\nX Koordinatı", nokta1.x_koordinati,"\nY Koordinatı",nokta1.y_koordinati) #kullanıcıya gösterme
                 ikid_nokta = "var"  #z değeri olmadığı için ikid_nokta değişkenine "var" denilecek
-                nokta2d=Point([x_degeri,y_degeri])  #2d point objesi oluşturulacak
-                print(ikid_nokta)   #2d point objesi ekrana çıktı olarak verilecek
-                ikid_nokta_tuple=(nokta2d)  #dosya çıktı işlemi için point objesi 2d tuple içine aktarılacak
 
         """         POİNT OBJESİ OLUŞTURULDUKTAN SONRA DIŞARI AKTARMA SEÇENEKLERİ       """
 
