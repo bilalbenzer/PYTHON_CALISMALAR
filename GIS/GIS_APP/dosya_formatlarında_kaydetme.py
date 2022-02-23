@@ -1,11 +1,11 @@
 """SHP,TXT,XML,XLSX,PDF,CSV,DOCX"""
 import geopandas
 import fiona
-import shapely
+from shapely.geometry import Point
 def shape_olustur2d(args):
     for i in range(1):
         try:
-            konum=input("Dosyayı kaydetmek istediğiniz konumu giriniz. Örnek:C:/Users/.../name.shp\n:")
+            konum=input("Dosyayı kaydetmek istediğiniz konumu giriniz. Örnek:C:/Users/.../name.shp")
             konum = r"{}".format(konum)
         except fiona._err.CPLE_AppDefinedError and fiona.errors.DriverError:
                 print("Konum Bilgisini Yanlış Girdiniz. Lütfen Tekrar Deneyiniz.")
@@ -13,16 +13,26 @@ def shape_olustur2d(args):
         bos_veri_tabanı = geopandas.GeoDataFrame()
         aaa = -1
         bos_veri_tabanı ["geometry"] = None
-        for i in args:
-            aaa +=1
+        if args == tuple:
+            for i in args:
+                aaa +=1
+                try:                
+                    print(i)
+                    bos_veri_tabanı.loc[aaa,"geometry"] = i
+                except TypeError:
+                    print("Shp Formatına çevirilecek Veride Sorun Var. Lütfen Tekrar Deneyiniz.")
+                    break
+            else:
+                bos_veri_tabanı.to_file(konum)
+        elif args != tuple:
             try:                
-                print(i)
-                bos_veri_tabanı.loc[aaa,"geometry"] = i
+                print(args)
+                bos_veri_tabanı.loc[aaa,"geometry"] = args
             except TypeError:
                 print("Shp Formatına çevirilecek Veride Sorun Var. Lütfen Tekrar Deneyiniz.")
                 break
-        else:
-            bos_veri_tabanı.to_file(konum)
+            else:
+                bos_veri_tabanı.to_file(konum)
 def shape_olustur3d(args):
     for i in range(1):
         try:
@@ -34,16 +44,27 @@ def shape_olustur3d(args):
         bos_veri_tabanı = geopandas.GeoDataFrame()
         aaa = -1
         bos_veri_tabanı ["geometry"] = None
-        for i in args:
-            aaa +=1
+        if args == tuple:
+            for i in args:
+                aaa +=1
+                try:                
+                    print(i)
+                    bos_veri_tabanı.loc[aaa,"geometry"] = i
+                except TypeError:
+                    print("Shp Formatına çevirilecek Veride Sorun Var. Lütfen Tekrar Deneyiniz.")
+                    break
+            else:
+                bos_veri_tabanı.to_file(konum)
+        elif args != tuple:
             try:                
-                print(i)
-                bos_veri_tabanı.loc[aaa,"geometry"] = i
+                print(args)
+                bos_veri_tabanı.loc[aaa,"geometry"] = args
             except TypeError:
                 print("Shp Formatına çevirilecek Veride Sorun Var. Lütfen Tekrar Deneyiniz.")
                 break
-        else:
-            bos_veri_tabanı.to_file(konum)
+            else:
+                bos_veri_tabanı.to_file(konum)
+
 def text_olusturma2d(args):
     for i in range(1):
         try:
