@@ -2,7 +2,7 @@
 import geopandas
 import fiona
 import shapely
-from shapely.geometry import Point
+from shapely.geometry import Point,MultiPoint
 import xlsxwriter
 def shape_olustur2d(args):
     for i in range(1):
@@ -33,12 +33,38 @@ def shape_olustur2d(args):
         elif type(args) == shapely.geometry.point.Point:
             try:                
                 print(args)
-                bos_veri_tabanı1.loc[aaa,"geometry"] = args
+                bos_veri_tabanı1.loc[0,"geometry"] = args
             except TypeError:
                 print("Shp Formatına çevirilecek Veride Sorun Var. Lütfen Tekrar Deneyiniz.")
-                break
+                try:                
+                    print(args)
+                    bos_veri_tabanı1.loc[0,"geometry"] = args
+                except TypeError:
+                    print("Shp Formatına çevirilecek Veride Sorun Var. İşlem sonlanmıştır.")
+                    break
             else:
                 bos_veri_tabanı1.to_file(konum)
+        elif type(args) == shapely.geometry.multipoint.MultiPoint:
+            
+            try:                
+                print(args)
+                for i in tuple(args):
+                    aaa+=1
+                    bos_veri_tabanı1.loc[aaa,"geometry"] = i
+            except TypeError:
+                print("Shp Formatına çevirilecek Veride Sorun Var. Lütfen Tekrar Deneyiniz.")
+                try:                
+                    print(args)
+                    for i in tuple(args):
+                        aaa+=1
+                        bos_veri_tabanı1.loc[aaa,"geometry"] = i
+                except TypeError:
+                    print("Shp Formatına çevirilecek Veride Sorun Var. İşlem sonlanmıştır.")
+                    break
+            else:
+                bos_veri_tabanı1.to_file(konum)
+    else:
+        bos_veri_tabanı = 0
 def shape_olustur3d(args):
     for i in range(1):
         try:
@@ -55,7 +81,7 @@ def shape_olustur3d(args):
         bos_veri_tabanı = geopandas.GeoDataFrame()
         aaa = -1
         bos_veri_tabanı ["geometry"] = None
-        if type(args) == tuple:
+        if type(args) == tuple or shapely.geometry.multipoint.MultiPoint:
             for i in args:
                 aaa +=1
                 try:                
@@ -74,17 +100,19 @@ def shape_olustur3d(args):
         elif type(args) == shapely.geometry.point.Point:
             try:                
                 print(args)
-                bos_veri_tabanı.loc[aaa,"geometry"] = args
+                bos_veri_tabanı.loc[0,"geometry"] = args
             except TypeError:
                 print("Shp Formatına çevirilecek Veride Sorun Var. Lütfen Tekrar Deneyiniz.")
                 try:                
                     print(i)
-                    bos_veri_tabanı.loc[aaa,"geometry"] = i
+                    bos_veri_tabanı.loc[0,"geometry"] = i
                 except TypeError:
                     print("Shp Formatına çevirilecek Veride Sorun Var. Program sonlanmıştır.")
                     break
             else:
                 bos_veri_tabanı.to_file(konum)
+    else:
+        bos_veri_tabanı = 0
 def text_olusturma2d(args):
     for i in range(1):
         try:
