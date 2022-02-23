@@ -1,5 +1,4 @@
 from shapely.geometry import Point   #gerekli kütüphane
-import geopandas,pandas,fiona
 
 def nokta_olustur():
     for i in range(1):  #hatalı durumlarda break kullanılması için 1 döngülük for kullanıyoruz.
@@ -17,6 +16,8 @@ def nokta_olustur():
                 break
         else:   #kullanıcı adet bilgisini doğru girmişse else ile devam sağlıyoruz
             print("İşleme devam edebilirsiniz.\nSırasıyla noktaların x,y ve varsa z değerini giriniz. z değeri yoksa eğer, boş bırakabilir veya 0 girebilirsiniz.")
+            nokta_listesi2d = 0
+            nokta_listesi3d = 0
             nokta_listesi2d = []
             nokta_listesi3d = []
             for i in range(adet):
@@ -70,24 +71,36 @@ def nokta_olustur():
             if nokta_listesi2d!=[]:
                 from dosya_formatlarında_kaydetme import shape_olustur2d
                 shape_olustur2d(noktalar2d)
+            else:
+                pass
             if nokta_listesi3d !=[]:
                 print("Projenizde koordinat içeren nokta ögesi bulunmakta. Z değeri içeren noktalar farklı bir shape dosyasında saklanmalıdır.")
                 from dosya_formatlarında_kaydetme import shape_olustur3d
                 shape_olustur3d(noktalar3d)
+            else:
+                pass
         if dosya_format_tip =="2":
             if nokta_listesi2d!=[]:
                 from dosya_formatlarında_kaydetme import text_olusturma2d
                 text_olusturma2d(noktalar2d)
+            else:
+                pass
             if nokta_listesi3d !=[]:
                 from dosya_formatlarında_kaydetme import text_olusturma3d
-                text_olusturma2d(noktalar3d)
+                text_olusturma3d(noktalar3d)
+            else:
+                pass
         if dosya_format_tip =="3":
             if nokta_listesi2d!=[]:
                 from dosya_formatlarında_kaydetme import xml_olusturma2d
                 xml_olusturma2d(noktalar2d)
+            else:
+                pass
             if nokta_listesi3d !=[]:
                 from dosya_formatlarında_kaydetme import xml_olusturma3d
                 xml_olusturma3d(noktalar3d)
+            else:
+                pass
 
 
 

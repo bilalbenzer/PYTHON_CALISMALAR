@@ -1,15 +1,12 @@
 """SHP,TXT,XML,XLSX,PDF,CSV,DOCX"""
 import geopandas
-from shapely.geometry import Point
 import fiona
+import shapely
 def shape_olustur2d(args):
     for i in range(1):
-        schema = {'geometry':'Point',
-        'properties':[('Name','str')]}
         try:
-            konum=input("Dosyayı kaydetmek istediğiniz konumu giriniz. Örnek:C:/Users/.../name.shp")
+            konum=input("Dosyayı kaydetmek istediğiniz konumu giriniz. Örnek:C:/Users/.../name.shp\n:")
             konum = r"{}".format(konum)
-            dosya = fiona.open(konum,mode="w",driver="ESRI Shapefile",schema=schema)
         except fiona._err.CPLE_AppDefinedError and fiona.errors.DriverError:
                 print("Konum Bilgisini Yanlış Girdiniz. Lütfen Tekrar Deneyiniz.")
                 break
@@ -28,12 +25,9 @@ def shape_olustur2d(args):
             bos_veri_tabanı.to_file(konum)
 def shape_olustur3d(args):
     for i in range(1):
-        schema = {'geometry':'Point',
-        'properties':[('Name','str')]}
         try:
             konum=input("Dosyayı kaydetmek istediğiniz konumu giriniz. Örnek:C:/Users/.../name.shp")
             konum = r"{}".format(konum)
-            dosya = fiona.open(konum,mode="w",driver="ESRI Shapefile",schema=schema)
         except fiona._err.CPLE_AppDefinedError and fiona.errors.DriverError:
                 print("Konum Bilgisini Yanlış Girdiniz. Lütfen Tekrar Deneyiniz.")
                 break

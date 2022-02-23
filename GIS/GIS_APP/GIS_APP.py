@@ -18,12 +18,16 @@ islem_turlerı = """
 3- SHAPEFILE AKTARMA
 
 """
-while True:
-    secim = input("Lütfen bir işlem türü seçiniz.Çıkış yapmak için 0 diyebilirsiniz.\nCevap:")
-    if secim =="1.1-":
-        from nokta_olusturma import nokta_olustur
-        nokta_olustur()
-    elif secim=="0":
-        break
+print(giris_messaj)
+try:
+    while True:
+        secim = input("Lütfen bir işlem türü seçiniz.Çıkış yapmak için 0 diyebilirsiniz.\nCevap:")
+        if secim =="1.1-":
+            from coklu_nokta_olusturma import nokta_olustur
+            nokta_olustur()
+        elif secim=="0":
+            break
+except KeyboardInterrupt as hata:
+    print(hata,"\nİşlem iptal edilmiştir.\n",cikis_mesaj)
     
 
