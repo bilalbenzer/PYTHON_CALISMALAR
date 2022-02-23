@@ -113,6 +113,3 @@ def nokta_olustur():
         else:
             print("Dosya format tipini yanlış seçtiniz. Program sonlanmıştır.")
             break
-    else:
-        ikid_nokta_tuple = ()   #aktarım tamamlandıktan sonra tuple nesneleri boşaltılacak
-        ucd_nokta_tuple = ()    
