@@ -115,8 +115,19 @@ Y Koordinatı:   {nokta1.y_koordinati}
             else:
                 pass
             if ucd_nokta=="var":    #3d nokta aktarım
-                from dosya_formatlarında_kaydetme import xlsx_olusturma2d
-                xlsx_olusturma2d(nokta1,geometri_tipi)
+                from dosya_formatlarında_kaydetme import xlsx_olusturma3d
+                xlsx_olusturma3d(nokta1,geometri_tipi)
+            else:
+                pass
+        elif dosya_format_tip =="5":    #kullanıcı 4 girişi verirse bu blok çalışacak
+            if ikid_nokta=="var":   #2d nokta aktarım
+                from dosya_formatlarında_kaydetme import pdf_olusturma2d
+                pdf_olusturma2d(nokta1,geometri_tipi)
+            else:
+                pass
+            if ucd_nokta=="var":    #3d nokta aktarım
+                from dosya_formatlarında_kaydetme import pdf_olusturma3d
+                pdf_olusturma3d(nokta1,geometri_tipi)
             else:
                 pass
         else:
