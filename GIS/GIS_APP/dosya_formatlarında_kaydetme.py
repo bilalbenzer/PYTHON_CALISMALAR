@@ -71,7 +71,7 @@ def shape_olustur2d(args,tip):
                 bos_veri_tabanı1.to_file(konum)
     else:
         bos_veri_tabanı = 0
-def shape_olustur3d(args):
+def shape_olustur3d(args,tip):
     for i in range(1):
         try:
             konum=input("Dosyayı kaydetmek istediğiniz konumu giriniz. Örnek:C:/Users/.../name.shp\nDosya Yolu:")
@@ -87,6 +87,11 @@ def shape_olustur3d(args):
         bos_veri_tabanı = geopandas.GeoDataFrame()
         aaa = -1
         bos_veri_tabanı ["geometry"] = None
+        if tip =="nokta":
+            veri = {'AD': [args.point_ad],'TIP' : [args.geometri_tip], 'X' : [args.x_koordinati], 'Y' : [args.y_koordinati],'Z' : [args.z_koordinati], 'geometry' : [args.geometri]}
+            veritabani = geopandas.GeoDataFrame(veri,crs = "EPSG:4326")
+            print(veritabani)
+            veritabani.to_file(konum)  
         if type(args) == tuple or shapely.geometry.multipoint.MultiPoint:
             for i in args:
                 aaa +=1
