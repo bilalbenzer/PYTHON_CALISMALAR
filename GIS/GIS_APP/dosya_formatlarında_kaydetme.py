@@ -3,7 +3,6 @@ import geopandas
 import fiona
 import shapely
 from shapely.geometry import Point,MultiPoint
-import xlsxwriter
 from siniflar import point2d,point3d
 def shape_olustur2d(args,tip):
     for i in range(1):
@@ -87,110 +86,78 @@ def text_olusturma3d(args,tip):
 {args.point_ad},{args.geometri_tip},{args.x_koordinati},{args.y_koordinati},{args.z_koordinati},{args.geometri}"""
             with open(konum,"w+") as dosya:
                 dosya.write(str(verii)+"\n")
-def xml_olusturma2d(args):
+def xml_olusturma2d(args,tip):
     for i in range(1):
         try:
             konum=input("Dosyayı kaydetmek istediğiniz konumu giriniz. Örnek:C:/Users/.../name.xml\nDosya Yolu:")
-            konum = r"{}".format(konum)
-            with open(konum,"w+") as dosya:
-                for i in args:
-                    print(i)
-                    dosya.write(str(i)+"\n")              
+            konum = r"{}".format(konum)             
         except :
                 print("Konum Bilgisini Yanlış Girdiniz. Lütfen Tekrar Deneyiniz.")
                 try:
                     konum=input("Dosyayı kaydetmek istediğiniz konumu giriniz. Örnek:C:/Users/.../name.xml\nDosya Yolu:")
-                    konum = r"{}".format(konum)
-                    with open(konum,"w+") as dosya:
-                        for i in args:
-                            print(i)
-                            dosya.write(str(i)+"\n")              
+                    konum = r"{}".format(konum)          
                 except :
-                        print("Konum Bilgisini Yanlış Girdiniz. Program sonlanmıştır.") 
-                        break          
-def xml_olusturma3d(args):
+                        print("Konum Bilgisini Yanlış Girdiniz. Program Sonlanmıştır.")
+                        break
+        if tip =="nokta":
+            verii=f"""AD-TIP-X-Y-GEOMETRY
+{args.point_ad},{args.geometri_tip},{args.x_koordinati},{args.y_koordinati},{args.geometri}"""
+            with open(konum,"w+") as dosya:
+                dosya.write(str(verii)+"\n")    
+def xml_olusturma3d(args,tip):
     for i in range(1):
         try:
             konum=input("Dosyayı kaydetmek istediğiniz konumu giriniz. Örnek:C:/Users/.../name.xml\nDosya Yolu:")
-            konum = r"{}".format(konum)
-            with open(konum,"w+") as dosya:
-                for i in args:
-                    print(i)
-                    dosya.write(str(i)+"\n")              
+            konum = r"{}".format(konum)             
         except :
                 print("Konum Bilgisini Yanlış Girdiniz. Lütfen Tekrar Deneyiniz.")
                 try:
                     konum=input("Dosyayı kaydetmek istediğiniz konumu giriniz. Örnek:C:/Users/.../name.xml\nDosya Yolu:")
-                    konum = r"{}".format(konum)
-                    with open(konum,"w+") as dosya:
-                        for i in args:
-                            print(i)
-                            dosya.write(str(i)+"\n")              
+                    konum = r"{}".format(konum)          
                 except :
-                        print("Konum Bilgisini Yanlış Girdiniz.Program sonlanmıştır.")
-                        break           
-def xlsx_olusturma2d(args):
+                        print("Konum Bilgisini Yanlış Girdiniz. Program Sonlanmıştır.")
+                        break
+        if tip =="nokta":
+            verii=f"""AD-TIP-X-Y-Z-GEOMETRY
+{args.point_ad},{args.geometri_tip},{args.x_koordinati},{args.y_koordinati},{args.z_koordinati},{args.geometri}"""
+            with open(konum,"w+") as dosya:
+                dosya.write(str(verii)+"\n")        
+def xlsx_olusturma2d(args,tip):
     for i in range(1):
         try:
             konum=input("Dosyayı kaydetmek istediğiniz konumu giriniz. Örnek:C:/Users/.../name.xlsx\nDosya Yolu:")
             konum = r"{}".format(konum)
-            xlsx_file = xlsxwriter.Workbook(konum)
-            dosya = xlsx_file.add_worksheet()
-            sutun_ad="A"
-            sutun_no=0
-            for i in args:
-                sutun_no+=1
-                dosya.write(sutun_ad+str(sutun_no),str(i))
-            else:
-                xlsx_file.close()
         except :
             print("Konum Bilgisini Yanlış Girdiniz. Lütfen Tekrar Deneyiniz.")
             try:
                 konum=input("Dosyayı kaydetmek istediğiniz konumu giriniz. Örnek:C:/Users/.../name.xlsx\nDosya Yolu:")
                 konum = r"{}".format(konum)
-                xlsx_file = xlsxwriter.Workbook(konum)
-                dosya = xlsx_file.add_worksheet()
-                sutun_ad="A"
-                sutun_no=0
-                for i in args:
-                    sutun_no+=1
-                    dosya.write(sutun_ad+str(sutun_no),str(i))
-                else:
-                    xlsx_file.close()
             except:
                 print("Konum Bilgisini Yanlış Girdiniz.Program sonlanmıştır.")
                 break
+        if tip =="nokta":
+            veri = {'AD': [args.point_ad],'TIP' : [args.geometri_tip], 'X' : [args.x_koordinati], 'Y' : [args.y_koordinati], 'geometry' : [args.geometri]}
+            veritabani = geopandas.GeoDataFrame(veri,crs = "EPSG:4326")
+            print(veritabani)
+            veritabani.to_excel(konum)
+        
 def xlsx_olusturma3d(args):
     for i in range(1):
         try:
             konum=input("Dosyayı kaydetmek istediğiniz konumu giriniz. Örnek:C:/Users/.../name.xlsx\nDosya Yolu:")
             konum = r"{}".format(konum)
-            xlsx_file = xlsxwriter.Workbook(konum)
-            dosya = xlsx_file.add_worksheet()
-            sutun_ad="A"
-            sutun_no=0
-            for i in args:
-                sutun_no+=1
-                dosya.write(sutun_ad+str(sutun_no),str(i))
-            else:
-                xlsx_file.close()
         except :
             print("Konum Bilgisini Yanlış Girdiniz. Lütfen Tekrar Deneyiniz.")
             try:
                 konum=input("Dosyayı kaydetmek istediğiniz konumu giriniz. Örnek:C:/Users/.../name.xlsx\nDosya Yolu:")
                 konum = r"{}".format(konum)
-                xlsx_file = xlsxwriter.Workbook(konum)
-                dosya = xlsx_file.add_worksheet()
-                sutun_ad="A"
-                sutun_no=0
-                for i in args:
-                    sutun_no+=1
-                    dosya.write(sutun_ad+str(sutun_no),str(i))
-                else:
-                    xlsx_file.close()
             except:
                 print("Konum Bilgisini Yanlış Girdiniz.Program sonlanmıştır.")
                 break
-
+        if tip =="nokta":
+            veri = {'AD': [args.point_ad],'TIP' : [args.geometri_tip], 'X' : [args.x_koordinati], 'Y' : [args.y_koordinati],"Z" : [args.z_koordinati], 'geometry' : [args.geometri]}
+            veritabani = geopandas.GeoDataFrame(veri,crs = "EPSG:4326")
+            print(veritabani)
+            veritabani.to_excel(konum)
 
 
