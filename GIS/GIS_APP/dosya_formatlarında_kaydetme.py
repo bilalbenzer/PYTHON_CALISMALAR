@@ -25,50 +25,7 @@ def shape_olustur2d(args,tip):
             veritabani = geopandas.GeoDataFrame(veri,crs = "EPSG:4326")
             print(veritabani)
             veritabani.to_file(konum)          
-        if type(args) == tuple:
-            for i in args:
-                aaa +=1
-                try:                
-                    print(i)
-                    bos_veri_tabanı1.loc[aaa,"geometry"] = i
-                except TypeError:
-                    print("Shp Formatına çevirilecek Veride Sorun Var. Lütfen Tekrar Deneyiniz.")
-                    break
-            else:
-                bos_veri_tabanı1.to_file(konum)
-        elif type(args) == shapely.geometry.point.Point:
-            try:                
-                print(args)
-                bos_veri_tabanı1.loc[0,"geometry"] = args
-            except TypeError:
-                print("Shp Formatına çevirilecek Veride Sorun Var. Lütfen Tekrar Deneyiniz.")
-                try:                
-                    print(args)
-                    bos_veri_tabanı1.loc[0,"geometry"] = args
-                except TypeError:
-                    print("Shp Formatına çevirilecek Veride Sorun Var. İşlem sonlanmıştır.")
-                    break
-            else:
-                bos_veri_tabanı1.to_file(konum)
-        elif type(args) == shapely.geometry.multipoint.MultiPoint:
-            
-            try:                
-                print(args)
-                for i in tuple(args):
-                    aaa+=1
-                    bos_veri_tabanı1.loc[aaa,"geometry"] = i
-            except TypeError:
-                print("Shp Formatına çevirilecek Veride Sorun Var. Lütfen Tekrar Deneyiniz.")
-                try:                
-                    print(args)
-                    for i in tuple(args):
-                        aaa+=1
-                        bos_veri_tabanı1.loc[aaa,"geometry"] = i
-                except TypeError:
-                    print("Shp Formatına çevirilecek Veride Sorun Var. İşlem sonlanmıştır.")
-                    break
-            else:
-                bos_veri_tabanı1.to_file(konum)
+        
     else:
         bos_veri_tabanı = 0
 def shape_olustur3d(args,tip):

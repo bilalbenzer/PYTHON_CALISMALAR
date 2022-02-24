@@ -39,6 +39,7 @@ def nokta_olustur():
             if z_degeri>0 or z_degeri<0:    
                 ucd_nokta = "var"       #kullanıcı z değeri vermiş ise ön tanım olarak yapılan ucd_nokta değişkenine veri atayacak
                 nokta1 = point3d()      #z değeri var ise point3d classında bir değişken tanımlıyoruz
+                #kullanıcıdan gelen bilgileri nokta2d sınıfında oluşan değişkene veriyoruz
                 nokta1.point_ad = nokta_adi
                 nokta1.x_koordinati = x_degeri
                 nokta1.y_koordinati = y_degeri
@@ -51,17 +52,23 @@ Y Koordinatı:   {nokta1.y_koordinati}
 Z Koordinatı:   {nokta1.z_koordinati}
                 """)
             elif z_degeri == 0:   #kullanıcı z değeri vermemişse point 2d olarak aktarılacak
-                nokta1 = point2d()  # z değeri olmadığı için point2d sınıfnda bir değişken oluşturuyoruz
-                nokta1.point_ad = nokta_adi
+                ikid_nokta = "var"  #z değeri olmadığı için ikid_nokta değişkenine "var" denilecek
+                nokta1 = point2d()  # z değeri olmadığı için point2d sınıfnda bir değişken oluşturuyoruz                
+                nokta1.point_ad = nokta_adi 
                 nokta1.x_koordinati = x_degeri
                 nokta1.y_koordinati = y_degeri
                 nokta1.geometri = Point([nokta1.x_koordinati,nokta1.y_koordinati])              
-                ikid_nokta = "var"  #z değeri olmadığı için ikid_nokta değişkenine "var" denilecek
+                
                 print(f"""
 Nokta Adı   :   {nokta1.point_ad}
-X Koordinatı:   {nokta1.x_koordinati}
+X Koordinatı:   {nokta1.x_koordinati}       #kullanıcıya girilen değerlere göre oluşturulan objeleri gösteriyoruz.
 Y Koordinatı:   {nokta1.y_koordinati}
                 """)
+        girilen_bilgiler_dogru_mu = input("Girilen bilgilerde sorun var ise lütfen 1'i tuşlayınız.")
+        if girilen_bilgiler_dogru_mu =="1":
+            nokta_olustur()
+        else:
+            pass
 
         """         POİNT OBJESİ OLUŞTURULDUKTAN SONRA DIŞARI AKTARMA SEÇENEKLERİ       """
         print("Girmiş olduğunuz nokta değerini \"1-SHP,2-TXT,3-XML,4-XLSX,5-PDF,6-CSV,7-DOCX\" formatlarında saklayabilirsiniz.\nBu formatlardan herhangi birisine aktarım yapmak istiyorsanız lütfen ilgili format numarasını tuşlayınız.")
@@ -112,7 +119,6 @@ Y Koordinatı:   {nokta1.y_koordinati}
                 xlsx_olusturma2d(nokta1,geometri_tipi)
             else:
                 pass
-
         else:
             print("Dosya format tipini yanlış seçtiniz. Program sonlanmıştır.")
             break
