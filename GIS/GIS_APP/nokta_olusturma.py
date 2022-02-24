@@ -21,13 +21,13 @@ def nokta_olustur():
             print(f"Hata metni\n{hata}")
             print(f"Yanlış bir seçim yaptınız. Lütfen bir sayı değeri giriniz.")    #2. kez veri istenecek
             try:
-                
+                nokta_adi = input("Nokta Adı:")
                 x_degeri = float((input("Nokta-x:")).replace(",", ".")) #kullanıcıdan x değeri alma
                 y_degeri = float((input("Nokta-y:")).replace(",", ".")) #kullanıcıdan y değeri alma
-                z_degeri = input("Nokta-z:")    #kullanıcıdan z değeri alma
+                z_degeri = input("Nokta-z:")     #kullanıcıdan z değeri alma
                 if z_degeri!='':    #kullanıcı z değeri verirse bu blok çalışacak
-                    z_degeri = float((z_degeri).replace(",", "."))  
-                else:   #kullanıcı z değerini boş bırakırsa bu blok çalışacak
+                    z_degeri = float((z_degeri).replace(",", "."))
+                else:    #kullanıcı z değerini boş bırakırsa bu blok çalışacak
                     z_degeri = 0
             except ValueError as hata:  #hata olması durumunda (float yerine karakter girilmesi vs)
                 print(f"Hata metni\n{hata}")    
@@ -39,13 +39,29 @@ def nokta_olustur():
             if z_degeri>0 or z_degeri<0:    
                 ucd_nokta = "var"       #kullanıcı z değeri vermiş ise ön tanım olarak yapılan ucd_nokta değişkenine veri atayacak
                 nokta1 = point3d()      #z değeri var ise point3d classında bir değişken tanımlıyoruz
-                nokta1.point_ad, nokta1.x_koordinati,nokta1.y_koordinati,nokta1.z_koordinati = nokta_adi,x_degeri,y_degeri,z_degeri   #değişkenimize kullanıcının verdiği bilgileri giriyoruz.
-                print("Gometri Tipi",nokta1.geometri_tip,"\nNokta Adı",nokta1.point_ad,"\nX Koordinatı", nokta1.x_koordinati,"\nY Koordinatı",nokta1.y_koordinati,"\nZ Koordinatı",nokta1.z_koordinati)    #ekranda girilen değerleri gösteriyoruz
+                nokta1.point_ad = nokta_adi
+                nokta1.x_koordinati = x_degeri
+                nokta1.y_koordinati = y_degeri
+                nokta1.z_koordinati = z_degeri
+                nokta1.geometri = Point([nokta1.x_koordinati,nokta1.y_koordinati,nokta1.z_koordinati])
+                print(f"""
+Nokta Adı   :   {nokta1.point_ad}
+X Koordinatı:   {nokta1.x_koordinati}
+Y Koordinatı:   {nokta1.y_koordinati}
+Z Koordinatı:   {nokta1.z_koordinati}
+                """)
             elif z_degeri == 0:   #kullanıcı z değeri vermemişse point 2d olarak aktarılacak
                 nokta1 = point2d()  # z değeri olmadığı için point2d sınıfnda bir değişken oluşturuyoruz
-                nokta1.point_ad, nokta1.x_koordinati,nokta1.y_koordinati = nokta_adi ,x_degeri,y_degeri    #kullanıcıdan gelen bilgileri tanımladığımız değişkene veriyoruz
-                print("Gometri Tipi",nokta1.geometri_tip,"\nNokta Adı",nokta1.point_ad,"\nX Koordinatı", nokta1.x_koordinati,"\nY Koordinatı",nokta1.y_koordinati) #kullanıcıya gösterme
+                nokta1.point_ad = nokta_adi
+                nokta1.x_koordinati = x_degeri
+                nokta1.y_koordinati = y_degeri
+                nokta1.geometri = Point([nokta1.x_koordinati,nokta1.y_koordinati])              
                 ikid_nokta = "var"  #z değeri olmadığı için ikid_nokta değişkenine "var" denilecek
+                print(f"""
+Nokta Adı   :   {nokta1.point_ad}
+X Koordinatı:   {nokta1.x_koordinati}
+Y Koordinatı:   {nokta1.y_koordinati}
+                """)
 
         """         POİNT OBJESİ OLUŞTURULDUKTAN SONRA DIŞARI AKTARMA SEÇENEKLERİ       """
         print("Girmiş olduğunuz nokta değerini \"1-SHP,2-TXT,3-XML,4-XLSX,5-PDF,6-CSV,7-DOCX\" formatlarında saklayabilirsiniz.\nBu formatlardan herhangi birisine aktarım yapmak istiyorsanız lütfen ilgili format numarasını tuşlayınız.")

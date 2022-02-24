@@ -19,16 +19,12 @@ def shape_olustur2d(args,tip):
                     print("Dosya Yolunu 2. kez yanlış girdiniz. Program sonlanmıştır.")
         bos_veri_tabanı1 = geopandas.GeoDataFrame()
         aaa = -1
-        bos_veri_tabanı1 ["AD","TIP","X","Y","geometry"] = None
+        bos_veri_tabanı1 ["AD","TIP","X","Y"] = str(),str(),float(),float()
         if tip =="nokta":
-            bos_veri_tabanı1.loc[0,"AD"] = args.point_ad
-            bos_veri_tabanı1.loc[0,"TIP"] = args.geometri_tip
-            bos_veri_tabanı1.loc[0,"X"] = args.x_koordinati
-            bos_veri_tabanı1.loc[0,"Y"] = args.y_koordinati
-            a= Point([args.x_koordinati,args.y_koordinati])
-            print(a)
-            bos_veri_tabanı1.loc[0,"geometry"] = str(a)
-            print(bos_veri_tabanı1)
+            veri = {'AD': [args.point_ad],'TIP' : [args.geometri_tip], 'X' : [args.x_koordinati], 'Y' : [args.y_koordinati], 'geometry' : [args.geometri]}
+            veritabani = geopandas.GeoDataFrame(veri,crs = "EPSG:4326")
+            print(veritabani)
+            veritabani.to_file(konum)          
         if type(args) == tuple:
             for i in args:
                 aaa +=1
