@@ -48,37 +48,7 @@ def shape_olustur3d(args,tip):
             veri = {'AD': [args.point_ad],'TIP' : [args.geometri_tip], 'X' : [args.x_koordinati], 'Y' : [args.y_koordinati],'Z' : [args.z_koordinati], 'geometry' : [args.geometri]}
             veritabani = geopandas.GeoDataFrame(veri,crs = "EPSG:4326")
             print(veritabani)
-            veritabani.to_file(konum)  
-        if type(args) == tuple or shapely.geometry.multipoint.MultiPoint:
-            for i in args:
-                aaa +=1
-                try:                
-                    print(i)
-                    bos_veri_tabanı.loc[aaa,"geometry"] = i
-                except TypeError:
-                    print("Shp Formatına çevirilecek Veride Sorun Var. Lütfen Tekrar Deneyiniz.")
-                    try:                
-                        print(i)
-                        bos_veri_tabanı.loc[aaa,"geometry"] = i
-                    except TypeError:
-                        print("Shp Formatına çevirilecek Veride Sorun Var. Program sonlanmıştır.")
-                        break
-            else:
-                bos_veri_tabanı.to_file(konum)
-        elif type(args) == shapely.geometry.point.Point:
-            try:                
-                print(args)
-                bos_veri_tabanı.loc[0,"geometry"] = args
-            except TypeError:
-                print("Shp Formatına çevirilecek Veride Sorun Var. Lütfen Tekrar Deneyiniz.")
-                try:                
-                    print(i)
-                    bos_veri_tabanı.loc[0,"geometry"] = i
-                except TypeError:
-                    print("Shp Formatına çevirilecek Veride Sorun Var. Program sonlanmıştır.")
-                    break
-            else:
-                bos_veri_tabanı.to_file(konum)
+            veritabani.to_file(konum) 
     else:
         bos_veri_tabanı = 0
 def text_olusturma2d(args):
