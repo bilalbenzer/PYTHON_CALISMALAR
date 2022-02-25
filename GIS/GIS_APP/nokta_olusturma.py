@@ -13,6 +13,16 @@ def nokta_olustur():
             x_degeri = float((input("Nokta-x:")).replace(",", ".")) #kullanıcıdan x değeri alma
             y_degeri = float((input("Nokta-y:")).replace(",", ".")) #kullanıcıdan y değeri alma
             z_degeri = input("Nokta-z:")     #kullanıcıdan z değeri alma
+            koordinat_sistemi = input("Koordinat Sistemi (EPSG Kodu):")
+            try:
+                koordinat_sistemi = int(koordinat_sistemi)
+                pass
+            except:
+                print("Koordinat Sistemi EPSG Kodunu Yanlış Girdiniz. Lütfen Tekrar denemek için 1, çıkmak için 2'yi tuşlayınız.")
+                if input(":") =="1":
+                    return nokta_olustur()
+                if input(":") =="2":
+                    break
             if z_degeri!='':    #kullanıcı z değeri verirse bu blok çalışacak
                 z_degeri = float((z_degeri).replace(",", "."))
             else:    #kullanıcı z değerini boş bırakırsa bu blok çalışacak
@@ -25,6 +35,16 @@ def nokta_olustur():
                 x_degeri = float((input("Nokta-x:")).replace(",", ".")) #kullanıcıdan x değeri alma
                 y_degeri = float((input("Nokta-y:")).replace(",", ".")) #kullanıcıdan y değeri alma
                 z_degeri = input("Nokta-z:")     #kullanıcıdan z değeri alma
+                koordinat_sistemi = input("Koordinat Sistemi (EPSG Kodu):")
+                try:
+                    koordinat_sistemi = int(koordinat_sistemi)
+                    pass
+                except:
+                    print("Koordinat Sistemi EPSG Kodunu Yanlış Girdiniz. Lütfen Tekrar denemek için 1, çıkmak için 2'yi tuşlayınız.")
+                    if input(":") =="1":
+                        return nokta_olustur()
+                    if input(":") =="2":
+                        break
                 if z_degeri!='':    #kullanıcı z değeri verirse bu blok çalışacak
                     z_degeri = float((z_degeri).replace(",", "."))
                 else:    #kullanıcı z değerini boş bırakırsa bu blok çalışacak
@@ -44,12 +64,14 @@ def nokta_olustur():
                 nokta1.x_koordinati = x_degeri
                 nokta1.y_koordinati = y_degeri
                 nokta1.z_koordinati = z_degeri
+                nokta1.koordinat_sistemi = koordinat_sistemi
                 nokta1.geometri = Point([nokta1.x_koordinati,nokta1.y_koordinati,nokta1.z_koordinati])
                 print(f"""
-Nokta Adı   :   {nokta1.point_ad}
-X Koordinatı:   {nokta1.x_koordinati}
-Y Koordinatı:   {nokta1.y_koordinati}
-Z Koordinatı:   {nokta1.z_koordinati}
+Nokta Adı   :       {nokta1.point_ad}
+X Koordinatı:       {nokta1.x_koordinati}
+Y Koordinatı:       {nokta1.y_koordinati}
+Z Koordinatı:       {nokta1.z_koordinati}
+Koordinat Sistemi:  {nokta1.koordinat_sistemi}
                 """)
             elif z_degeri == 0:   #kullanıcı z değeri vermemişse point 2d olarak aktarılacak
                 ikid_nokta = "var"  #z değeri olmadığı için ikid_nokta değişkenine "var" denilecek
@@ -57,12 +79,14 @@ Z Koordinatı:   {nokta1.z_koordinati}
                 nokta1.point_ad = nokta_adi 
                 nokta1.x_koordinati = x_degeri
                 nokta1.y_koordinati = y_degeri
+                nokta1.koordinat_sistemi = koordinat_sistemi
                 nokta1.geometri = Point([nokta1.x_koordinati,nokta1.y_koordinati])              
                 
                 print(f"""
-Nokta Adı   :   {nokta1.point_ad}
-X Koordinatı:   {nokta1.x_koordinati}       #kullanıcıya girilen değerlere göre oluşturulan objeleri gösteriyoruz.
-Y Koordinatı:   {nokta1.y_koordinati}
+Nokta Adı   :       {nokta1.point_ad}
+X Koordinatı:       {nokta1.x_koordinati}
+Y Koordinatı:       {nokta1.y_koordinati}
+Koordinat Sistemi:  {nokta1.koordinat_sistemi}
                 """)
         girilen_bilgiler_dogru_mu = input("Girilen bilgilerde sorun var ise lütfen 1'i tuşlayınız.")
         if girilen_bilgiler_dogru_mu =="1":
@@ -128,6 +152,17 @@ Y Koordinatı:   {nokta1.y_koordinati}
             if ucd_nokta=="var":    #3d nokta aktarım
                 from dosya_formatlarında_kaydetme import pdf_olusturma3d
                 pdf_olusturma3d(nokta1,geometri_tipi)
+            else:
+                pass
+        elif dosya_format_tip =="6":    #kullanıcı 4 girişi verirse bu blok çalışacak
+            if ikid_nokta=="var":   #2d nokta aktarım
+                from dosya_formatlarında_kaydetme import csv_olusturma2d
+                csv_olusturma2d(args, tip)(nokta1,geometri_tipi)
+            else:
+                pass
+            if ucd_nokta=="var":    #3d nokta aktarım
+                from dosya_formatlarında_kaydetme import csv_olusturma3d
+                csv_olusturma3d(args, tip)(nokta1,geometri_tipi)
             else:
                 pass
         else:

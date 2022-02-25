@@ -22,7 +22,7 @@ def shape_olustur2d(args,tip):
         bos_veri_tabanı1 ["AD","TIP","X","Y"] = str(),str(),float(),float()
         if tip =="nokta":
             veri = {'AD': [args.point_ad],'TIP' : [args.geometri_tip], 'X' : [args.x_koordinati], 'Y' : [args.y_koordinati], 'geometry' : [args.geometri]}
-            veritabani = geopandas.GeoDataFrame(veri,crs = "EPSG:4326")
+            veritabani = geopandas.GeoDataFrame(veri,crs = args.koordinat_sistemi)
             print(veritabani)
             veritabani.to_file(konum)          
         
@@ -46,7 +46,7 @@ def shape_olustur3d(args,tip):
         bos_veri_tabanı ["geometry"] = None
         if tip =="nokta":
             veri = {'AD': [args.point_ad],'TIP' : [args.geometri_tip], 'X' : [args.x_koordinati], 'Y' : [args.y_koordinati],'Z' : [args.z_koordinati], 'geometry' : [args.geometri]}
-            veritabani = geopandas.GeoDataFrame(veri,crs = "EPSG:4326")
+            veritabani = geopandas.GeoDataFrame(veri,crs =f"EPSG:{args.koordinat_sistemi}")
             print(veritabani)
             veritabani.to_file(konum) 
     else:
@@ -217,5 +217,40 @@ GEOMETRY        :{args.geometri}
             b.set_font("Arial","B",15)
             b.write(8,verii)
             b.output(konum,"F")
-
+def csv_olusturma2d(args,tip):
+    for i in range(1):
+        try:
+            konum=input("Dosyayı kaydetmek istediğiniz konumu giriniz. Örnek:C:/Users/.../name.csv\nDosya Yolu:")
+            konum = r"{}".format(konum)
+        except :
+            print("Konum Bilgisini Yanlış Girdiniz. Lütfen Tekrar Deneyiniz.")
+            try:
+                konum=input("Dosyayı kaydetmek istediğiniz konumu giriniz. Örnek:C:/Users/.../name.csv\nDosya Yolu:")
+                konum = r"{}".format(konum)
+            except:
+                print("Konum Bilgisini Yanlış Girdiniz.Program sonlanmıştır.")
+                break
+        if tip =="nokta":
+            veri = {'AD': [args.point_ad],'TIP' : [args.geometri_tip], 'X' : [args.x_koordinati], 'Y' : [args.y_koordinati], 'geometry' : [args.geometri]}
+            veritabani = geopandas.GeoDataFrame(veri,crs = "EPSG:4326")
+            print(veritabani)
+            veritabani.csv(konum)
+def csv_olusturma3d(args,tip):
+    for i in range(1):
+        try:
+            konum=input("Dosyayı kaydetmek istediğiniz konumu giriniz. Örnek:C:/Users/.../name.csv\nDosya Yolu:")
+            konum = r"{}".format(konum)
+        except :
+            print("Konum Bilgisini Yanlış Girdiniz. Lütfen Tekrar Deneyiniz.")
+            try:
+                konum=input("Dosyayı kaydetmek istediğiniz konumu giriniz. Örnek:C:/Users/.../name.csv\nDosya Yolu:")
+                konum = r"{}".format(konum)
+            except:
+                print("Konum Bilgisini Yanlış Girdiniz.Program sonlanmıştır.")
+                break
+        if tip =="nokta":
+            veri = {'AD': [args.point_ad],'TIP' : [args.geometri_tip], 'X' : [args.x_koordinati], 'Y' : [args.y_koordinati],'Z' : [args.z_koordinati], 'geometry' : [args.geometri]}
+            veritabani = geopandas.GeoDataFrame(veri,crs = "EPSG:4326")
+            print(veritabani)
+            veritabani.csv(konum)
 

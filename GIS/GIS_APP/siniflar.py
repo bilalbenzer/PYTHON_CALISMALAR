@@ -6,6 +6,7 @@ class point2d():
         point_ad = str()
         x_koordinati = float()
         y_koordinati = float()
+        koordinat_sistemi = str()
         geometri = Point()
 
 
@@ -17,6 +18,7 @@ class point3d():
         x_koordinati = float()
         y_koordinati = float()
         z_koordinati = float()
+        koordinat_sistemi = str()
         geometri = Point()
 
 
