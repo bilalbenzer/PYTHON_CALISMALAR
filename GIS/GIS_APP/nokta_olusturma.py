@@ -58,37 +58,25 @@ def nokta_olustur():
             print("Girmiş olduğunuz koordinatlara göre nokta oluşturulmuştur.Lütfen koordinat bilgilerini kontrol ediniz ve onaylayarak işleme devam ediniz.")
             if z_degeri>0 or z_degeri<0:    
                 ucd_nokta = "var"       #kullanıcı z değeri vermiş ise ön tanım olarak yapılan ucd_nokta değişkenine veri atayacak
-                nokta1 = point3d()      #z değeri var ise point3d classında bir değişken tanımlıyoruz
+                nokta1 = point3d(point_name=nokta_adi,x_koordinati=x_degeri,y_koordinati=y_degeri,z_koordinati=z_degeri,crs_kod_epsg=koordinat_sistemi)      #z değeri var ise point3d classında bir değişken tanımlıyoruz
                 #kullanıcıdan gelen bilgileri nokta2d sınıfında oluşan değişkene veriyoruz
-                nokta1.point_ad = nokta_adi
-                nokta1.x_koordinati = x_degeri
-                nokta1.y_koordinati = y_degeri
-                nokta1.z_koordinati = z_degeri
-                nokta1.koordinat_sistemi = koordinat_sistemi
-                nokta1.geometri = Point([nokta1.x_koordinati,nokta1.y_koordinati,nokta1.z_koordinati])
                 print(f"""
-Nokta Adı   :       {nokta1.point_ad}
-X Koordinatı:       {nokta1.x_koordinati}
-Y Koordinatı:       {nokta1.y_koordinati}
-Z Koordinatı:       {nokta1.z_koordinati}
-Koordinat Sistemi:  {nokta1.koordinat_sistemi}
+Nokta Adı   :       {nokta1.name}
+X Koordinatı:       {nokta1.x}
+Y Koordinatı:       {nokta1.y}
+Z Koordinatı:       {nokta1.z}
+Koordinat Sistemi:  {nokta1.crs_system}
                 """)
             elif z_degeri == 0:   #kullanıcı z değeri vermemişse point 2d olarak aktarılacak
                 ikid_nokta = "var"  #z değeri olmadığı için ikid_nokta değişkenine "var" denilecek
-                nokta1 = point2d()  # z değeri olmadığı için point2d sınıfnda bir değişken oluşturuyoruz                
-                nokta1.point_ad = nokta_adi 
-                nokta1.x_koordinati = x_degeri
-                nokta1.y_koordinati = y_degeri
-                nokta1.koordinat_sistemi = koordinat_sistemi
-                nokta1.geometri = Point([nokta1.x_koordinati,nokta1.y_koordinati])              
-                
+                nokta1 = point2d(point_name=nokta_adi,x_koordinati=x_degeri,y_koordinati=y_degeri,crs_kod_epsg=koordinat_sistemi)  # z değeri olmadığı için point2d sınıfnda bir değişken oluşturuyoruz                        
                 print(f"""
-Nokta Adı   :       {nokta1.point_ad}
-X Koordinatı:       {nokta1.x_koordinati}
-Y Koordinatı:       {nokta1.y_koordinati}
-Koordinat Sistemi:  {nokta1.koordinat_sistemi}
+Nokta Adı   :       {nokta1.name}
+X Koordinatı:       {nokta1.x}
+Y Koordinatı:       {nokta1.y}
+Koordinat Sistemi:  {nokta1.crs_system}
                 """)
-        girilen_bilgiler_dogru_mu = input("Girilen bilgilerde sorun var ise lütfen 1'i tuşlayınız.")
+        girilen_bilgiler_dogru_mu = input("Girilen bilgilerde sorun var ise lütfen 1'i tuşlayınız.Devam etmek için 'enter' a basınız.")
         if girilen_bilgiler_dogru_mu =="1":
             nokta_olustur()
         else:

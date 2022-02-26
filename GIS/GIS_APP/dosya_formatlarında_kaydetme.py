@@ -17,14 +17,15 @@ def shape_olustur2d(args,tip):
                     konum = r"{}".format(konum)
                 except fiona._err.CPLE_AppDefinedError and fiona.errors.DriverError:
                     print("Dosya Yolunu 2. kez yanlış girdiniz. Program sonlanmıştır.")
-        bos_veri_tabanı1 = geopandas.GeoDataFrame()
+        args.oznitelik_ekleme()
+        obje_oznitelik = args.attibuties
+
         aaa = -1
-        bos_veri_tabanı1 ["AD","TIP","X","Y"] = str(),str(),float(),float()
         if tip =="nokta":
-            veri = {'AD': [args.point_ad],'TIP' : [args.geometri_tip], 'X' : [args.x_koordinati], 'Y' : [args.y_koordinati], 'geometry' : [args.geometri]}
-            veritabani = geopandas.GeoDataFrame(veri,crs = args.koordinat_sistemi)
-            print(veritabani)
-            veritabani.to_file(konum)          
+            print(args.crs_system)
+            bos_veri_tabanı1 = geopandas.GeoDataFrame(obje_oznitelik,crs="EPSG:"+str(args.crs_system))
+            print(bos_veri_tabanı1)
+            bos_veri_tabanı1.to_file(konum)          
         
     else:
         bos_veri_tabanı = 0
