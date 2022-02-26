@@ -14,15 +14,13 @@ def nokta_olustur():
             y_degeri = float((input("Nokta-y:")).replace(",", ".")) #kullanıcıdan y değeri alma
             z_degeri = input("Nokta-z:")     #kullanıcıdan z değeri alma
             koordinat_sistemi = input("Koordinat Sistemi (EPSG Kodu):")
-            try:
-                koordinat_sistemi = int(koordinat_sistemi)
+            if koordinat_sistemi =='':
                 pass
-            except:
-                print("Koordinat Sistemi EPSG Kodunu Yanlış Girdiniz. Lütfen Tekrar denemek için 1, çıkmak için 2'yi tuşlayınız.")
-                if input(":") =="1":
-                    return nokta_olustur()
-                if input(":") =="2":
-                    break
+            elif koordinat_sistemi==int(koordinat_sistemi):
+                pass
+            else:
+                print("Koordinat sistemini yanlış girdiniz. Lütfen tekrar deneyiniz.")
+                return koordinat_sistemi
             if z_degeri!='':    #kullanıcı z değeri verirse bu blok çalışacak
                 z_degeri = float((z_degeri).replace(",", "."))
             else:    #kullanıcı z değerini boş bırakırsa bu blok çalışacak
@@ -36,15 +34,13 @@ def nokta_olustur():
                 y_degeri = float((input("Nokta-y:")).replace(",", ".")) #kullanıcıdan y değeri alma
                 z_degeri = input("Nokta-z:")     #kullanıcıdan z değeri alma
                 koordinat_sistemi = input("Koordinat Sistemi (EPSG Kodu):")
-                try:
-                    koordinat_sistemi = int(koordinat_sistemi)
+                if koordinat_sistemi =='':
                     pass
-                except:
-                    print("Koordinat Sistemi EPSG Kodunu Yanlış Girdiniz. Lütfen Tekrar denemek için 1, çıkmak için 2'yi tuşlayınız.")
-                    if input(":") =="1":
-                        return nokta_olustur()
-                    if input(":") =="2":
-                        break
+                elif koordinat_sistemi==int(koordinat_sistemi):
+                    pass
+                else:
+                    print("Koordinat sistemini yanlış girdiniz. Lütfen tekrar deneyiniz.")
+                    return koordinat_sistemi
                 if z_degeri!='':    #kullanıcı z değeri verirse bu blok çalışacak
                     z_degeri = float((z_degeri).replace(",", "."))
                 else:    #kullanıcı z değerini boş bırakırsa bu blok çalışacak

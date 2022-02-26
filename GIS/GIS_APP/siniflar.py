@@ -14,11 +14,17 @@ class point2d():
         except ValueError:   #kullanıcı, str bir değer verirse eğer, uyarı verilecek ve tekrar girmesi istenecek
             print("Y Koordinatı yanlış girildi. Değeri tekrar atamnız gerekmektedir.")
             self.y = None     #hatalı girişten dolayı y koordinatına none değeri atıyoruz
-        try:    #koordinat sistemi epsg kodu sayısal bir değer olmalı. bunun için try except yapıyoruz
-            self.crs_system = int(crs_kod_epsg)  #gelen değşikenin epsg kodu
-        except ValueError:  #koordinat bilgisi, sayısal olmayan bir değer gelirse none değeri verilecek
-            print("Koordinat sistemi EPSG kodu yanlış girildi. Değeri tekrar atamanız gerekmektedir.")
-            self.crs_system = "4326"  #hatalı girişten dolayı koordinat sistemi wgs84 olarak değişecek
+           
+        if crs_kod_epsg=='':
+            print("Koordinat sistemi EPSG kodu girmediniz. Varsayılan olarak WGS84 koordinat sistemi tanımlandı.")
+            self.crs_system="4326"
+             #koordinat sistemi epsg kodu sayısal bir değer olmalı. bunun için try except yapıyoruz
+        else:
+            try:
+                self.crs_system = int(crs_kod_epsg)  #gelen değşikenin epsg kodu
+            except ValueError:  #koordinat bilgisi, sayısal olmayan bir değer gelirse WGS84 değeri verilecek
+                print("Koordinat sistemi EPSG kodu yanlış girildi. Değeri tekrar atamanız gerekmektedir.")
+                self.crs_system = "4326"  #hatalı girişten dolayı koordinat sistemi 4326 olarak değişecek
         # geometri objesi, x,y ve z değerlerinden oluşur. Bunlardan herhangi birinin hatalı girilemsi durumunda point objesi oluşamaz. Bunun için try except bloğu kullanacağız
         try:   
             if (self.x == None) or (self.y == None):    #point objesi temelde x ve y den oluşur. x veya yden birisi yanlış verilirse eğer obje none olarak değişr
@@ -32,6 +38,21 @@ class point2d():
         self.attibuties = {"AD":[self.name],"TIP":["Point"],"X":[self.x],"Y":[self.y],"geometry":[self.geometry]}    #ilk olarak dict tipinde bir değişkenimiz olmalı. bu sözlüğe varsayılan kolonları ekliyoruz.
         for i,c in oznitelik.items():   #kullanıcının verdiği bilgileri for döngüsü ile dict verimizie veriyoruz.
             self.attibuties.update({i:[c]})
+    def database_olusturma(self):
+        import geopandas
+        try:
+            self.database = geopandas.GeoDataFrame(self.attibuties,crs=self.crs_system)
+            print(self.database)
+        except AttributeError as hata:
+            print(f"Hata Metni:{hata}\nVeritabanı oluşturmak için, öznitelik bilgilerini oluşturmanız gerekmektedir.")
+    def shape_file_olusturma(self,konum=r"dosya.shp"):
+        import geopandas as gpd
+        import fiona as fio
+        self.konum = r"{}".format(konum)
+        try:
+            self.database.to_file(self.konum)
+        except AttributeError as hata:
+            print(f"Hata Metni:{hata}\nShapefile dosyası oluşturmak için, veritabanı oluşturmanız gerekmektedir.")
 
 class point3d():
     geometry_type="Point Z"  #geometri tipi için sınıfa ait bir özellik
@@ -52,11 +73,16 @@ class point3d():
         except ValueError:  #kullanıcı, str bir değer verirse eğer, uyarı verilecek ve tekrar girmesi istenecek
             print("Z Koordinatı yanlış girildi. Değeri tekrar atamnız gerekmektedir.")
             self.z = None   #hatalı girişten dolayı z koordinatına none değeri atıyoruz
-        try:    #koordinat sistemi epsg kodu sayısal bir değer olmalı. bunun için try except yapıyoruz
-            self.crs_system = int(crs_kod_epsg)  #gelen değşikenin epsg kodu
-        except ValueError:  #koordinat bilgisi, sayısal olmayan bir değer gelirse none değeri verilecek
-            print("Koordinat sistemi EPSG kodu yanlış girildi. Değeri tekrar atamanız gerekmektedir.")
-            self.crs_system = "4326"  #hatalı girişten dolayı koordinat sistemi 4326 olarak değişecek
+        if crs_kod_epsg=='':
+            print("Koordinat sistemi EPSG kodu girmediniz. Varsayılan olarak WGS84 koordinat sistemi tanımlandı.")
+            self.crs_system="4326"
+             #koordinat sistemi epsg kodu sayısal bir değer olmalı. bunun için try except yapıyoruz
+        else:
+            try:
+                self.crs_system = int(crs_kod_epsg)  #gelen değşikenin epsg kodu
+            except ValueError:  #koordinat bilgisi, sayısal olmayan bir değer gelirse WGS84 değeri verilecek
+                print("Koordinat sistemi EPSG kodu yanlış girildi. Değeri tekrar atamanız gerekmektedir.")
+                self.crs_system = "4326"  #hatalı girişten dolayı koordinat sistemi 4326 olarak değişecek
         # geometri objesi, x,y ve z değerlerinden oluşur. Bunlardan herhangi birinin hatalı girilemsi durumunda point objesi oluşamaz. Bunun için try except bloğu kullanacağız
         try:   
             if (self.x == None) or (self.y == None):    #point objesi temelde x ve y den oluşur. z değeri isteğe bağlıdır. x veya yden birisi yanlış verilirse eğer obje none olarak değişr
@@ -73,4 +99,18 @@ class point3d():
         self.attibuties = {"AD":[self.name],"TIP":["Point"],"X":[self.x],"Y":[self.y],"Z":[self.z],"geometry":[self.geometry]}    #ilk olarak dict tipinde bir değişkenimiz olmalı. bu sözlüğe varsayılan kolonları ekliyoruz.
         for i,c in oznitelik.items():   #kullanıcının verdiği bilgileri for döngüsü ile dict verimizie veriyoruz.
             self.attibuties.update({i:[c]})
-
+    def database_olusturma(self):
+        import geopandas
+        try:
+            self.database = geopandas.GeoDataFrame(self.attibuties,crs=self.crs_system)
+            print(self.database)
+        except AttributeError as hata:
+            print(f"Hata Metni:{hata}\nVeritabanı oluşturmak için, öznitelik bilgilerini oluşturmanız gerekmektedir.")
+    def shape_file_olusturma(self,konum=r"dosya.shp"):
+        import geopandas as gpd
+        import fiona as fio
+        self.konum = r"{}".format(konum)
+        try:
+            self.database.to_file(self.konum)
+        except AttributeError as hata:
+            print(f"Hata Metni:{hata}\nShapefile dosyası oluşturmak için, veritabanı oluşturmanız gerekmektedir.")
