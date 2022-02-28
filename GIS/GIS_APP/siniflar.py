@@ -99,3 +99,12 @@ class point_olustur():
 class coklu_point_olustur(point_olustur):
     geometry_type = None
     
+import speech_recognition as sr
+import pyttsx3
+a  = sr.Recognizer()
+
+def speaktext(command):
+    engine = pyttsx3.init()
+    engine.say(command)
+    engine.runAndWait()
+speaktext(command)
