@@ -8,6 +8,8 @@ cikis_mesaj = """
 -----------------------------------------------------------"""
 
 islem_turlerı = """
+***SESLİ KONUŞMA ETKİN DEĞİL. SESLİ KONUŞMAYI KULLANMAK İÇİN 1 DİYEBİLİRSİNİZ***
+
 1- GEOMETRİK NESNE OLUŞTURMA
     1.1- NOKTA OLUŞTURMA
     1.2- ÇİZGİ OLUŞTURMA
@@ -27,6 +29,8 @@ try:
         sesli_komut = input("Sesli Komut Kullanmak İstiyor Musunuz?\nEvet:1\nHayır:2\nCevap:")
         print("Lütfen bir işlem türü seçiniz.Çıkış yapmak için 0 diyebilirsiniz.\nCevap:")
         if sesli_komut=="2":
+            ayarlar(sesli_komut_acik_kapali="Kapalı")
+            print("Lütfen bir işlem türü seçiniz.Çıkış yapmak için 0 diyebilirsiniz.\nCevap:")
             secim =input(":")         
             if secim =="1.4-":
                 from coklu_nokta_olusturma import nokta_olustur
@@ -37,9 +41,12 @@ try:
             elif secim=="0":
                 break
         elif sesli_komut=="1":
-            from konusma_tanima import kayit_olustur
-            a = kayit_olustur(acik_kapali="Açık")
+            ###
+            from siniflar import ayarlar, kayit_olustur
+            b = ayarlar(sesli_komut_acik_kapali="Açık")
+            a = kayit_olustur(b)
             a.kayit()
+            ###
             komut1=a.text
             secenekler = ["1.1","1.1-","nokta oluşturma","nokta oluşturmak istiyorum","nokta oluştur"]
             print(f"Cevap:{komut1}")
@@ -48,7 +55,9 @@ try:
                 nokta_olustur()
                 text = 0
             else:
-                print("Durdu")
+                print("Durdu","\n",cikis_mesaj)
+                break
+                
                 
 except KeyboardInterrupt as hata:
     print(hata,"\nİşlem iptal edilmiştir.\n",cikis_mesaj)

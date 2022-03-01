@@ -1,6 +1,31 @@
 from shapely.geometry import Point,MultiPoint
 import geopandas
+class ayarlar():
+    def __init__(self,sesli_komut_acik_kapali):
+        self.sesli_komut = sesli_komut_acik_kapali
+import speech_recognition
+import pyttsx3
+class kayit_olustur(ayarlar):
+    def __init__(self,ayarlar):
+        print(ayarlar.sesli_komut)
+        if ayarlar.sesli_komut == "Açık":
+            self.ses_tanima_acik_kapali = "Açık"
+            print("Sesli Tanıma Açıldı")
+        else:
+            self.ses_tanima_acik_kapali = "Kapalı"
+            print("Sesli Tanıma Kapatıldı.")
+        
+    def kayit(self):
+        if self.ses_tanima_acik_kapali =="Açık":
+            with speech_recognition.Microphone() as source:
+                self.r = speech_recognition.Recognizer()
+                print("Şuan sizi dinliyorum.(5 saniye boyunca..)")
+                self.audio_data = self.r.record(source,duration=2)
+                self.text = str(self.r.recognize_google(self.audio_data,language="tr-TR")).lower()
+        else:
+            print("Sesli Tanıma Kapalı")
 
+        
 class point_olustur():
     geometry_type=None  #geometri tipi için sınıfa ait bir özellik
     def __init__(self,point_name=None,x_koordinati=None,y_koordinati=None,z_koordinati=None,crs_kod_epsg="4326",geometry=None):    #gelen değişkene atamak için örnek nitelikleri
