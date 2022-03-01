@@ -12,13 +12,7 @@ islem_turlerı = """
 
 1- GEOMETRİK NESNE OLUŞTURMA
     1.1- NOKTA OLUŞTURMA
-    1.2- ÇİZGİ OLUŞTURMA
-    1.3- ÇOKGEN OLUŞTURMA
-    1.4- ÇOKLU NOKTA OLUŞTURMA
-    1.5- ÇOKLU ÇİZGİ OLUŞTURMA
-    1.6- ÇOKLU POLİGON OLUŞTURMA
-2- SHAPEFILE AÇMA
-3- SHAPEFILE AKTARMA
+
 
 """
 print(giris_messaj)
