@@ -119,8 +119,41 @@ class point_olustur():
         except fiona.errors.DriverIOError or fiona.errors.DriverError :
             print("Dosya yolu yanlış belirtildi.")
     def show_in_map(self):
-        print(self.database.plot())
+        self.a =self.database.plot()
 
 class coklu_point_olustur(point_olustur):
-    geometry_type = None
+    geometry_type = "Multi Point"
+    point_sayisi = 0
+    def __init__(self,point_olustur):
+        self.point_sayisi = 1
+        self.multi_point = {self.point_sayisi:[point_olustur.name,point_olustur.geometry_type,point_olustur.x,point_olustur.y,point_olustur.z,point_olustur.crs_system,point_olustur.attibuties,point_olustur.database]} 
+    def update_point(self,point_olustur):
+        self.point_sayisi+=1
+        self.multi_point.update({self.point_sayisi:[point_olustur.name,point_olustur.geometry_type,point_olustur.x,point_olustur.y,point_olustur.z,point_olustur.crs_system,point_olustur.attibuties,point_olustur.database,]})
+        return self.multi_point
+    def cikti_ekrani(self):
+        a = 0
+        for x,y in self.multi_point.items():
+            a+=1
+            print(f"""{x}. Nokta:
+Nokta Adı:          {y[0]}
+Geometri Tipi:      {y[1]}
+X Koordinatı:       {y[2]}
+Y Koordinatı:       {y[3]}
+Z Koordinatı:       {y[4]}
+Koordinat Sistemi:  {y[5]}
+Öznitelik Bilgileri:{y[6]}
+""")
+    
+point1 = point_olustur(point_name="nokta1",x_koordinati=123,y_koordinati=345,z_koordinati=5,crs_kod_epsg="4326")
+point2 = point_olustur(point_name="nokta2",x_koordinati=435,y_koordinati=5345,z_koordinati=5,crs_kod_epsg="4326")
+coklu_nokta = coklu_point_olustur(point1)
+
+coklu_nokta.update_point(point2)
+
+coklu_nokta.cikti_ekrani()
+
+        
+
+        
     
