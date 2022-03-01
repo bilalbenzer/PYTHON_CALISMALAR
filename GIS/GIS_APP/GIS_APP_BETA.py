@@ -37,16 +37,18 @@ try:
             elif secim=="0":
                 break
         elif sesli_komut=="1":
-            from konusma_tanima import kayit
-            text1=0
-            kayit()
-            print(text1)
-            secenekler = ["1.1","1.1-","Nokta Oluşturma","Nokta Oluşturmak İstiyorum","Nokta Oluştur"]
-            if text1 in secenekler:
+            from konusma_tanima import kayit_olustur
+            a = kayit_olustur(acik_kapali="Açık")
+            a.kayit()
+            komut1=a.text
+            secenekler = ["1.1","1.1-","nokta oluşturma","nokta oluşturmak istiyorum","nokta oluştur"]
+            print(f"Cevap:{komut1}")
+            if secenekler.count(komut1) >= 1:
                 from nokta_olusturma import nokta_olustur
                 nokta_olustur()
+                text = 0
             else:
-                print("DUrdu")
+                print("Durdu")
                 
 except KeyboardInterrupt as hata:
     print(hata,"\nİşlem iptal edilmiştir.\n",cikis_mesaj)
