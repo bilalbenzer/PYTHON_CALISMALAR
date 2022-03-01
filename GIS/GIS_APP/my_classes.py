@@ -1,5 +1,8 @@
 from shapely.geometry import Point,MultiPoint
 import geopandas
+
+ara_satir_cizgi = "\n------------------------------------------------------------------------------------------------------------------------------------\n"
+
 class settings():
     def __init__(self,voice_command_open_close):
         self.voice_command = voice_command_open_close
@@ -7,23 +10,31 @@ import speech_recognition
 import pyttsx3
 class listen_to_voice_command(settings):
     def __init__(self,settings):
-        print(settings.voice_command)
         if settings.voice_command == "Open":
             self.voice_command = "Open"
-            print("voice command turned on")
+            print("voice command turned off")
+            print(ara_satir_cizgi)
         else:
             self.voice_command = "Close"
-            print("voice command turned on")
+            print("voice command turned off")
+            print(ara_satir_cizgi)
         
     def listen(self):
         if self.voice_command =="Open":
             with speech_recognition.Microphone() as source:
-                self.r = speech_recognition.Recognizer()
-                print("Şuan sizi dinliyorum.(5 saniye boyunca..)\nI'm listening to you right now (for 5 seconds..)")
-                self.audio_data = self.r.record(source,duration=2)
-                self.text = str(self.r.recognize_google(self.audio_data,language="tr-TR")).lower()
+                try:
+                    self.r = speech_recognition.Recognizer()
+                    print("Şuan sizi dinliyorum.(5 saniye boyunca..)\nI'm listening to you right now (for 5 seconds..)")
+                    print(ara_satir_cizgi)
+                    self.audio_data = self.r.record(source,duration=2)
+                    self.text = str(self.r.recognize_google(self.audio_data,language="tr-TR")).lower()
+                except speech_recognition.UnknownValueError as error:
+                    print("Hata Metni / Text Error",error)
+                    print("Sizi anlayamadım. Lütfen klavye ile tuşlayarak devam ediniz.\nI couldn't understand you. Please continue by typing with the keyboard")
+                    print(ara_satir_cizgi)
         else:
-            print("voice command turned on")
+            print("voice command turned off")
+            print(ara_satir_cizgi)
         
 class create_point():
     geometry_type=None  #geometri tipi için sınıfa ait bir özellik
@@ -40,6 +51,7 @@ class create_point():
                 pass
             except ValueError:  #kullanıcı, str bir değer verirse eğer, uyarı verilecek ve tekrar girmesi istenecek
                 print("X Koordinatı yanlış girildi. Değeri tekrar atamanız gerekmektedir.\nThe X Coordinate was entered incorrectly. You need to reassign the value.")
+                print(ara_satir_cizgi)
                 self.x = None   #hatalı girişten dolayı x koordinatına none değeri atıyoruz
                 pass
         if y_coordinate==None:
@@ -50,6 +62,7 @@ class create_point():
                 pass
             except ValueError:  #kullanıcı, str bir değer verirse eğer, uyarı verilecek ve tekrar girmesi istenecek
                 print("Y Koordinatı yanlış girildi. Değeri tekrar atamanız gerekmektedir.\nThe Y Coordinate was entered incorrectly. You need to reassign the value.")
+                print(ara_satir_cizgi)
                 self.y = None   #hatalı girişten dolayı y koordinatına none değeri atıyoruz
                 pass
         if z_coordinate==None:
@@ -62,11 +75,13 @@ class create_point():
                 pass
             except ValueError:  #kullanıcı, str bir değer verirse eğer, uyarı verilecek ve tekrar girmesi istenecek
                 print("Z Koordinatı yanlış girildi. Değeri tekrar atamanız gerekmektedir.\nThe Z Coordinate was entered incorrectly. You need to reassign the value.")
+                print(ara_satir_cizgi)
                 self.z = None   #hatalı girişten dolayı z koordinatına none değeri atıyoruz
                 self.geometry_type = "Point"
                 pass
         if crs_kod_epsg=='':
             print("Koordinat sistemi EPSG kodu girmediniz. Varsayılan olarak WGS84 koordinat sistemi tanımlandı.\nYou have not entered a coordinate system EPSG code. WGS84 coordinate system is defined by default.")
+            print(ara_satir_cizgi)
             self.crs_system="4326"
             pass
              #koordinat sistemi epsg kodu sayısal bir değer olmalı. bunun için try except yapıyoruz
@@ -76,6 +91,7 @@ class create_point():
                 pass
             except ValueError:  #koordinat bilgisi, sayısal olmayan bir değer gelirse WGS84 değeri verilecek
                 print("Koordinat sistemi EPSG kodu yanlış girildi. Değeri tekrar atamanız gerekmektedir.\nCoordinate system EPSG code was entered incorrectly. You need to reassign the value.")
+                print(ara_satir_cizgi)
                 self.crs_system = "4326"  #hatalı girişten dolayı koordinat sistemi 4326 olarak değişecek
                 pass
         # geometri objesi, x,y ve z değerlerinden oluşur. Bunlardan herhangi birinin hatalı girilemsi durumunda point objesi oluşamaz. Bunun için try except bloğu kullanacağız
@@ -98,13 +114,16 @@ class create_point():
                 pass
         except:
             print("Point özniteliklerine varsayılan değerler atandı.\nPoint attributes are assigned default values.")
+            print(ara_satir_cizgi)
     def create_GeoDataFrame(self):
         try:
             self.geo_data_frame = geopandas.GeoDataFrame(self.attribute,crs=self.crs_system)
         except AttributeError as error:
             print(f"Hata Metni/Error Text:{error}\nVeritabanı oluşturmak için, öznitelik bilgilerini oluşturmanız gerekmektedir.\nTo create a database, you must create an attribute.\n")
+            print(ara_satir_cizgi)
     def create_shape_file(self,location=r"file.shp"):
         print(r"varsayılan konum ayarlıdır.Konum bilgisi girilemzse eğer programın kurulu olduğu klasöre dosya.shp olarak kaydedilecektir.\nThe default location is set. If the location information is not entered, it will be saved as file.shp in the folder where the program is installed.")
+        print(ara_satir_cizgi)
         import fiona
         if location == r"file.shp":
             pass
@@ -115,8 +134,10 @@ class create_point():
             self.geo_data_frame.to_file(self.save_location)
         except AttributeError as error:
             print(f"Hata Metni/Error Text:{error}\nShapefile dosyası oluşturmak için, veritabanı oluşturmanız gerekmektedir.\nTo create a shapefile file, you need to create a database")
+            print(ara_satir_cizgi)
         except fiona.errors.DriverIOError or fiona.errors.DriverError :
             print("Dosya yolu yanlış belirtildi.\nThe file path was specified incorrectly.")
+            print(ara_satir_cizgi)
     def show_in_map(self):
         self.a =self.geo_data_frame.plot()
 
@@ -145,3 +166,4 @@ _________________________________________________________________
 -    Öznitelik Bilgileri / Attribute Informations:---{y[6]}      
 __________________________________________________________________
 """)
+            print(ara_satir_cizgi)
