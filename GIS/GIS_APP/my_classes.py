@@ -9,31 +9,64 @@ class settings():
 import speech_recognition
 import pyttsx3
 class listen_to_voice_command(settings):
-    def __init__(self,settings):
+    def __init__(self,settings,language_choice=None):
+        self.language_choice = language_choice
         if settings.voice_command == "Open":
             self.voice_command = "Open"
-            print("voice command turned off")
+            if language_choice=="tr":
+                print("Sesli komut açıldı.")
+            elif language_choice=="en":
+                print("Voice command turned on")
             print(ara_satir_cizgi)
         else:
             self.voice_command = "Close"
-            print("voice command turned off")
+            if self.language_choice=="tr":
+                print("Sesli komut kapatıldı.")
+            elif self.language_choice=="en":
+                print("Voice command turned off")
             print(ara_satir_cizgi)
         
-    def listen(self):
+    def listen_tr(self):
         if self.voice_command =="Open":
             with speech_recognition.Microphone() as source:
                 try:
                     self.r = speech_recognition.Recognizer()
-                    print("Şuan sizi dinliyorum.(5 saniye boyunca..)\nI'm listening to you right now (for 5 seconds..)")
+                    print("Şuan sizi dinliyorum.(5 saniye boyunca..)")
                     print(ara_satir_cizgi)
                     self.audio_data = self.r.record(source,duration=2)
                     self.text = str(self.r.recognize_google(self.audio_data,language="tr-TR")).lower()
                 except speech_recognition.UnknownValueError as error:
-                    print("Hata Metni / Text Error",error)
-                    print("Sizi anlayamadım. Lütfen klavye ile tuşlayarak devam ediniz.\nI couldn't understand you. Please continue by typing with the keyboard")
+                    print("Hata Metni",error)
+                    print("Sizi anlayamadım.")
                     print(ara_satir_cizgi)
+                finally:
+                    print("Lütfen klavye ile tuşlayarak devam ediniz.")
         else:
-            print("voice command turned off")
+            if self.language_choice=="tr":
+                print("Sesli komut kapatıldı.")
+            elif self.language_choice=="en":
+                print("Voice command turned açıldı")
+            print(ara_satir_cizgi)
+    def listen_en(self):
+        if self.voice_command =="Open":
+            with speech_recognition.Microphone() as source:
+                try:
+                    self.r = speech_recognition.Recognizer()
+                    print("I'm listening to you right now (for 5 seconds..)")
+                    print(ara_satir_cizgi)
+                    self.audio_data = self.r.record(source,duration=2)
+                    self.text = str(self.r.recognize_google(self.audio_data,language="en-US")).lower()
+                except speech_recognition.UnknownValueError as error:
+                    print("Text Error",error)
+                    print("I couldn't understand you. Please continue by typing with the keyboard")
+                    print(ara_satir_cizgi)
+                finally:
+                    print("Please continue by typing with the keyboard.")
+        else:
+            if self.language_choice=="tr":
+                print("Sesli komut kapatıldı.")
+            elif self.language_choice=="en":
+                print("Voice command turned açıldı")
             print(ara_satir_cizgi)
         
 class create_point():
