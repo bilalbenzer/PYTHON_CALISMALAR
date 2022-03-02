@@ -25,7 +25,7 @@ class listen_to_voice_command(settings):
             elif self.language_choice=="en":
                 print("Voice command turned off")
             print(ara_satir_cizgi)
-        
+
     def listen_tr(self):
         if self.voice_command =="Open":
             with speech_recognition.Microphone() as source:
@@ -33,13 +33,15 @@ class listen_to_voice_command(settings):
                     self.r = speech_recognition.Recognizer()
                     print("Şuan sizi dinliyorum.(5 saniye boyunca..)")
                     print(ara_satir_cizgi)
-                    self.audio_data = self.r.record(source,duration=2)
+                    self.audio_data = self.r.record(source,duration=3)
                     self.text = str(self.r.recognize_google(self.audio_data,language="tr-TR")).lower()
+                    print(self.text)
                 except speech_recognition.UnknownValueError as error:
                     print("Hata Metni",error)
                     print("Sizi anlayamadım.")
                     print(ara_satir_cizgi)
-                    self.text = 0
+                    self.text = ""
+                    print(self.text)
         else:
             if self.language_choice=="tr":
                 print("Sesli komut kapatıldı.")

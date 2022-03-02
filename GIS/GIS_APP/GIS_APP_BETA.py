@@ -60,15 +60,19 @@ while True:
                             if voice__command=="1": #kullanıcı 1 cevabını verirse sesli komut aktif edilecek
                                 while True:
                                     try:
-                                        from create_point_defs import voice_command_use
-                                        a=voice_command_use("Open")
+                                        from my_classes import settings, listen_to_voice_command
+                                        a = settings(voice_command_open_close="Open")
+                                        b = listen_to_voice_command(a)
+                                        print("Lütfen işlem türünü söyleyiniz.")
+                                        b.listen_tr()
+                                        command1 = b.text
                                         words = ["1","bir","1. seçenek","nokta oluşturma","nokta oluşturmak istiyorum","nokta oluştur","nokta oluştu"]   #sesli tanımadan gelen komutun bu listede olup olmadığı kontrol edilecek.
                                                                                                                                     #olası kelimeler bu liste içinde güncellenecek 
-                                        print(f"Cevap:{a.command1}")  
+ 
                                         print(ara_satir_cizgi)
                                         if words.count(command1) >= 1:  #cevap burada varsa eğer nokta oluşturma modülü çalışacak
-                                            from create_point_defs import create_point_with_voice
-                                            create_point_with_voice()
+                                            from create_point_defs import create_point_with_voice_tr
+                                            a = create_point_with_voice_tr()
                                         else:                           #cevap yoksa eğer kullanıcıya sesli komuta devam edilip edilmeyeceği sorulur
                                             print("Verdiğiniz komut, işlevlerimiz arasında yok. Tekrar deneyiniz.Sesli komutu kapatmak için aşağıda 2 cevabını verebilir veya devam etmek için 1e basabilirsiniz.")
                                             print(ara_satir_cizgi)
@@ -82,6 +86,7 @@ while True:
                                                 print(ara_satir_cizgi)
                                                 break
                                     except AttributeError as error: #herhangi bir attribute error da döngü başa saracak
+                                        print("Hata Oluştu..",error)
                                         pass
                             elif voice__command=="2":   #If the user answers 1, the voice command will be activated.
                                 while True:
@@ -161,6 +166,7 @@ while True:
                     print("Hata Metni/Error Text",error,"\nİşlem iptal edilmiştir./The program has been canceled\n",exit_message_tr,exit_message_en)
                     print(ara_satir_cizgi)
                     break
+
     except KeyboardInterrupt as error:
         print("Hata Metni/Error Text",error,"\nİşlem iptal edilmiştir./The program has been canceled\n",exit_message_tr,exit_message_en)
         print(ara_satir_cizgi)
