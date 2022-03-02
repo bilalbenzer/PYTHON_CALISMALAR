@@ -39,8 +39,7 @@ class listen_to_voice_command(settings):
                     print("Hata Metni",error)
                     print("Sizi anlayamadım.")
                     print(ara_satir_cizgi)
-                finally:
-                    print("Lütfen klavye ile tuşlayarak devam ediniz.")
+                    self.text = 0
         else:
             if self.language_choice=="tr":
                 print("Sesli komut kapatıldı.")
@@ -60,8 +59,6 @@ class listen_to_voice_command(settings):
                     print("Text Error",error)
                     print("I couldn't understand you. Please continue by typing with the keyboard")
                     print(ara_satir_cizgi)
-                finally:
-                    print("Please continue by typing with the keyboard.")
         else:
             if self.language_choice=="tr":
                 print("Sesli komut kapatıldı.")
