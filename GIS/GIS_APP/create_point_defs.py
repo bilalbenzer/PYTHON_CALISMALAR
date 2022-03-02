@@ -1,9 +1,76 @@
 from shapely.geometry import Point   #gerekli kütüphane
-from siniflar import point2d,point3d
-"""         OLUŞTURULACAK POİNTLER İÇİN ÖZNİTELİK BİLGİLERİNİ İÇEREN CLASSLARIM         """
+from my_classes import create_point , create_multi_point
 
-"""         NOKTA OLUŞTURMA         """
-def nokta_olustur():
+def voice_command_use(open_close):
+    from my_classes import settings, listen_to_voice_command 
+    voice_command_open_close = open_close
+    b = settings(voice_command_open_close)
+    a = listen_to_voice_command(b)
+    a.listen_tr()
+    global command1
+    command1=a.text
+    print(command1)
+    return command1
+
+def create_point_with_voice():
+    from GIS_APP_BETA import selected_language
+    if selected_language =="tr":
+        while True:
+            voice_command_use("Open")
+            print(command1)
+            point_name = command1
+            try:
+                voice_command_use("Open")
+                print(command1)
+                x_coordinate = float((command1).replace(",", "."))
+            except ValueError as error:
+                print(f"Hata Metni:{error}\nX koordinatı sayı olmalıdır.")
+                return x_coordinate
+            try:
+                voice_command_use("Open")
+                print(command1)
+                y_coordinate = float((command1).replace(",", "."))
+            except ValueError as error:
+                print(f"Hata Metni:{error}\nX koordinatı sayı olmalıdır.")
+                return y_coordinate 
+            try:
+                voice_command_use("Open")
+                print(command1)
+                z_coordinate = float((command1).replace(",", "."))
+            except ValueError as error:
+                print(f"Hata Metni:{error}\nX koordinatı sayı olmalıdır.")
+                return z_coordinate
+            print("Koordinat Sistemini Boş Bırakırsanız Veya Yanlış Girerseniz 4326 EPSG Kodu Varsayılan Olarak Atanacak.") 
+            voice_command_use("Open")
+            print(command1)
+            coordinat_system = (command1)
+
+            print(f"""Girilen Değerler Aşağıdaki Gibidir.
+Nokta Adı:              {point_name}
+X Koordinatı:           {x_coordinate}
+Y Koordinatı:           {y_coordinate}
+Z Koordinatı:           {z_coordinate}
+Koordinat Sistmei:      {coordinat_system}
+""")
+            print("Girilen Bilgiler Doğru İse 1, Yanlış İse 2 Cevabını Veriniz.\n:")
+            voice_command_use("Open")
+            print(command1)
+            true_false = command1
+            if true_false=="1":
+                print("Girdiğiniz Değer İle Nokta OBjesi Oluşturuluyor. Lütfen Bekleyin...")
+                a = create_point(point_name=point_name,x_coordinate=x_coordinate,y_coordinate=y_coordinate,z_coordinate=z_coordinate,crs_kod_epsg=coordinat_system)
+                print(a.attribute)
+
+
+
+
+
+
+
+
+
+
+
     for i in range(1):  #hatalı durumlarda break kullanılması için 1 döngülük for kullanıyoruz.
         ikid_nokta = "" #z bilgisi içermeyen nokta için ön tanımlı değişken
         ucd_nokta = ""  #z bilgisi içeren nokta için ön tanımlı değişken

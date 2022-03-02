@@ -38,7 +38,7 @@ function_types_en = """
 
 """
 ara_satir_cizgi = "\n------------------------------------------------------------------------------------------------------------------------------------\n"
-
+command1 = ""
 while True:
     try:
     #Program başlangıcında dil seçimi yapılacak #Language will be selected at the start of the program
@@ -51,6 +51,7 @@ while True:
             while True:
                 try:
                     if language_choice == "tr": #Çıktılar vs Türkçe olarak program bu blokta çalışacak
+                        selected_language = "tr"
                         print("Program dili Türkçe olarak ayarlandı.")
                         print(welcome_message_tr)
                         voice__command = input("Sesli Komut Kullanmak İstiyor Musunuz?\nEvet:1\nHayır:2\nCevap:")   #sesli komutun kullanılıp kullanılmayacağına dair kullanıcıdan giriş istenecek
@@ -59,18 +60,15 @@ while True:
                             if voice__command=="1": #kullanıcı 1 cevabını verirse sesli komut aktif edilecek
                                 while True:
                                     try:
-                                        from my_classes import settings, listen_to_voice_command    #sesli komut classının import edilmesi
-                                        voice_command_open_close = "Open"   #sesli komuta 1 cevabı verdilği için class içinde açık veya kapalı olduğunu belirtiyoruz
-                                        b = settings(voice_command_open_close)  #aynı şekilde settings classına da bilgiyi gönderiyoruz
-                                        a = listen_to_voice_command(b)  #kapalı veya açık bilgisini sesli komut dinle classına da gönderiyoruz
-                                        a.listen_tr()   #sesli tanıma başlıyor. türkçe olarak
-                                        command1=a.text #sesli tanımadan gelen texti command1 değişkenine veriyoruz.
-                                        words = ["1","1. seçenek","nokta oluşturma","nokta oluşturmak istiyorum","nokta oluştur"]   #sesli tanımadan gelen komutun bu listede olup olmadığı kontrol edilecek.
+                                        from create_point_defs import voice_command_use
+                                        a=voice_command_use("Open")
+                                        words = ["1","bir","1. seçenek","nokta oluşturma","nokta oluşturmak istiyorum","nokta oluştur","nokta oluştu"]   #sesli tanımadan gelen komutun bu listede olup olmadığı kontrol edilecek.
                                                                                                                                     #olası kelimeler bu liste içinde güncellenecek 
-                                        print(f"Cevap:{command1}")  
+                                        print(f"Cevap:{a.command1}")  
                                         print(ara_satir_cizgi)
                                         if words.count(command1) >= 1:  #cevap burada varsa eğer nokta oluşturma modülü çalışacak
-                                            pass
+                                            from create_point_defs import create_point_with_voice
+                                            create_point_with_voice()
                                         else:                           #cevap yoksa eğer kullanıcıya sesli komuta devam edilip edilmeyeceği sorulur
                                             print("Verdiğiniz komut, işlevlerimiz arasında yok. Tekrar deneyiniz.Sesli komutu kapatmak için aşağıda 2 cevabını verebilir veya devam etmek için 1e basabilirsiniz.")
                                             print(ara_satir_cizgi)
