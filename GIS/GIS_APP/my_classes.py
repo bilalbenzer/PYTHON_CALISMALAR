@@ -72,14 +72,7 @@ class listen_to_voice_command(settings):
                                 pass
                         except ValueError:
                             pass
-                    else:
-                        for i in self.coordinate:
-                            if i != ".":
-                                a = "nokta yok"
-                            elif i ==".":
-                                break
-                        else:
-                            self.coordinate[6] = "."    
+                    else:   
                         print(self.coordinate)
                 except speech_recognition.UnknownValueError as error:
                     print("Hata Metni",error)
