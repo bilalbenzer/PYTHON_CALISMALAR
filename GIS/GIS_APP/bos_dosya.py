@@ -1,17 +1,4 @@
-
-
-text = "795 1546  . 546"
-coordinate = ""
-
-for i in str(text).replace(" ", ""):
-    if i=="." or i=="," or (9>=int(i)>=0) :
-        coordinate+=str(i)
-        print(coordinate)
-    else:
-        text = ""
-        continue
-
-
+import time
 
 
 
