@@ -31,11 +31,56 @@ class listen_to_voice_command(settings):
             with speech_recognition.Microphone() as source:
                 try:
                     self.r = speech_recognition.Recognizer()
-                    print("Şuan sizi dinliyorum.(5 saniye boyunca..)")
+                    print("Şuan sizi dinliyorum.(3 saniye boyunca..)")
                     print(ara_satir_cizgi)
                     self.audio_data = self.r.record(source,duration=3)
                     self.text = str(self.r.recognize_google(self.audio_data,language="tr-TR")).lower()
+                    print("Cevap:",self.text)
+                except speech_recognition.UnknownValueError as error:
+                    print("Hata Metni",error)
+                    print("Sizi anlayamadım.")
+                    print(ara_satir_cizgi)
+                    self.text = ""
                     print(self.text)
+        else:
+            if self.language_choice=="tr":
+                print("Sesli komut kapatıldı.")
+            elif self.language_choice=="en":
+                print("Voice command turned açıldı")
+            print(ara_satir_cizgi)
+    def listen_tr_coordinate(self):
+        if self.voice_command =="Open":
+            with speech_recognition.Microphone() as source:
+                try:
+                    self.r = speech_recognition.Recognizer()
+                    print("Şuan sizi dinliyorum.(5 saniye boyunca..)")
+                    print(ara_satir_cizgi)
+                    self.audio_data = self.r.record(source,duration=8)
+                    self.text = str(self.r.recognize_google(self.audio_data,language="tr-TR")).lower()
+                    print(self.text)
+                    self.coordinate = str()
+                    self.text = (self.text).replace("nokta", ".")
+                    self.text = (self.text).replace("virgül", ".")
+                    self.text = (self.text).replace(",", ".")
+                    liste1 = [".",",","1","2","3","4","5","6","7","8","9","0"]
+                    print(self.text)
+                    for i in str(self.text):
+                        try:
+                            if liste1.count(i):
+                                self.coordinate+=str(i)
+                            else:
+                                pass
+                        except ValueError:
+                            pass
+                    else:
+                        for i in self.coordinate:
+                            if i != ".":
+                                a = "nokta yok"
+                            elif i ==".":
+                                break
+                        else:
+                            self.coordinate[6] = "."    
+                        print(self.coordinate)
                 except speech_recognition.UnknownValueError as error:
                     print("Hata Metni",error)
                     print("Sizi anlayamadım.")
@@ -199,3 +244,4 @@ _________________________________________________________________
 __________________________________________________________________
 """)
             print(ara_satir_cizgi)
+

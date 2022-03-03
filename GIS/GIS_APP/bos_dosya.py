@@ -1,3 +1,32 @@
+
+
+text = "795 1546  . 546"
+coordinate = ""
+
+for i in str(text).replace(" ", ""):
+    if i=="." or i=="," or (9>=int(i)>=0) :
+        coordinate+=str(i)
+        print(coordinate)
+    else:
+        text = ""
+        continue
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 """
 for i in range(1):  #hatalı durumlarda break kullanılması için 1 döngülük for kullanıyoruz.
         ikid_nokta = "" #z bilgisi içermeyen nokta için ön tanımlı değişken

@@ -38,7 +38,6 @@ function_types_en = """
 
 """
 ara_satir_cizgi = "\n------------------------------------------------------------------------------------------------------------------------------------\n"
-command1 = ""
 while True:
     try:
     #Program başlangıcında dil seçimi yapılacak #Language will be selected at the start of the program
@@ -166,8 +165,10 @@ while True:
                     print("Hata Metni/Error Text",error,"\nİşlem iptal edilmiştir./The program has been canceled\n",exit_message_tr,exit_message_en)
                     print(ara_satir_cizgi)
                     break
-
-    except KeyboardInterrupt as error:
+        else:   #Dil seçiminde yanlış seçim yapılırsa bu blok çalışacak ve tekrar giriş yapılması sağlanacak. #If the wrong choice is made in the language selection, this block will work and re-login will be provided.
+            print("You Have Wrong Language Selection. Please try again.")
+            continue
+    except KeyboardInterrupt as error:  #konsolda input girişlerinin iptali durumunda bu komut çalışacak #this command will work in case of cancellation of input entries in console
         print("Hata Metni/Error Text",error,"\nİşlem iptal edilmiştir./The program has been canceled\n",exit_message_tr,exit_message_en)
         print(ara_satir_cizgi)
         break

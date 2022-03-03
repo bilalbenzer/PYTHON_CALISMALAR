@@ -3,54 +3,47 @@ from my_classes import create_point , create_multi_point , settings , listen_to_
 ara_satir_cizgi = "\n------------------------------------------------------------------------------------------------------------------------------------\n"
 
 def listening_you():
-            a = settings("Open")
-            b = listen_to_voice_command(a)
-            b.listen_tr()
-            global command1
-            command1 = b.text
+    a = settings("Open")
+    b = listen_to_voice_command(a)
+    b.listen_tr()
+    global command1
+    command1 = b.text
+def listening_you_for_coordinat():
+    a = settings("Open")
+    b = listen_to_voice_command(a)
+    b.listen_tr_coordinate()
+    global command1
+    command1 = b.coordinate
 
 def create_point_with_voice_tr():
     while True:
         print("Nokta Adını Söyleyiniz.")    #sesli tanıma başlamadan önce kullanıcıya nokta adını söylemesi bildirilir
-        print(ara_satir_cizgi)
-        donus1 = ""
-        listening_you() #ses tanıma başlar
-        if command1 !="":    #
-            point_name = str(command1)
-        else:
-            print("Sesinizi Algılayamadım. Tekrar Deneyiniz.\nNokta Adını Söyleyiniz.")    #sesli tanıma başlamadan önce kullanıcıya nokta adını söylemesi bildirilir
-            print(ara_satir_cizgi)
+        print(ara_satir_cizgi)   
+        for i in range(2):
             listening_you() #ses tanıma başlar
-            if command1 !="":
-                print(f"Nokta Adı: {command1}")
+            if command1 !="":    #
                 point_name = str(command1)
+                break
             else:
-                print("Sesinizi yine algılayamadım. Nokta adı:Nokta olarak girildi. Daha Sonra Düzenleyebilirsiniz.")
+                print("Sesinizi Algılayamadım. Tekrar Deneyiniz.\nNokta Adını Söyleyiniz.")    #sesli tanıma başlamadan önce kullanıcıya nokta adını söylemesi bildirilir
                 print(ara_satir_cizgi)
-                print(f"Nokta Adı: {point_name}")
-                point_name="Nokta"
-        try:
-            print("X Koordinatını Söyleyiniz.Lütfen koordinat bilgisindeki rakamları teker teker söyleyiniz.")
+        else:
+            print("Program Sesinizi Algılayamadı. Lütfen Klavye İle Giriş Yapınız.")
+            point_name = input("Nokta Adı:")
+        for i in range(2):
+            print("X Koordinatını Söyleyiniz.Daha Doğru Bir Tanıma İçin Rakamları Teker Teker Söyleyebilirsiniz.")
             print(ara_satir_cizgi)
-            listening_you()
+            listening_you_for_coordinat()
             if command1 !="":
-                str(command1.replace(" ", ""))
-                x_coordinate = float(str(command1).replace(",", "."))
+                x_coordinate = float(str(command1))
                 print(f"X Koordinatı: {x_coordinate}")
+                break
             else:
-                print("Sesinizi Algılayamadım. Tekrar Deneyiniz.\nNokta Adını Söyleyiniz\n X Koordinatını Söyleyiniz.")
+                print("Sesinizi Algılayamadım. Tekrar Deneyiniz.\nNokta Adını Söyleyiniz\n X Koordinatını Söyleyiniz.\n")
                 print(ara_satir_cizgi)
-                listening_you()
-                if command1 !="":
-                    x_coordinate = float(str(command1).replace(",", "."))
-                    print(f"X Koordinatı: {x_coordinate}")
-                else:
-                    print("Sesizini yine algılayamadım. X Koordinatı:0 olarak girildi. Daha Sonra Düzenleyebilirsiniz.")
-                    x_coordinate = 0
-                    print(f"X Koordinatı: {x_coordinate}")
-        except ValueError as error:
-            print(f"Hata Metni:{error}\nX koordinatı sayı olmalıdır.")
-            return x_coordinate
+        else:
+            print("Program Sesinizi Algılayamadı. Lütfen Klavye İle Giriş Yapınız.")
+
         try:
             print("Y Koordinatını Söyleyiniz.")
             listening_you()
@@ -83,5 +76,5 @@ Koordinat Sistmei:      {coordinat_system}
             print("Girdiğiniz Değer İle Nokta Objesi Oluşturuluyor. Lütfen Bekleyin...")
             a = create_point(point_name=point_name,x_coordinate=x_coordinate,y_coordinate=y_coordinate,z_coordinate=z_coordinate,crs_kod_epsg=coordinat_system)
             print(a.attribute)
-
-listening_you()
+    
+create_point_with_voice_tr()
