@@ -108,61 +108,55 @@ class listen_to_voice_command(settings):
         
 class create_point():
     geometry_type=None  #geometri tipi için sınıfa ait bir özellik
-    def __init__(self,point_name=None,x_coordinate=None,y_coordinate=None,z_coordinate=None,crs_kod_epsg="4326",geometry=None):    #gelen değişkene atamak için örnek nitelikleri
+    def with_keyboard(self,point_name=input("Nokta Adını Giriniz.\n:"),x_coordinate=input("X Koordinatını Giriniz. \n"),y_coordinate=input("Y Koordinatını Giriniz. \n:"),
+    z_coordinate=input("Z Koordinatını Giriniz.\n:"),crs_kod_epsg=input("Koordinat Sistemi EPSG Kodunu Giriniz.\n:"),geometry=None):    #gelen değişkene atamak için örnek nitelikleri
         if point_name==None:
-            self.name = ''
+            self.name = "Point"
         else:
             self.name = str(point_name)  #gelen değişkenin ismi
-        if x_coordinate==None:
-            self.x=None
-        else:
-            try:      #x koordinatı sayısal bir değer olmalı. bunun için try except yapıyoruz
-                self.x = float(x_coordinate)   #gelen değişkenin x koordinatı
-                pass
-            except ValueError:  #kullanıcı, str bir değer verirse eğer, uyarı verilecek ve tekrar girmesi istenecek
-                print("X Koordinatı yanlış girildi. Değeri tekrar atamanız gerekmektedir.\nThe X Coordinate was entered incorrectly. You need to reassign the value.")
-                print(ara_satir_cizgi)
-                self.x = None   #hatalı girişten dolayı x koordinatına none değeri atıyoruz
-                pass
-        if y_coordinate==None:
-            self.y=None
-        else:
-            try:      #y koordinatı sayısal bir değer olmalı. bunun için try except yapıyoruz
-                self.y = float(y_coordinate)   #gelen değişkenin y koordinatı
-                pass
-            except ValueError:  #kullanıcı, str bir değer verirse eğer, uyarı verilecek ve tekrar girmesi istenecek
-                print("Y Koordinatı yanlış girildi. Değeri tekrar atamanız gerekmektedir.\nThe Y Coordinate was entered incorrectly. You need to reassign the value.")
-                print(ara_satir_cizgi)
-                self.y = None   #hatalı girişten dolayı y koordinatına none değeri atıyoruz
-                pass
-        if z_coordinate==None:
-            self.z=None
-            self.geometry_type = "Point"
-        else:
-            try:      #z koordinatı sayısal bir değer olmalı. bunun için try except yapıyoruz
-                self.z = float(z_coordinate)   #gelen değişkenin z koordinatı
-                self.geometry_type = "Point Z"
-                pass
-            except ValueError:  #kullanıcı, str bir değer verirse eğer, uyarı verilecek ve tekrar girmesi istenecek
-                print("Z Koordinatı yanlış girildi. Değeri tekrar atamanız gerekmektedir.\nThe Z Coordinate was entered incorrectly. You need to reassign the value.")
-                print(ara_satir_cizgi)
-                self.z = None   #hatalı girişten dolayı z koordinatına none değeri atıyoruz
-                self.geometry_type = "Point"
-                pass
-        if crs_kod_epsg=='':
-            print("Koordinat sistemi EPSG kodu girmediniz. Varsayılan olarak WGS84 koordinat sistemi tanımlandı.\nYou have not entered a coordinate system EPSG code. WGS84 coordinate system is defined by default.")
+
+        try:      #x koordinatı sayısal bir değer olmalı. bunun için try except yapıyoruz
+            self.x = float(x_coordinate)   #gelen değişkenin x koordinatı
+            pass
+        except ValueError:  #kullanıcı, str bir değer verirse eğer, uyarı verilecek ve tekrar girmesi istenecek
+            print("X Koordinatı yanlış girildiği için 0 değeri verildi. Değeri tekrar atamanız gerekmektedir.\nThe X Coordinate was entered incorrectly. You need to reassign the value.")
             print(ara_satir_cizgi)
-            self.crs_system="4326"
+            self.x = 0   #hatalı girişten dolayı x koordinatına none değeri atıyoruz
+            pass
+
+        try:      #y koordinatı sayısal bir değer olmalı. bunun için try except yapıyoruz
+            self.y = float(y_coordinate)   #gelen değişkenin y koordinatı
+            pass
+        except ValueError:  #kullanıcı, str bir değer verirse eğer, uyarı verilecek ve tekrar girmesi istenecek
+            print("Y Koordinatı yanlış girildiği için 0 değeri verildi. Değeri tekrar atamanız gerekmektedir.\nThe Y Coordinate was entered incorrectly. You need to reassign the value.")
+            print(ara_satir_cizgi)
+            self.y = 0   #hatalı girişten dolayı y koordinatına none değeri atıyoruz
+            pass
+
+        try:      #z koordinatı sayısal bir değer olmalı. bunun için try except yapıyoruz
+            self.z = float(z_coordinate)   #gelen değişkenin z koordinatı
+            self.geometry_type = "Point Z"
+            pass
+        except ValueError:  #kullanıcı, str bir değer verirse eğer, uyarı verilecek ve tekrar girmesi istenecek
+            print("Z Koordinatı yanlış girildiği için 0 değeri verildi. Değeri tekrar atamanız gerekmektedir.\nThe Z Coordinate was entered incorrectly. You need to reassign the value.")
+            print(ara_satir_cizgi)
+            self.z = 0   #hatalı girişten dolayı z koordinatına none değeri atıyoruz
+            self.geometry_type = "Point"
+            pass
+        if crs_kod_epsg=='':
+            print("Koordinat sistemi EPSG kodu girmediniz. Varsayılan olarak WGS84(EPSG:4326) koordinat sistemi tanımlandı.\nYou have not entered a coordinate system EPSG code. WGS84 coordinate system is defined by default.")
+            print(ara_satir_cizgi)
+            self.crs_system="EPSG:4326"
             pass
              #koordinat sistemi epsg kodu sayısal bir değer olmalı. bunun için try except yapıyoruz
         else:
             try:
-                self.crs_system = int(crs_kod_epsg)  #gelen değşikenin epsg kodu
+                self.crs_system = "EPSG:"+str(int(crs_kod_epsg))  #gelen değşikenin epsg kodu
                 pass
             except ValueError:  #koordinat bilgisi, sayısal olmayan bir değer gelirse WGS84 değeri verilecek
-                print("Koordinat sistemi EPSG kodu yanlış girildi. Değeri tekrar atamanız gerekmektedir.\nCoordinate system EPSG code was entered incorrectly. You need to reassign the value.")
+                print("Koordinat sistemi EPSG kodu yanlış girildiği için WGS84(EPSG:4326) değeri atandı. Değeri tekrar atamanız gerekmektedir.\nCoordinate system EPSG code was entered incorrectly. You need to reassign the value.")
                 print(ara_satir_cizgi)
-                self.crs_system = "4326"  #hatalı girişten dolayı koordinat sistemi 4326 olarak değişecek
+                self.crs_system = "EPSG:4326"  #hatalı girişten dolayı koordinat sistemi 4326 olarak değişecek
                 pass
         # geometri objesi, x,y ve z değerlerinden oluşur. Bunlardan herhangi birinin hatalı girilemsi durumunda point objesi oluşamaz. Bunun için try except bloğu kullanacağız
         if type(self.x)==float and type(self.y)==float:
@@ -171,10 +165,23 @@ class create_point():
             else:
                 self.geometry = Point([self.x,self.y])
         else:
-            self.geometry = None
+            self.geometry = Point([self.x,self.y])
         self.add_attribute()
+        print(f"""
+_________________________________________________________________
+-    Nokta Adı / Point Name:-------------------------{self.name}      
+-    Geometri Tipi / Geometry Type:------------------{self.geometry_type}      
+-    X :---------------------------------------------{self.x}      
+-    Y :---------------------------------------------{self.y}      
+-    Z :---------------------------------------------{self.z}      
+-    Koordinat Sistemi / Coordinate System:----------{self.crs_system}      
+-    Öznitelik Bilgileri / Attribute Informations:---{self.attribute}      
+__________________________________________________________________
+""")
         self.create_GeoDataFrame()
         self.show_in_map()
+
+       
     def add_attribute(self,attribute=dict):   #geometriye ait öznitelik bilgileri bu kısımda saklanabilir
         self.attribute = {"AD/NAME":[self.name],"TIP/TYPE":[self.geometry_type],"X":[self.x],"Y":[self.y],"Z":[self.z],"geometry":[self.geometry]}    #ilk olarak dict tipinde bir değişkenimiz olmalı. bu sözlüğe varsayılan kolonları ekliyoruz.
         try:    
@@ -237,4 +244,5 @@ _________________________________________________________________
 __________________________________________________________________
 """)
             print(ara_satir_cizgi)
+
 

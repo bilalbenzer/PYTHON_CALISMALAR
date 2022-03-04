@@ -1,6 +1,12 @@
-import time
+"""
+nokta adı : mustafa
+x koordinatı : 7894567.132
+y koordinatı : 456789.654
+z koordinatı : 5.8
+koordinat sistemi : 2320
 
 
+"""
 
 
 
