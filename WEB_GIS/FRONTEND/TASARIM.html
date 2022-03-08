@@ -8,19 +8,38 @@
             <style>
                 #map {
                     width: 100%;
-                    height: 1000px;
+                    height: 950px;
                 }
             </style>
         </head>
             <body>
                 <div id="map"></div>
+                <button onclick=fullScreenview()> View is full SCreen  </button>
+                <div class='coordinate'></div>
             </body>
     </html>
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script>
+        // map class initialize
         var map = L.map('map').setView([38.9573, 35.2407], 7);
+        map.zoomControl.setPosition('topright');
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
             attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         }).addTo(map);
-        L.CRS.EPSG4326
+       //Map Scale Ekleme
+       L.control.scale({position: 'bottomright'}).addTo(map)
+       //full screen map view
+    
+        var mmapId = document.getElementById('map');
+        function fullScreenview() {
+        mmapId.requestFullscreen();
+        }
+
+        //map coordinate display
+        map.on('mousemove',function (e) {
+            console.log(e)
+            $('.coordinate').html('Lat: ${e.latlng.lat} Lng: ${e.latlng.lng} ')
+        })
+
     </script>
