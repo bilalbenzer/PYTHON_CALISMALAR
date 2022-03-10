@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width = device-width, inital-scale =1.0">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A==" crossorigin="" />
+    <title>Leaflet Geoproject</title>
+    <style>
+        #map {
+            width: 100%;
+            height: 950px;
+        }
+    </style>
+</head>
+
+<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js" integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA==" crossorigin=""></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<body>
+    <div id="map"></div>
+    <button onclick=fullScreenView()>View İn FulLScreen</button>
+    <div class="coordinate"></div>
+</body>
+
+</html>
+<script>
+    //aşağıda yer alan setview içindeki tırnaklı yer, gösterilecek yerin koordinatları yer alır. tırnağın yanındaki 7 ise yakınlaştırmayı gösteirr.
+    var map = L.map('map').setView([38.9637, 35.2433], 7);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(map);
+    //aşağıdaki  kısım, haritada koordinatı verilen yere etiket koyar
+    // L.marker([51.5, -0.09]).addTo(map)
+    //     .bindPopup('A pretty CSS3 popup.<br> Easily customizable.')
+    //     .openPopup();
+
+    //add map scale
+    L.control.scale({
+        position: 'bottomright'
+    }).addTo(map)
+
+    //tam ekran butonu
+    var mapId = document.getElementById('map');
+
+    function fullScreenView() {
+        mapId.requestFullscreen();
+    }
+    //harita koordinatını gösterme
+    map.on('mousemove', function(e) {
+        console.log(e)
+        $('.coordinate').html('Lat: ${e.latlng.lat} Lng: ${e.latlng.lng}')
+    })
+</script>
