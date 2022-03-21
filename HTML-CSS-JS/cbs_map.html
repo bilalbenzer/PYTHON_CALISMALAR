@@ -9,22 +9,34 @@
   </head>
   <body style="background-image: url(static/gis_world.jpg);background-repeat: no-repeat;
   background-size: 100%; color: aliceblue;">
-  <div id="ust_sekme">  </div>
-        <div id="map_ust_sekme">
+        <div id="ust_sekme">
+          <div id="ust_sekme_saydam"></div>
           <a href="index.html">
-          <button type="button" id="backbutton"></button></a>
-          <button  type="menu" id="nokta">Nokta</button>
-          <button  type="menu" id="cizgi">Çizgi</button>
-          <button  type="menu" id="cokgen">Çokgen</button>
-          <button  type="menu" id="shp_al">Shp Al</button>
-          <button  type="menu" id="sec">Seç</button>
-          <button  type="menu" id="shpgonder">Shp Gönder</button>
+          <button type="menu" id="backbutton">
+          </button></a>
+          <details id="objeolustur"><summary style="font-size: small; list-style: none;padding: 5px;font-weight: bold;">Obje Oluştur</summary>
+            <button class="acilirbuton" type="menu">Nokta</button>
+            <button class="acilirbuton"type="menu">Çizgi</button>
+            <button class="acilirbuton" type="menu">Çokgen</button></details>
+          <details id="verial"><summary style=" margin: 3%; font-size: small; list-style: none;padding: 5px;font-weight: bold;">Vektör Veri Al</summary>
+            <button class="acilirbuton" type="menu">Shp</button>
+            <button class="acilirbuton"type="menu">Dwg</button>
+            <button class="acilirbuton" type="menu">Ncz</button>
+            <button class="acilirbuton" type="menu">Kml</button></details>
         </div>
+        <div id="map_vieww"></div>
         <div id="map_view">
-        <div id="katmanlar">vektörler</div>
-        <div id="rasterlar">rasterlar</div>
-        <div id="map_arkaplan"></div>
-        <map name="harita" id="harita"></map>
-      </div>
+          <div id="sekmeler">
+            <details id="vektor"><summary id="vektoryazi">Vektörler</summary>
+            <div id="katmanlarvektor"></div></details>
+            <details id="raster"><summary id="rasteryazi">Rasterlar</summary>
+              <div id="katmanlarraster"></div></details>
+          </div>
+        </div>
+        <div id="sag_sekme">
+          <details id="araclar"><summary id="araclar2">Araçlar</summary>
+          <div id="sekme_araclar"></div></details>
+        </div>
+        <div id="haritaa">harita</div>
   </body>
 </html>
