@@ -9,14 +9,22 @@
   </head>
   <body style="background-image: url(static/gis_world.jpg);background-repeat: no-repeat;
   background-size: 100%; color: aliceblue;">
-  <div id="ust_sekme">
-    <a href="index.html">
-    <img id="backbutton" src="static/back.png" alt="geri"></a>
-  </div>
-      <div id="map_view">gis map
+  <div id="ust_sekme">  </div>
         <div id="map_ust_sekme">
+          <a href="index.html">
+          <button type="button" id="backbutton"></button></a>
           <button  type="menu" id="nokta">Nokta</button>
+          <button  type="menu" id="cizgi">Çizgi</button>
+          <button  type="menu" id="cokgen">Çokgen</button>
+          <button  type="menu" id="shp_al">Shp Al</button>
+          <button  type="menu" id="sec">Seç</button>
+          <button  type="menu" id="shpgonder">Shp Gönder</button>
         </div>
+        <div id="map_view">
+        <div id="katmanlar">vektörler</div>
+        <div id="rasterlar">rasterlar</div>
+        <div id="map_arkaplan"></div>
+        <map name="harita" id="harita"></map>
       </div>
   </body>
 </html>
