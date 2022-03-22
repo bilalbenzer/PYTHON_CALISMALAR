@@ -2,30 +2,18 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="stylesheet" href="css/deneme.css">
-    <title>CBS-ARAYÜZÜ</title>
   </head>
   <body>
-    <details><summary>Items</summary>
-      <div onclick="">Item 1</div>
-      <div onclick="">Item 2</div>
-      <div onclick="">Item 3</div>
-      <div onclick="">Item 4</div>
-      </details>
-    <details ><summary>Nokta Oluştur</summary><div onclick="">
-      <button></button>
-      <button></button></details>
-    </div>
-    <details><summary>Obje Oluştur</summary>
-    <button type="menu" id="nokta">Nokta</button>
-  <button>Çizgi</button>
-<button>Çokgen</button></details>
-    <button  type="menu" id="nokta">Nokta</button>
-          <button  type="menu" id="cizgi">Çizgi</button>
-          <button  type="menu" id="cokgen">Çokgen</button>
-          <button  type="menu" id="shp_al">Shp Al</button>
-          <button  type="menu" id="sec">Seç</button>
-          <button  type="menu" id="shpgonder">Shp Gönder</button>
+    <button onclick="mesajGoster()">tıkla</button>
+    <script>
+    function mesajGoster() {
+
+      alert("Merhaba Düünya");
+      document.getElementById('butonmesajı').innerText="Merhaba Dünya"
+    }
+    </script>
+    <button onclick="mesajGoster()">Tıkla</button>
+    <span id="butonmesajı"></span>
+    
   </body>
+  </html>
