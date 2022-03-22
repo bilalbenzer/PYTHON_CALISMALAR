@@ -162,6 +162,7 @@ body{}
     opacity: 1;
     position: absolute;
     float: left;
+    border-radius: 20px;
 }
 #backbutton{
     z-index: 1;
@@ -316,7 +317,7 @@ body{}
     width: 10%;
     margin-top: -835px;
 }
-#araclar{
+#araclar,#analizler{
     border: solid black;
 
     background-color: wheat;
@@ -329,14 +330,14 @@ body{}
     color: black;
     list-style: none;
 }
-#araclar2{
+#araclar2,#analizler2{
     width: 100%;
     z-index: 0;
     color: black;
     cursor: pointer;
     list-style: none;
 }
-#sekme_araclar{
+#sekme_araclar,#sekme_analizler{
     z-index: 0;
     color: black;
     background-color: wheat ;
@@ -348,15 +349,14 @@ body{}
 }
 #haritaa{
     z-index: -1;
-    background-image: url(https://www.nationsonline.org/maps/turkey-map.jpg);
+    
     background-repeat: no-repeat;
     background-position: center;
-    border:  solid black 10px;
-    width: 98.5%;
-    height: 920px;
+    width: 100%;
+    height: 100%;
     position: absolute;
-    margin-top:50px;
     margin-left: -5px;
+
 }
 
 
