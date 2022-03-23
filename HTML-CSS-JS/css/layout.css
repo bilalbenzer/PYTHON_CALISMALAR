@@ -1,4 +1,4 @@
-body{}
+
 /* SAYFA GENEL YAPISI */
 *{
     font-family: 'fantasy','papyrus';
@@ -148,13 +148,21 @@ body{}
 }
 
 /* CBS ARAYÜZÜ İLE İLGİLİ KISIMLAR */
-#ust_sekme{
-    z-index: 1;
+body{
+    opacity: 1;
+    z-index: 0;
+    background-image: url("../static/gis_world.jpg");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size:cover;
+}
+#top_tab{
+    z-index:1;
     width: 99%;
     position: absolute;
     float: left;
 }
-#ust_sekme_saydam{
+#top_tab_opacity{
     z-index: 0;
     background-color: rgba(0, 0, 0, 0.397);
     width: 100%;
@@ -164,8 +172,8 @@ body{}
     float: left;
     border-radius: 20px;
 }
-#backbutton{
-    z-index: 1;
+#go_homepage{
+    z-index: 01;
     float: left;
     background-color: black;
     background-image: url("../static/back.png");
@@ -179,7 +187,7 @@ body{}
     cursor: pointer;
     opacity: 0.7;
 }
-#objeolustur{
+#create_object{
     position: relative;
     float: left;
     border-radius: 10px;
@@ -191,10 +199,11 @@ body{}
     list-style:none;
     cursor:pointer;
     list-style: none;
-    z-index: 2;
     opacity: 0.8;
+    color: white;
 }
-#verial{
+#up_data,#down_data,#map_services{
+    color: white;
     position: relative;
     float: left;
     border-radius: 10px;
@@ -206,11 +215,10 @@ body{}
     list-style:none;
     cursor:pointer;
     list-style: none;
-    z-index: 2;
     opacity: 0.8;
 }
-.acilirbuton{
-    z-index: 1;
+.button,.button1,.button2,button,.button4{
+    z-index: 5;
     position: relative;
     background-color: black;
     font-size: medium;
@@ -218,10 +226,10 @@ body{}
     border-radius: 10px;
     opacity: 0.8;
     margin: 4   px;
-    width: 75px;
+    width: auto;
     height: 50px;
 }
-#map_vieww{
+#map_view_background{
     position: absolute;
     opacity: 0.3;
     z-index: -1;
@@ -236,11 +244,11 @@ body{}
     float: left;
     margin-top: 60px;
     opacity: 1;
-    z-index: -1;
+    z-index: 0;
     width: 99.5%;
     height:830px;
 }
-#sekmeler{
+#left_tabs{
     text-align: center;
     position: relative;
     z-index: 0;
@@ -259,13 +267,13 @@ body{}
     color: black;
     list-style: none;
 }
-#vektoryazi{
+#vektor_text{
     z-index: 0;
     color: black;
     cursor: pointer;
     list-style: none;
 }
-#katmanlarvektor{
+#layers_vektor{
     z-index: 0;
     position: relative;
     color: black;
@@ -290,13 +298,13 @@ body{}
     color: black;
     list-style: none;
 }
-#rasteryazi{
+#raster_text{
     z-index: 0;
     color: black;
     cursor: pointer;
     list-style: none;
 }
-#katmanlarraster{
+#layers_raster{
     z-index: 0;
     position: relative;
     color: black;
@@ -308,20 +316,18 @@ body{}
     margin-top: 5px;
     opacity: 0.7;
 }
-#sag_sekme{
+#right_tab{
     text-align: center;
-
-    z-index: 0;
+    z-index: 1;
     font-weight: bold;
     float: right;
     width: 10%;
     margin-top: -835px;
 }
-#araclar,#analizler{
+#tools_bar,#analys{
     border: solid black;
-
     background-color: wheat;
-    z-index: 0;
+    z-index: 1;
     width: 100%;
     height: 3%;
     border-radius: 10px;
@@ -330,15 +336,15 @@ body{}
     color: black;
     list-style: none;
 }
-#araclar2,#analizler2{
+#tools_text,#analyst_text{
     width: 100%;
-    z-index: 0;
+    z-index: 1;
     color: black;
     cursor: pointer;
     list-style: none;
 }
-#sekme_araclar,#sekme_analizler{
-    z-index: 0;
+#tools_tab,#analys_tab{
+    z-index: 1;
     color: black;
     background-color: wheat ;
     width: 100%;
@@ -347,16 +353,15 @@ body{}
     margin-top: 5px;
     opacity: 0.7;
 }
-#haritaa{
+#map_screen{
+    background-color:white;
     z-index: -1;
-    
-    background-repeat: no-repeat;
-    background-position: center;
-    width: 100%;
-    height: 100%;
+    width: 100.1%;
+    height: 1010px;
     position: absolute;
-    margin-left: -5px;
-
+    margin-left: -10px;
+    margin-top: -10px;
+    opacity: 0.5;
 }
 
 

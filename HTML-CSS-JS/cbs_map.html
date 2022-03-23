@@ -5,51 +5,104 @@
     <link rel="icon" href="static/icon.png"  />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="stylesheet" href="css/layout.css">
-    <title>CBS-ARAYÜZÜ</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
   </head>
-  <body style="background-image: url(static/gis_world.jpg);background-repeat: no-repeat;
-  background-size: 100%; color: aliceblue;">
-        <div id="ust_sekme">
-          <div id="ust_sekme_saydam"></div>
+  <body >
+        <div id="top_tab">
+          <div id="top_tab_opacity"></div>
           <a href="index.html">
-          <button type="menu" id="backbutton">
+          <button type="menu" id="go_homepage">
           </button></a>
-          <details id="objeolustur"><summary style="font-size: small; list-style: none;padding: 5px;font-weight: bold;">Obje Oluştur</summary>
-            <button class="acilirbuton" type="menu">Nokta</button>
-            <button class="acilirbuton"type="menu">Çizgi</button>
-            <button class="acilirbuton" type="menu">Çokgen</button></details>
-          <details id="verial"><summary style=" margin: 3%; font-size: small; list-style: none;padding: 5px;font-weight: bold;">Vektör Veri Yükle</summary>
-            <button class="acilirbuton" type="menu">Shp</button>
-            <button class="acilirbuton"type="menu">Dwg</button>
-            <button class="acilirbuton" type="menu">Ncz</button>
-            <button class="acilirbuton" type="menu">Kml</button></details>
-            <details id="verial"><summary style=" margin: 3%; font-size: small; list-style: none;padding: 5px;font-weight: bold;">Vektör Veri İndir</summary>
-              <button class="acilirbuton" type="menu">Shp</button>
-              <button class="acilirbuton"type="menu">Dwg</button>
-              <button class="acilirbuton" type="menu">Ncz</button>
-              <button class="acilirbuton" type="menu">Kml</button></details>
-              <details id="verial"><summary style=" margin: 3%; font-size: small; list-style: none;padding: 5px;font-weight: bold;">Harita Servisleri</summary>
-                <button class="acilirbuton" type="menu">Shp</button>
-                <button class="acilirbuton"type="menu">Dwg</button>
-                <button class="acilirbuton" type="menu">Ncz</button>
-                <button class="acilirbuton" type="menu">Kml</button></details>
+          <details id="create_object"><summary style="font-size: small; list-style: none;padding: 5px;font-weight: bold;">Obje Oluştur</summary>
+            <button class="button" type="menu">Nokta</button>
+            <button class="button"type="menu">Çizgi</button>
+            <button class="button" type="menu">Çokgen</button></details>
+          <details id="up_data"><summary style="font-size: small; list-style: none;padding: 5px;font-weight: bold;" >Vektör Veri Yükle</summary>
+            <button class="button" type="menu">Shp</button>
+            <button class="button"type="menu">Dwg</button>
+            <button class="button" type="menu">Ncz</button>
+            <button class="button" type="menu">Kml</button></details>
+            <details id="down_data"><summary style="font-size: small; list-style: none;padding: 5px;font-weight: bold;">Vektör Veri İndir</summary>
+              <button class="button" type="menu">Shp</button>
+              <button class="button"type="menu">Dwg</button>
+              <button class="button" type="menu">Ncz</button>
+              <button class="button" type="menu">Kml</button></details>
+              <details id="map_services"><summary style="font-size: small; list-style: none;padding: 5px;font-weight: bold;">Harita Servisleri</summary>
+                <button class="button1" onclick="add_osm()"" ondblclick="remove_osm()" type="menu">OpenStreetMap</button>
+                <button class="button2"type="menu"onclick="add_googlestreet()" ondblclick="remove_googlestreet()">GoogleStreetMap</button>
+                <button class="button3" type="menu" >GoogleSatellite</button>
+                <button class="button4" type="menu" onclick="add_mapbox()" ondblclick="remove_mapbox()">MapBox</button></details>
         </div>
-        <div id="map_vieww"></div>
+        <div id="map_view_background"></div>
         <div id="map_view">
-          <div id="sekmeler">
-            <details id="vektor"><summary id="vektoryazi">Vektörler</summary>
-            <div id="katmanlarvektor"></div></details>
-            <details id="raster"><summary id="rasteryazi">Rasterlar</summary>
-              <div id="katmanlarraster"></div></details>
+          <div id="left_tabs">
+            <details id="vektor"><summary id="vektor_text">Vektörler</summary>
+            <div id="layers_vektor"></div></details>
+            <details id="raster"><summary id="raster_text">Rasterlar</summary>
+              <div id="layers_raster"></div></details>
           </div>
         </div>
-        <div id="sag_sekme">
-          <details id="araclar"><summary id="araclar2">Araçlar</summary>
-          <div id="sekme_araclar"></div></details>
-          <details id="analizler"><summary id="analizler2">Analizler</summary>
-            <div id="sekme_analizler"></div></details>
+        <div id="right_tab">
+          <details id="tools_bar"><summary id="tools_text">Araçlar</summary>
+          <div id="tools_tab"></div></details>
+          <details id="analys"><summary id="analyst_text">Analizler</summary>
+            <div id="analys_tab"></div></details>
 
         </div>
-        <div id="haritaa">harita</div>
+        <div id="map_screen"></div>
   </body>
 </html>
+<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+<script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+<script>
+  //harita çeşitler
+  var map = L.map('map_screen').setView([38.9637,35.2433], 7 );
+
+  var osm_map = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    });
+  var googlestreets =L.tileLayer('http://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}',{
+    maxZoom: 20,
+    subdomains:['mt0','mt1','mt2','mt3']
+ });
+  var mapbox = L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
+    attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+    maxZoom: 18,
+    id: 'mapbox/satellite-v9',
+    tileSize: 512,
+    zoomOffset: -1,
+    accessToken: 'pk.eyJ1IjoiYmlsYWxiZW56ZXIiLCJhIjoiY2wxM3QwanJwMDk0ZTNwbHFrdXNsc215aiJ9.cpvdEZ1Dv8cmWASBnyvnag'
+});
+
+function add_osm() {
+  osm_map.addTo(map);
+  googlestreets.remove(map);
+  mapbox.remove(map) ;
+  document.getElementById('map_screen').style.opacity = 1
+}
+function remove_osm() {
+  osm_map.remove(map);
+  document.getElementById('map_screen').style.opacity = 0.5
+}
+function add_googlestreet() {
+  googlestreets.addTo(map)
+  osm_map.remove(map)
+  mapbox.remove(map)
+  document.getElementById('map_screen').style.opacity = 1 
+ }
+function remove_googlestreet() {
+  googlestreets.remove(map)
+  document.getElementById('map_screen').style.opacity = 0.5
+ }
+function add_mapbox() {
+  mapbox.addTo(map)
+  osm_map.remove(map)
+  googlestreets.remove(map)
+  document.getElementById('map_screen').style.opacity = 1
+}
+function remove_mapbox(){
+  mapbox.remove(map)
+  document.getElementById('map_screen').style.opacity = 0.5
+}
+</script>
