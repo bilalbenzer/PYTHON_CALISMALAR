@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="css/layout.css">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
+
   </head>
   <body >
         <div id="top_tab">
@@ -29,14 +30,20 @@
               <button class="button" type="menu">Ncz</button>
               <button class="button" type="menu">Kml</button></details>
               <details id="map_services"><summary style="font-size: small; list-style: none;padding: 5px;font-weight: bold;">Harita Servisleri</summary>
-                <button class="button1" onclick="add_osm()"" ondblclick="remove_osm()" type="menu">OpenStreetMap</button>
-                <button class="button2"type="menu"onclick="add_googlestreet()" ondblclick="remove_googlestreet()">GoogleStreetMap</button>
-                <button class="button2"type="menu"onclick="add_googlesatellite()" ondblclick="remove_googlesatellite()">GoogleSatelliteMap</button>
+                <button class="button1" onclick="add_osm()"" ondblclick="remove_osm()" type="menu">Open Street Map</button>
+                <button class="button2"type="menu"onclick="add_googlestreet()" ondblclick="remove_googlestreet()">Google Street Map</button>
+                <button class="button2"type="menu"onclick="add_googlesatellite()" ondblclick="remove_googlesatellite()">Google Satellite Map</button>
                 <button class="button3" type="menu" onclick="add_cardodb_darkmatter()" ondblclick="remove_cardodb_darkmatter()" >Carto Dark Matter</button>
-                <button class="button4" type="menu" onclick="add_mapbox()" ondblclick="remove_mapbox()">MapBox Satellite</button>
-                <button class="button4" type="menu" onclick="add_stamen_watercolor()" ondblclick="remove_stamen_watercolor()">Stamen Watercolor</button></details>
+                <button class="button4" type="menu" onclick="add_mapbox_satellite()" ondblclick="remove_mapbox_satellite()">MapBox Satellite</button>
+                <button class="button4" type="menu" onclick="add_mapbox_streets()" ondblclick="remove_mapbox_streets()">MapBox Streets</button>
+                <button class="button4" type="menu" onclick="add_stamen_watercolor()" ondblclick="remove_stamen_watercolor()">Stamen Watercolor</button>
+                <button class="button4" type="menu" onclick="add_opentopomap()" ondblclick="remove_opentopomap()">Opentopo map</button>
+                <button class="button4" type="menu" onclick="add_herev3()" ondblclick="remove_herev3()">Here Map V3</button>
+                <button class="button4" type="menu" onclick="add_jawg_map()" ondblclick="remove_jawg_map()"> Jawg Map</button></details>
         </div>
+        
         <div id="map_view_background"></div>
+        <div id="map_screen"></div>
         <div id="map_view">
           <div id="left_tabs">
             <details id="vektor"><summary id="vektor_text">Vektörler</summary>
@@ -52,11 +59,13 @@
             <div id="analys_tab"></div></details>
 
         </div>
-        <div id="map_screen"></div>
+        <div id="coordinat_tab"></div>
+        
   </body>
 </html>
 <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
 <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+<script src="js/leaflet-providers.js"></script>
 <script>
   //harita çeşitler
   var map = L.map('map_screen').setView([38.9637,35.2433], 7 );
@@ -68,7 +77,7 @@
     maxZoom: 20,
     subdomains:['mt0','mt1','mt2','mt3']
  });
-  var mapbox = L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
+  var mapbox_satellite = L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
     attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
     maxZoom: 18,
     id: 'mapbox/satellite-v9',
@@ -76,92 +85,193 @@
     zoomOffset: -1,
     accessToken: 'pk.eyJ1IjoiYmlsYWxiZW56ZXIiLCJhIjoiY2wxM3QwanJwMDk0ZTNwbHFrdXNsc215aiJ9.cpvdEZ1Dv8cmWASBnyvnag'
 });
-var CartoDB_DarkMatter = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+  var mapbox_streets = L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
+    attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+    maxZoom: 18,
+    id: 'mapbox/streets-v11',
+    tileSize: 512,
+    zoomOffset: -1,
+    accessToken: 'pk.eyJ1IjoiYmlsYWxiZW56ZXIiLCJhIjoiY2wxM3QwanJwMDk0ZTNwbHFrdXNsc215aiJ9.cpvdEZ1Dv8cmWASBnyvnag'
+});
+  var CartoDB_DarkMatter = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
 attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
 subdomains: 'abcd',
 	maxZoom: 19
 });
-var googlesatellite = L.tileLayer('http://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}',{
+  var googlesatellite = L.tileLayer('http://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}',{
    maxZoom: 20,
    subdomains:['mt0','mt1','mt2','mt3']
  });
-var Stamen_Watercolor = L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/watercolor/{z}/{x}/{y}.{ext}', {
+  var Stamen_Watercolor = L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/watercolor/{z}/{x}/{y}.{ext}', {
  attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
 subdomains: 'abcd',
 minZoom: 1,
 maxZoom: 16,
 ext: 'jpg'
 });
+  var OpenTopoMap = L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {
+	maxZoom: 17,
+	attribution: 'Map data: &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, <a href="http://viewfinderpanoramas.org">SRTM</a> | Map style: &copy; <a href="https://opentopomap.org">OpenTopoMap</a> (<a href="https://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA</a>)'
+});
+  var herev3 = L.tileLayer.provider('HEREv3.terrainDay', {
+    apiKey: 'pwF1Xj9Xob7B_oRW2xgQVJ65gC21q0hfaLpbBRWWMnc'
+})
+  var jawg_map = L.tileLayer.provider('Jawg.Streets', {
+    variant: '',
+    accessToken: 'wpnsRT419zEQ9XTokJabanKEDLmSbNI6J3b4suZiYVwQgOQgDUvbj9v7WTMer2aT'
+})
+
+
+
+const maps_for_leaflet = {
+  "OpenStreetMap":osm_map,
+  "GoogleStreetsMap":googlestreets,
+  "GoogleSatelliteMap":googlesatellite,
+  "Mapbox Satellite":mapbox_satellite,
+  "Mapbox Streets":mapbox_streets,
+  "CartoDbDarkMatter":CartoDB_DarkMatter,
+  "WatStamenercolor":Stamen_Watercolor,
+  "Open Topo Map":OpenTopoMap,
+  "herev3":herev3,
+  "jawg map":jawg_map};
+
+function add_opentopomap(){
+  for (i in maps_for_leaflet) {
+    if (i === "Open Topo Map"){
+      maps_for_leaflet[i].addTo(map);
+      continue;}
+    maps_for_leaflet[i].remove(map);
+  }
+  document.getElementById('map_screen').style.opacity = 1;
+  show_coordints()
+}
+function  remove_opentopomap(){
+  OpenTopoMap.remove(map);
+  document.getElementById('map_screen').style.opacity = 0.5
+}
 function add_stamen_watercolor() {
-  Stamen_Watercolor.addTo(map);
-  osm_map.remove(map);
-  googlestreets.remove(map);
-  mapbox.remove(map) ;
-  googlesatellite.remove(map);
-  CartoDB_DarkMatter.remove(map);
-  document.getElementById('map_screen').style.opacity = 1
+  for (i in maps_for_leaflet) {
+    if (i === "WatStamenercolor"){
+      maps_for_leaflet[i].addTo(map);
+      continue;}
+    maps_for_leaflet[i].remove(map);
+  }
+  document.getElementById('map_screen').style.opacity = 1;
 }
 function remove_stamen_watercolor() {
   Stamen_Watercolor.remove(map);
   document.getElementById('map_screen').style.opacity = 0.5
 }
 function add_osm() {
-  osm_map.addTo(map);
-  googlestreets.remove(map);
-  mapbox.remove(map) ;
-  googlesatellite.remove(map);
-  CartoDB_DarkMatter.remove(map);Stamen_Watercolor.remove(map);
-  document.getElementById('map_screen').style.opacity = 1
+  for (i in maps_for_leaflet) {
+    if (i === "OpenStreetMap"){
+      maps_for_leaflet[i].addTo(map);
+      continue;}
+    maps_for_leaflet[i].remove(map);
+  }
+  document.getElementById('map_screen').style.opacity = 1;
 }
 function remove_osm() {
   osm_map.remove(map);
   document.getElementById('map_screen').style.opacity = 0.5
 }
 function add_googlestreet() {
-  googlestreets.addTo(map);
-  osm_map.remove(map);
-  mapbox.remove(map);
-  googlesatellite.remove(map);
-  CartoDB_DarkMatter.remove(map);Stamen_Watercolor.remove(map);
-  document.getElementById('map_screen').style.opacity = 1 
- }
+  for (i in maps_for_leaflet) {
+    if (i === "GoogleStreetsMap"){
+      maps_for_leaflet[i].addTo(map);
+      continue;}
+    maps_for_leaflet[i].remove(map);
+  }
+  document.getElementById('map_screen').style.opacity = 1;
+}
 function remove_googlestreet() {
   googlestreets.remove(map)
   document.getElementById('map_screen').style.opacity = 0.5
  }
- function add_googlesatellite() {
-  googlesatellite.addTo(map)
-  osm_map.remove(map)
-  mapbox.remove(map)
-  CartoDB_DarkMatter.remove(map);Stamen_Watercolor.remove(map);
-  document.getElementById('map_screen').style.opacity = 1 
- }
+function add_googlesatellite() {
+  for (i in maps_for_leaflet) {
+    if (i === "GoogleSatelliteMap"){
+      maps_for_leaflet[i].addTo(map);
+      continue;}
+    maps_for_leaflet[i].remove(map);
+  }
+  document.getElementById('map_screen').style.opacity = 1;
+}
 function remove_googlesatellite() {
   googlesatellite.remove(map)
   document.getElementById('map_screen').style.opacity = 0.5
  }
-function add_mapbox() {
-  mapbox.addTo(map);
-  osm_map.remove(map);
-  googlestreets.remove(map);
-  googlesatellite.remove(map);
-  CartoDB_DarkMatter.remove(map);Stamen_Watercolor.remove(map);
-  document.getElementById('map_screen').style.opacity = 1
+function add_mapbox_satellite() {
+  for (i in maps_for_leaflet) {
+    if (i === "Mapbox Satellite"){
+      maps_for_leaflet[i].addTo(map);
+      continue;}
+    maps_for_leaflet[i].remove(map);
+  }
+  document.getElementById('map_screen').style.opacity = 1;
 }
-function remove_mapbox(){
-  mapbox.remove(map)
+function remove_mapbox_satellite(){
+  mapbox_satellite.remove(map)
+  document.getElementById('map_screen').style.opacity = 0.5
+}
+function add_mapbox_streets() {
+  for (i in maps_for_leaflet) {
+    if (i === "Mapbox Streets"){
+      maps_for_leaflet[i].addTo(map);
+      continue;}
+    maps_for_leaflet[i].remove(map);
+  }
+  document.getElementById('map_screen').style.opacity = 1;
+}
+function remove_mapbox_streets(){
+  mapbox_streets.remove(map)
   document.getElementById('map_screen').style.opacity = 0.5
 }
 function add_cardodb_darkmatter(){
-  CartoDB_DarkMatter.addTo(map);
-  osm_map.remove(map);
-  googlestreets.remove(map);
-  mapbox.remove(map);
-  googlesatellite.remove(map);Stamen_Watercolor.remove(map);
-  document.getElementById('map_screen').style.opacity = 1
+  for (i in maps_for_leaflet) {
+    if (i === "CartoDbDarkMatter"){
+      maps_for_leaflet[i].addTo(map);
+      continue;}
+    maps_for_leaflet[i].remove(map);
+  }
+  document.getElementById('map_screen').style.opacity = 1;
 }
 function remove_cardodb_darkmatter(){
   CartoDB_DarkMatter.remove(map);
   document.getElementById('map_screen').style.opacity = 0.5
 }
+function add_herev3(){
+  for (i in maps_for_leaflet) {
+    if (i === "herev3"){
+      maps_for_leaflet[i].addTo(map);
+      continue;}
+    maps_for_leaflet[i].remove(map);
+  }
+  document.getElementById('map_screen').style.opacity = 1;
+}
+function remove_herev3(){
+  herev3.remove(map);
+  document.getElementById('map_screen').style.opacity = 0.5
+}
+function add_jawg_map(){
+  for (i in maps_for_leaflet) {
+    if (i === "jawg map"){
+      maps_for_leaflet[i].addTo(map);
+      continue;}
+    maps_for_leaflet[i].remove(map);
+  }
+  document.getElementById('map_screen').style.opacity = 1;
+}
+function remove_jawg_map(){
+  jawg_map.remove(map);
+  document.getElementById('map_screen').style.opacity = 0.5
+}
+
+
+
+function show_coordints() {
+  map.on('mousemove' , (e) =>{
+    document.getElementById('coordinat_tab').innerText ="X:"+(e.latlng.lat).toFixed(8) +"------"+ "Y:"+(e.latlng.lng).toFixed(8)
+    });}
+
 </script>

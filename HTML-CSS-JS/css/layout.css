@@ -355,13 +355,27 @@ body{
 }
 #map_screen{
     background-color:white;
-    z-index: -1;
+    z-index: 0;
     width: 100.1%;
     height: 1010px;
     position: absolute;
     margin-left: -10px;
     margin-top: -10px;
-    opacity: 0.5;
+    opacity: 0.7;
+}
+#coordinat_tab{
+    color: wheat;
+    background-color: black;
+    width: auto;
+    height: 20px;
+    z-index: 3;
+    position: relative;
+    float: left;
+    margin-top: 70px;
+    opacity: 0.7;
+    font-size: 20px;
+    font-family: 'Courier New', Courier, monospace;
+    text-align: center;
 }
 
 
