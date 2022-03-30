@@ -315,7 +315,7 @@ var myicon = L.icon({
 });
 
 function create_point(){
-  document.getElementById('sayfamesajlari').innerText="Çizime Başlayabilirsiniz.";
+  document.getElementById('sayfamesajlari').innerText="Çizime Başlayabilirsiniz.\nF2: Bitir";
   document.getElementById('sayfamesajlari').style.backgroundColor  = "black";
   
     map.on('click', (e)=>{
@@ -354,13 +354,14 @@ await sleep(500);
 document.getElementById('sayfamesajlari').style.backgroundColor  = "black";
 document.getElementById('sayfamesajlari').innerText = "Çizim Ekranı Oluşturuldu.";
 await sleep(2000);
-document.getElementById('sayfamesajlari').innerText = "";
-await sleep(500);
-document.getElementById('sayfamesajlari').style.backgroundColor  = "unset";}
+document.getElementById('sayfamesajlari').innerText ="............";
+await sleep(500)
+document.getElementById('sayfamesajlari').style.backgroundColor  = "unset";
+document.getElementById('sayfamesajlari').innerText =""}
 baslangic()
 
 // Fetch all the details element.
-const details = document.querySelectorAll("details");
+const details = document.querySelectorAll("#create_object,#up_data,#down_data,#map_services");
 
 // Add the onclick listeners.
 details.forEach((targetDetail) => {
