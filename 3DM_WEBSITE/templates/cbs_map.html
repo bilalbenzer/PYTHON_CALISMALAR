@@ -4,9 +4,7 @@
     <meta charset="utf-8" />
     <link rel="icon" href="static/icon.png"  />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <!-- referans dosyaları / css -->
     <link rel="stylesheet" href="css/layout.css">
-    <!-- leaflet eklentisi ve leafletle ilgili css -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
 
@@ -17,7 +15,6 @@
           <a href="index.html">
           <button type="menu" id="go_homepage">
           </button></a>
-          <span id="sayfamesajlari"></span>
           <details id="create_object"><summary style="font-size: small; list-style: none;padding: 5px;font-weight: bold;">Obje Oluştur</summary>
             <button class="button" type="menu" onclick="create_point()">Nokta</button>
             <button class="button"type="menu">Çizgi</button>
@@ -71,9 +68,8 @@
 <script src="js/leaflet-providers.js"></script>
 <script>
   //harita çeşitler
-var map = L.map('map_screen').setView([38.9637,35.2433], 7 );
+  var map = L.map('map_screen').setView([38.9637,35.2433], 7 );
 
-    
   var osm_map = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
     });
@@ -291,9 +287,7 @@ function remove_jawg_map(){
 }
 
 
-map.on('mousemove' , (e) =>{
-    document.getElementById('coordinat_tab').innerText ="X:"+(e.latlng.lat).toFixed(8) +"------"+ "Y:"+(e.latlng.lng).toFixed(8)
-    });
+
 // Haritanın Sol Alt Köşesinde Koordinat Gösterme
 function show_coordints() {
   map.on('mousemove' , (e) =>{
@@ -308,30 +302,16 @@ function dont_show_coordints(){
 1- haritada tıklanılan yerden koordinatı alır ve point oluşturur
 2- oluşturlan point haritaya eklenir
 */
-
-
 function create_point(){
-  document.getElementById('sayfamesajlari').innerText="Çizime Başlayabilirsiniz.";
-  document.getElementById('sayfamesajlari').style.backgroundColor  = "black";
-  
-    map.on('click', (e)=>{
+
+  map.on('click', (e)=>{
     x = (e.latlng.lat).toFixed(6);
     y = (e.latlng.lng).toFixed(6);
-    document.getElementById('sayfamesajlari').innerText="Nokta oluşturuldu \n"+"X="+x+"   "+"Y="+y;
+    console.log("x:"+x,"y:"+y);
     point = L.marker([x,y]);
-    map.addLayer(point);
-    })
-    document.addEventListener('keydown', (event) => {
-    var name = event.key;
-    var code = event.code;
-    if (name === "F2") {
-      document.getElementById('sayfamesajlari').innerText = "İşlem Tamamlandı"
-      map.off('click')
-    }
-  })}// fonksiyon sonu
-  
-
-
+    point.addTo(map);
+  })}
+  create_point()
 var x
 var y
 var point

@@ -187,17 +187,6 @@ body{
     cursor: pointer;
     opacity: 0.7;
 }
-#sayfamesajlari{
-    font-family: 'Courier New', Courier, monospace;
-    background-color: unset;
-    position: absolute;
-    width: auto;
-    height: 50px;
-    text-align: center;
-    color: white;
-    font-size: large;
-    margin-left: 25%;
-}
 #create_object{
     position: relative;
     float: left;
