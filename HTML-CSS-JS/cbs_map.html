@@ -51,7 +51,8 @@
         <div id="map_view">
           <div id="left_tabs">
             <details id="vektor"><summary id="vektor_text">Vektörler</summary>
-            <div id="layers_vektor"></div></details>
+            <div id="layers_vektor">
+            </div></details>
             <details id="raster"><summary id="raster_text">Rasterlar</summary>
               <div id="layers_raster"></div></details>
           </div>
@@ -301,7 +302,7 @@ function remove_jawg_map(){
   dont_show_coordints()
 }
 
-
+// sol alttaki koordinatların görünmesi için
 map.on('mousemove' , (e) =>{
     document.getElementById('coordinat_tab').innerText ="X:"+(e.latlng.lat).toFixed(8) +"------"+ "Y:"+(e.latlng.lng).toFixed(8)
     });
@@ -334,55 +335,93 @@ var myicon = L.icon({
   iconSize: [31,31]
 });
  // nokta oluşturma
+
+ 
 function create_point(){
-  document.getElementById('sayfamesajlari').innerText="Çizime Başlayabilirsiniz.\nN: Koordinat Gir\nS: Bitir";
-  document.getElementById('sayfamesajlari').style.backgroundColor  = "black";
-  
-  
+          document.getElementById('sayfamesajlari').innerText="Çizime Başlayabilirsiniz.\nN: Koordinat Gir\nS: Bitir";
+          document.getElementById('sayfamesajlari').style.backgroundColor  = "black";
+          map.on('click', (e)=>{
+          x = (e.latlng.lat).toFixed(6);
+          y = (e.latlng.lng).toFixed(6);
+          document.getElementById('sayfamesajlari').innerText="Nokta oluşturuldu \n"+"X="+x+"   "+"Y="+y;
 
-    map.on('click', (e)=>{
-    x = (e.latlng.lat).toFixed(6);
-    y = (e.latlng.lng).toFixed(6);
-    document.getElementById('sayfamesajlari').innerText="Nokta oluşturuldu \n"+"X="+x+"   "+"Y="+y;
-
-    var oznitelikler = {
-      "name":"nokta1",
-      "tip":"nokta",
-      "il":"afyon"
-    }
-    const point_obje = new point_object(x_coordinats=x,y_coordinats=y,oznitelik=oznitelikler)
-    L.geoJSON(point_obje.geojsonfeature,{
-      pointToLayer: function (Feature,latlng){
-        return L.circleMarker(latlng, geojsonMarkerOptions);
-      }
-    }).addTo(map);
-    point_listesi.push(point_obje)
-    console.log(point_obje.geojsonfeature)
-    console.log(point_listesi,point_listesi.length)
-
-    })
-    document.addEventListener('keydown', (event) => {
-    var name = event.key;
-    var code = event.code;
-    if (code==="KeyN"){
-      document.getElementById('obje_girdi').style.backgroundColor = "black";
-      document.getElementById('obje_girdi').innerHTML='<form><label for="xbuton">X :</label><input type="number" maxlength="999999" id="xbuton" step="0.001" required><br><label for="ybuton">Y :</label><input type="number" maxlength="999999" id="ybuton" step="0.001" required><input id="koordinatal" type="submit" value="nokta oluştur"></form>';
-      let secim = document.querySelector("#koordinatal");
-      secim.getAttribute
-    }
-    if (code === "KeyS") {
-      document.getElementById('sayfamesajlari').innerText = "İşlem Tamamlandı"
-      setTimeout(() => {  document.getElementById('sayfamesajlari').innerText = "\n..."; }, 1500);
-      setTimeout(() => {  document.getElementById('sayfamesajlari').innerText = "\n......"; }, 1500);
-      setTimeout(() => {  document.getElementById('sayfamesajlari').style.backgroundColor  = "unset"}, 1500);
-      setTimeout(() => {  document.getElementById('sayfamesajlari').innerText = "";}, 1500);
-      map.off('click')
-      document.getElementById('obje_girdi').style.backgroundColor = "unset";
-      document.getElementById('obje_girdi').innerHTML=""
-    }})}
+          var oznitelikler = {
+            "name":"nokta1",
+            "tip":"nokta",
+            "il":"afyon"
+            }
+          const point_obje = new point_object(x_coordinats=x,y_coordinats=y,oznitelik=oznitelikler)
+          point_listesi.push(point_obje)
+          katman_liste()
+          })
+          document.addEventListener('keydown', (event) => {
+          var name = event.key;
+          var code = event.code;
+          
+          if (code==="KeyN"){
+          document.getElementById('obje_girdi').style.backgroundColor = "black";
+          document.getElementById('obje_girdi').innerHTML='<label for="xbuton">X :</label><input type="number" maxlength="999999" id="xbuton" step="0.001" value="" required><br><label for="ybuton">Y :</label><input type="number" maxlength="999999" id="ybuton" step="0.001" value="" required><input id="koordinatal" onclick="koordinatileolustur()" type="submit"  value="nokta oluştur">';
+            }
+          if (code === "KeyS") {
+            document.getElementById('sayfamesajlari').innerText = "İşlem Tamamlandı"
+            setTimeout(() => {  document.getElementById('sayfamesajlari').innerText = "\n..."; }, 1500);
+            setTimeout(() => {  document.getElementById('sayfamesajlari').innerText = "\n......"; }, 1500);
+            setTimeout(() => {  document.getElementById('sayfamesajlari').style.backgroundColor  = "unset"}, 1500);
+            setTimeout(() => {  document.getElementById('sayfamesajlari').innerText = "";}, 1500);
+            map.off('click')
+            document.getElementById('obje_girdi').style.backgroundColor = "unset";
+            document.getElementById('obje_girdi').innerHTML=""
+              
+          }})}
     // fonksiyon sonu
-  
-
+//-------------------------------------------------------------------------------------------------------------------------------------
+  // koordinat girerek nokta oluşturma
+function koordinatileolustur(){
+          x = document.getElementById('xbuton').value
+          y = document.getElementById('ybuton').value
+          var oznitelikler = {
+            "name":"nokta1",
+            "tip":"nokta",
+            "il":"afyon"
+          }
+          const point_obje = new point_object(x_coordinats=x,y_coordinats=y,oznitelik=oznitelikler)
+          ;
+          point_listesi.push(point_obje)
+          console.log(point_obje.geojsonfeature)
+          console.log(point_listesi,point_listesi.length)
+          document.getElementById('sayfamesajlari').innerText="Nokta oluşturuldu \n"+"X="+x+"   "+"Y="+y;
+          console.log("Nokta Oluşturuldu"+x+y)
+          katman_liste()
+            }
+//-------------------------------------------------------------------------------------------------------------------------------------
+function katman_liste(){
+          for (i in point_listesi){
+            var noktano = "Nokta"+(i).toString()
+            a = document.getElementById((i).toString())
+            if (a!=null){
+              if (a.name===noktano){
+                continue
+              }
+            }
+            nokta = point_listesi[i];
+            var katman = document.createElement("button");
+            katman.setAttribute("id",(i).toString());
+            katman.setAttribute("name",noktano);
+            document.getElementById('layers_vektor').appendChild(katman);
+            document.getElementById(i.toString()).innerText=noktano;
+            document.getElementById(i.toString()).style.width="100%";
+            document.getElementById(i.toString()).style.height="20px";
+            document.getElementById(i.toString()).style.backgroundColor="wheat";
+            document.getElementById(i.toString()).style.fontFamily="'Courier New', Courier, monospace";
+            document.getElementById(i.toString()).style.fontWeight="bolder";
+            document.getElementById(i.toString()).style.fontSize="18px";
+            console.log(point_listesi[i])
+            L.geoJSON(point_listesi[i].geojsonfeature,{
+          pointToLayer: function (Feature,latlng){
+            return L.circleMarker(latlng, geojsonMarkerOptions);
+          }
+        }).addTo(map)
+          }}
 var x
 var y
 var point
@@ -398,7 +437,7 @@ document.getElementById('sayfamesajlari').innerText = "Çizim Ekranı Oluşturul
 
 await sleep(2500);
 document.getElementById('map_screen').style.backgroundColor = "white";
-await sleep(2000);
+await sleep(800);
 document.getElementById('sayfamesajlari').innerText ="............";
 await sleep(500)
 document.getElementById('sayfamesajlari').style.backgroundColor  = "unset";
