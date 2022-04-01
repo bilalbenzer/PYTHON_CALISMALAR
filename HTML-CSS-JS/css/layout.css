@@ -192,7 +192,7 @@ body{
     font-family: 'Courier New', Courier, monospace;
     background-color: unset;
     position: absolute;
-    width: auto;
+    width: 400px;
     height: auto;
     text-align: center;
     color: white;
@@ -203,6 +203,7 @@ body{
     opacity: 0.7;
     margin-top: 0.2%;
 }
+
 #create_object{
     position: relative;
     float: left;
@@ -376,7 +377,6 @@ body{
     position: absolute;
     margin-left: -10px;
     margin-top: -10px;
-    opacity: 0.7;
 }
 #coordinat_tab{
     color: wheat;
@@ -391,6 +391,31 @@ body{
     font-size: 20px;
     font-family: 'Courier New', Courier, monospace;
     text-align: center;
+}
+#obje_girdi{
+    font-weight: bolder;
+    border-radius: 20px;
+    font-family: 'Courier New', Courier, monospace;
+    background-color: unset;
+    position: relative;
+    width: 300px;
+    height: auto;
+    text-align: center;
+    color: wheat;
+    font-size: medium;
+    float: right;
+    opacity: 0.7;
+}
+#xbuton,#ybuton{
+    
+    font-weight: bolder;
+    border: wheat;
+    color: white;
+    background-color:darkkhaki;
+    width: 200px;
+    height: auto;
+    font-size: large;
+    font-family: 'Courier New', Courier, monospace;
 }
 
 

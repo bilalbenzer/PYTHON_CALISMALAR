@@ -18,6 +18,7 @@
           <button type="menu" id="go_homepage">
           </button></a>
           <span id="sayfamesajlari"></span>
+          
           <details id="create_object"><summary style="font-size: small; list-style: none;padding: 5px;font-weight: bold;">Obje Oluştur</summary>
             <button class="button" type="menu" onclick="create_point()">Nokta</button>
             <button class="button"type="menu">Çizgi</button>
@@ -63,17 +64,27 @@
 
         </div>
         <div id="coordinat_tab"></div>
+        <span id="obje_girdi"></span>
         
   </body>
 </html>
 <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
 <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
 <script src="js/leaflet-providers.js"></script>
+<script src="js/Proj4Leaflet-1.0.1/lib/proj4.js"></script>
+<script src="js/Proj4Leaflet-1.0.1/src/proj4leaflet.js"></script>
+<script src="js/Proj4Leaflet-1.0.1/lib/proj4-compressed.js"></script>
 <script>
   //harita çeşitler
-var map = L.map('map_screen').setView([38.9637,35.2433], 7 );
+var map = L.map('map_screen',{
+  center: [38.9637,35.2433],
+  zoom: 7,
+  zoomControl: false,
+});
 
-    
+
+
+
   var osm_map = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
     });
@@ -308,33 +319,66 @@ function dont_show_coordints(){
 1- haritada tıklanılan yerden koordinatı alır ve point oluşturur
 2- oluşturlan point haritaya eklenir
 */
-
+// geojson point işaretçi ayarı //
+var geojsonMarkerOptions = {
+    radius: 8,
+    fillColor: "#ff7800",
+    color: "#000",
+    weight: 1,
+    opacity: 1,
+    fillOpacity: 0.8
+};
+// marker için icon //
 var myicon = L.icon({
   iconUrl: "point_icon.png",
   iconSize: [31,31]
 });
-
+ // nokta oluşturma
 function create_point(){
-  document.getElementById('sayfamesajlari').innerText="Çizime Başlayabilirsiniz.\nF2: Bitir";
+  document.getElementById('sayfamesajlari').innerText="Çizime Başlayabilirsiniz.\nN: Koordinat Gir\nS: Bitir";
   document.getElementById('sayfamesajlari').style.backgroundColor  = "black";
   
+  
+
     map.on('click', (e)=>{
     x = (e.latlng.lat).toFixed(6);
     y = (e.latlng.lng).toFixed(6);
     document.getElementById('sayfamesajlari').innerText="Nokta oluşturuldu \n"+"X="+x+"   "+"Y="+y;
-    point = L.marker([x,y],{icon: myicon});
-    map.addLayer(point);
+
+    var oznitelikler = {
+      "name":"nokta1",
+      "tip":"nokta",
+      "il":"afyon"
+    }
+    const point_obje = new point_object(x_coordinats=x,y_coordinats=y,oznitelik=oznitelikler)
+    L.geoJSON(point_obje.geojsonfeature,{
+      pointToLayer: function (Feature,latlng){
+        return L.circleMarker(latlng, geojsonMarkerOptions);
+      }
+    }).addTo(map);
+    point_listesi.push(point_obje)
+    console.log(point_obje.geojsonfeature)
+    console.log(point_listesi,point_listesi.length)
+
     })
     document.addEventListener('keydown', (event) => {
     var name = event.key;
     var code = event.code;
-    if (name === "F2") {
+    if (code==="KeyN"){
+      document.getElementById('obje_girdi').style.backgroundColor = "black";
+      document.getElementById('obje_girdi').innerHTML='<form><label for="xbuton">X :</label><input type="number" maxlength="999999" id="xbuton" step="0.001" required><br><label for="ybuton">Y :</label><input type="number" maxlength="999999" id="ybuton" step="0.001" required><input id="koordinatal" type="submit" value="nokta oluştur"></form>';
+      let secim = document.querySelector("#koordinatal");
+      secim.getAttribute
+    }
+    if (code === "KeyS") {
       document.getElementById('sayfamesajlari').innerText = "İşlem Tamamlandı"
       setTimeout(() => {  document.getElementById('sayfamesajlari').innerText = "\n..."; }, 1500);
       setTimeout(() => {  document.getElementById('sayfamesajlari').innerText = "\n......"; }, 1500);
       setTimeout(() => {  document.getElementById('sayfamesajlari').style.backgroundColor  = "unset"}, 1500);
       setTimeout(() => {  document.getElementById('sayfamesajlari').innerText = "";}, 1500);
       map.off('click')
+      document.getElementById('obje_girdi').style.backgroundColor = "unset";
+      document.getElementById('obje_girdi').innerHTML=""
     }})}
     // fonksiyon sonu
   
@@ -342,17 +386,18 @@ function create_point(){
 var x
 var y
 var point
-
+// bekletme fonksiyonu
 function sleep(ms)  {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
-
+//baslangic fonksiyonu
 async function baslangic(){
-await sleep(1000);
-document.getElementById('map_screen').style.backgroundColor = "white";
 await sleep(500);
 document.getElementById('sayfamesajlari').style.backgroundColor  = "black";
-document.getElementById('sayfamesajlari').innerText = "Çizim Ekranı Oluşturuldu.";
+document.getElementById('sayfamesajlari').innerText = "Çizim Ekranı Oluşturuluyor..";
+
+await sleep(2500);
+document.getElementById('map_screen').style.backgroundColor = "white";
 await sleep(2000);
 document.getElementById('sayfamesajlari').innerText ="............";
 await sleep(500)
@@ -360,7 +405,7 @@ document.getElementById('sayfamesajlari').style.backgroundColor  = "unset";
 document.getElementById('sayfamesajlari').innerText =""}
 baslangic()
 
-// Fetch all the details element.
+// Fetch all the details element. // üst sekmelerden birini açınca diğerinin kapanması
 const details = document.querySelectorAll("#create_object,#up_data,#down_data,#map_services");
 
 // Add the onclick listeners.
@@ -374,4 +419,21 @@ details.forEach((targetDetail) => {
     });
   });
 });
+</script>
+<script>
+  //sınıflar
+  class point_object {
+    constructor(x_coordinats,y_coordinats,oznitelik){
+      this.geojsonfeature = {
+      "type": "Feature",
+      "properties": null,
+      "geometry":{
+        "type":"Point",
+        "coordinates":[null,null]}}
+      this.geojsonfeature.geometry.coordinates = [y_coordinats,x_coordinats]
+      this.geojsonfeature.properties = oznitelik
+      }} 
+
+var point_listesi = []
+
 </script>
