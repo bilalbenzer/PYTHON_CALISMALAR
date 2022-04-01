@@ -418,4 +418,10 @@ body{
     font-family: 'Courier New', Courier, monospace;
 }
 
+#katman{
+    position: relative;
+    width: 100%;
+
+}
+
 
