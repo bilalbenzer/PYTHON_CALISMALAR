@@ -344,13 +344,7 @@ function create_point(){
           x = (e.latlng.lat).toFixed(6);
           y = (e.latlng.lng).toFixed(6);
           document.getElementById('sayfamesajlari').innerText="Nokta oluşturuldu \n"+"X="+x+"   "+"Y="+y;
-
-          var oznitelikler = {
-            "name":"nokta1",
-            "tip":"nokta",
-            "il":"afyon"
-            }
-          const point_obje = new point_object(x_coordinats=x,y_coordinats=y,oznitelik=oznitelikler)
+          const point_obje = new point_object(x_coordinats=x,y_coordinats=y)
           point_listesi.push(point_obje)
           katman_liste()
           })
@@ -379,12 +373,8 @@ function create_point(){
 function koordinatileolustur(){
           x = document.getElementById('xbuton').value
           y = document.getElementById('ybuton').value
-          var oznitelikler = {
-            "name":"nokta1",
-            "tip":"nokta",
-            "il":"afyon"
-          }
-          const point_obje = new point_object(x_coordinats=x,y_coordinats=y,oznitelik=oznitelikler)
+
+          const point_obje = new point_object(x_coordinats=x,y_coordinats=y)
           ;
           point_listesi.push(point_obje)
           console.log(point_obje.geojsonfeature)

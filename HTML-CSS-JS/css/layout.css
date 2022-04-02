@@ -102,9 +102,10 @@
 }
 /* ANA SAYFA İLE İLGİLİ KISIMLAR */
 #container{
-    margin-top: 20px;
-    width: 100%;
-    height: auto;
+    position: static;
+    width: 95%;
+    height: 500px;
+    overflow: hidden;
 }
 #updates_and_news{
     border-radius: 25px;
@@ -263,16 +264,17 @@ body{
     z-index: 0;
     width: 99.5%;
     height:830px;
+    position: static;
 }
 #left_tabs{
     text-align: center;
-    position: relative;
+    position: static;
     z-index: 0;
     font-weight: bold;
 }
 #vektor{
     border: solid black;
-    position: relative;
+    position: static;
     background-color: wheat;
     z-index: 0;
     width: 10%;
@@ -375,6 +377,7 @@ body{
     width: 100.1%;
     height: 1010px;
     position: absolute;
+    
     margin-left: -10px;
     margin-top: -10px;
 }
@@ -384,7 +387,7 @@ body{
     width: auto;
     height: 20px;
     z-index: 3;
-    position: relative;
+    position: static;
     float: left;
     margin-top: 70px;
     opacity: 0.7;
