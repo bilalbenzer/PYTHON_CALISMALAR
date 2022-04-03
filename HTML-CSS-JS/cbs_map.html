@@ -45,7 +45,6 @@
                 <button class="button4" type="menu" onclick="add_herev3()" ondblclick="remove_herev3()">Here Map V3</button>
                 <button class="button4" type="menu" onclick="add_jawg_map()" ondblclick="remove_jawg_map()">Jawg Map</button></details>
         </div>
-        
         <div id="map_view_background"></div>
         <div id="map_screen"></div>
         <div id="map_view">
@@ -386,26 +385,35 @@ function koordinatileolustur(){
 //-------------------------------------------------------------------------------------------------------------------------------------
 function katman_liste(){
           for (i in point_listesi){
+            var id_name = (i).toString()
+            var id_name_summary = id_name+"_summary"
+            nokta = point_listesi[i];
             var noktano = "Nokta"+(i).toString()
-            a = document.getElementById((i).toString())
+            a = document.getElementById(id_name)
             if (a!=null){
               if (a.name===noktano){
                 continue
               }
             }
-            nokta = point_listesi[i];
-            var katman = document.createElement("button");
+            const katman = document.createElement("details");
             katman.setAttribute("id",(i).toString());
             katman.setAttribute("name",noktano);
+            const summary1= document.createElement("summary");
+            summary1.setAttribute("id",id_name_summary);
+            
             document.getElementById('layers_vektor').appendChild(katman);
-            document.getElementById(i.toString()).innerText=noktano;
-            document.getElementById(i.toString()).style.width="100%";
-            document.getElementById(i.toString()).style.height="20px";
-            document.getElementById(i.toString()).style.backgroundColor="wheat";
-            document.getElementById(i.toString()).style.fontFamily="'Courier New', Courier, monospace";
-            document.getElementById(i.toString()).style.fontWeight="bolder";
-            document.getElementById(i.toString()).style.fontSize="18px";
-            console.log(point_listesi[i])
+            document.getElementById(id_name).innerHTML='<button class="katmanadi" type="menu">Haritada Göster</button><button class="katmanadi"type="menu">Haritada Gizle</button><button class="katmanadi" type="menu">Yaklaş</button><button class="katmanadi" type="menu">Renk Değiştir</button><button class="katmanadi" type="menu">Boyut Değiştir</button><button class="katmanadi" type="menu">Biçim Değiştir</button><button class="katmanadi" type="menu">Öznitelikleri Görüntüle ve Düzenle</button>';
+            document.getElementById(id_name).appendChild(summary1);
+            document.getElementById(id_name_summary).innerText=noktano;    
+            document.getElementById(id_name).name =noktano;
+            document.getElementById(id_name_summary).style.listStyle="none";
+            document.getElementById(id_name_summary).style.fontSize="medium"
+            document.getElementById(id_name_summary).style.fontWeight="bold"
+            document.getElementById(id_name_summary).style.fontFamily="'Courier New', Courier, monospace"
+            document.getElementById(id_name_summary).style.cursor="pointer"
+            document.getElementById(id_name_summary).style.listStyle="none"
+            
+            console.log(point_listesi[i]);
             L.geoJSON(point_listesi[i].geojsonfeature,{
           pointToLayer: function (Feature,latlng){
             return L.circleMarker(latlng, geojsonMarkerOptions);

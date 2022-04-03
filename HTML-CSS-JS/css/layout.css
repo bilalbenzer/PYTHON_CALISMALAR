@@ -424,7 +424,17 @@ body{
 #katman{
     position: relative;
     width: 100%;
-
 }
 
+.katmanadi{
+    position: static;
+    width: 180px;
+    height: auto;
+    background-color: black;
+    font-size: medium;
+    font-family: 'Courier New', Courier, monospace;
+    font-weight: bold;
+    color: wheat;
+    margin: 2px;
+}
 
