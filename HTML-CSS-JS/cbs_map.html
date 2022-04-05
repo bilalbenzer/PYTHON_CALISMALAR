@@ -334,7 +334,14 @@ var myicon = L.icon({
   iconSize: [31,31]
 });
  // nokta oluşturma
-
+ var geojson_gosterim_ayar = {
+      radius: 8,
+      fillColor: "#ff7800",
+      color: "#000",
+      weight: 1,
+      opacity: 1,
+      fillOpacity: 0.8
+      };
  
 function create_point(){
           document.getElementById('sayfamesajlari').innerText="Çizime Başlayabilirsiniz.\nN: Koordinat Gir\nS: Bitir";
@@ -393,6 +400,7 @@ function katman_liste(){
             if (a!=null){
               if (a.name===noktano){
                 continue
+              
               }
             }
             const katman = document.createElement("details");
@@ -402,7 +410,7 @@ function katman_liste(){
             summary1.setAttribute("id",id_name_summary);
             
             document.getElementById('layers_vektor').appendChild(katman);
-            document.getElementById(id_name).innerHTML='<button class="katmanadi" type="menu">Haritada Göster</button><button class="katmanadi"type="menu">Haritada Gizle</button><button class="katmanadi" type="menu">Yaklaş</button><button class="katmanadi" type="menu">Renk Değiştir</button><button class="katmanadi" type="menu">Boyut Değiştir</button><button class="katmanadi" type="menu">Biçim Değiştir</button><button class="katmanadi" type="menu">Öznitelikleri Görüntüle ve Düzenle</button>';
+            document.getElementById(id_name).innerHTML='<button class="katmanadi" onclick="haritadagoster(i)"  type="menu">Haritada Göster</button><button class="katmanadi" onclick="haritadagizle(i)" type="menu">Haritada Gizle</button><button class="katmanadi" type="menu">Yaklaş</button><button class="katmanadi" type="menu">Renk Değiştir</button><button class="katmanadi" type="menu">Boyut Değiştir</button><button class="katmanadi" type="menu">Biçim Değiştir</button><button class="katmanadi" type="menu">Öznitelikleri Görüntüle ve Düzenle</button>';
             document.getElementById(id_name).appendChild(summary1);
             document.getElementById(id_name_summary).innerText=noktano;    
             document.getElementById(id_name).name =noktano;
@@ -412,13 +420,8 @@ function katman_liste(){
             document.getElementById(id_name_summary).style.fontFamily="'Courier New', Courier, monospace"
             document.getElementById(id_name_summary).style.cursor="pointer"
             document.getElementById(id_name_summary).style.listStyle="none"
-            
-            console.log(point_listesi[i]);
-            L.geoJSON(point_listesi[i].geojsonfeature,{
-          pointToLayer: function (Feature,latlng){
-            return L.circleMarker(latlng, geojsonMarkerOptions);
-          }
-        }).addTo(map)
+            console.log(nokta);
+            haritayaekle(i)
           }}
 var x
 var y
@@ -459,6 +462,17 @@ details.forEach((targetDetail) => {
 </script>
 <script>
   //sınıflar
+  // harita gizleme ve eklemelerde sorun var. 
+function haritayaekle(i){
+  point_listesi[i].layer.addTo(map)
+}
+
+function haritadagizle(i){
+    map.removeLayer(point_listesi[i].layer)
+}
+function haritadagoster(i){
+  (point_listesi[i].layer).addTo(map)
+}
   class point_object {
     constructor(x_coordinats,y_coordinats,oznitelik){
       this.geojsonfeature = {
@@ -466,11 +480,26 @@ details.forEach((targetDetail) => {
       "properties": null,
       "geometry":{
         "type":"Point",
-        "coordinates":[null,null]}}
-      this.geojsonfeature.geometry.coordinates = [y_coordinats,x_coordinats]
-      this.geojsonfeature.properties = oznitelik
-      }} 
+        "coordinates":[null,null]}};
+      this.geojsonfeature.geometry.coordinates = [y_coordinats,x_coordinats];
+      this.geojsonfeature.properties = oznitelik;
+     
+    this.layer = L.geoJSON(this.geojsonfeature,{
+      pointToLayer:function(feature,latlng){
+        return L.circleMarker(latlng,{
+        radius: 8,
+        fillColor: "#ff7800",
+        color: "#000",
+        weight: 1,
+        opacity: 1,
+        fillOpacity: 0.8
+      })
+      }
+    })};
+    
+    }
 
+  
 var point_listesi = []
 
 </script>
