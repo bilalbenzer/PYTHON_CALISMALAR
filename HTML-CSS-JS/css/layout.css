@@ -426,7 +426,7 @@ body{
     width: 100%;
 }
 
-.katmanadi{
+.oznitelikbilgi,.haritadagosterme,.haritadagizleme,.yaklasma,.renkdegistirme,.boyutdegistirme,.bicimdegistirme{
     position: static;
     width: 180px;
     height: auto;
