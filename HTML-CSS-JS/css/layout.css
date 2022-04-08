@@ -198,7 +198,7 @@ body{
     text-align: center;
     color: white;
     font-size: large;
-    margin-left: 22.5%;
+    margin-left: 15%;
     padding: 0.6%;
     float: left;
     opacity: 0.7;
@@ -220,7 +220,7 @@ body{
     opacity: 0.8;
     color: white;
 }
-#up_data,#down_data,#map_services{
+#up_data,#down_data,#map_services,#button12{
     color: white;
     position: relative;
     float: left;

@@ -44,6 +44,7 @@
                 <button class="button4" type="menu" onclick="add_opentopomap()" ondblclick="remove_opentopomap()">Opentopo map</button>
                 <button class="button4" type="menu" onclick="add_herev3()" ondblclick="remove_herev3()">Here Map V3</button>
                 <button class="button4" type="menu" onclick="add_jawg_map()" ondblclick="remove_jawg_map()">Jawg Map</button></details>
+              <button id="button12" type="menu" onclick='map.flyTo([38.9637,35.2433],7)' style="font-size: small; list-style: none;padding: 5px;font-weight: bold;">Haritayı Yenile</button>
         </div>
         <div id="map_view_background"></div>
         <div id="map_screen"></div>
@@ -76,6 +77,7 @@
 <script src="js/Proj4Leaflet-1.0.1/lib/proj4-compressed.js"></script>
 <script>
   //harita çeşitler
+
 var map = L.map('map_screen',{
   center: [38.9637,35.2433],
   zoom: 7,
@@ -422,6 +424,24 @@ function katman_liste(){
             // document.getElementById(id_name_summary).style.listStyle="none"
             console.log(document.getElementById(point_listesi[i].id_nosu))
           }}
+function nesneyiharitayaekle(i){
+  for (b in point_listesi){
+      if (point_listesi[b].id_nosu===i){
+      point_listesi[b].layer=  L.geoJSON(point_listesi[b].geojsonfeature,{
+      pointToLayer:function(feature,latlng){
+        return L.circleMarker(latlng,point_listesi[b].bicim)
+      }})
+      point_listesi[b].layer.addTo(map)
+      point_listesi[b].bounds=point_listesi[b].layer.getBounds()
+      console.log(point_listesi[b].bounds)}
+      else{
+        continue
+      }
+    }
+}
+function nesneyiharitadangizleme(i){
+
+}
 class point_object {
     constructor(x_coordinats,y_coordinats,oznitelik){
       this.geojsonfeature = {
@@ -431,19 +451,20 @@ class point_object {
         "type":"Point",
         "coordinates":[null,null]}};
     this.geojsonfeature.geometry.coordinates = [y_coordinats,x_coordinats];
-    this.layer = L.geoJSON(this.geojsonfeature,{
-      pointToLayer:function(feature,latlng){
-        return L.circleMarker(latlng,{
+    this.bicim = {
         radius: 8,
         fillColor: renk_listesi[Math.floor(Math.random()*renk_listesi.length)],
         color: "#000",
         weight: 1,
         opacity: 1,
         fillOpacity: 0.8
-      })}}).addTo(map)
+      }
+      this.layer=null
       this.id_nosu = "point"+(new Date()).getMilliseconds()+Math.floor(Math.random()*1000)
+      this.bounds=null
     }
     menuleriolustur(){
+      nesneyiharitayaekle(this.id_nosu)
       this.details_katman =document.createElement("details");
       this.details_katman.setAttribute("id",this.id_nosu);
       this.details_katman.setAttribute("name",this.id_nosu);
@@ -477,23 +498,36 @@ function renkdegistir(i){
   renksecici.setAttribute("type","color")
   renksecici.setAttribute("name","favcolor")
   renksecici.setAttribute("value","#000000")
-  var renkalma = document.createElement("button")
+  var renkalma = document.createElement("input")
   renkalma.setAttribute("type","submit")
   renkalma.setAttribute("value","Değiştir")
   renkalma.setAttribute("onclick","rengialma('"+i+"')")
-  document.getElementById(i).getElementsByTagName("button")[3].innerHTML=""
-  document.getElementById(i).getElementsByTagName("button")[3].appendChild(form_element)
   //document.getElementById(i).getElementsByTagName("button")[3].innerHTML='<form><label for="favcolor">Rengi Seçiniz:</label><input type="color" id="favcolor" name="favcolor" value="#000000"><input type="submit" value="Değiştir"></form>'
   // document.getElementById(i).getElementsByTagName("button")[3].getElementsByClassName("formelementi").appendChild(label_element)
   // document.getElementById(i).getElementsByTagName("button")[3].getElementsByClassName("formelementi").appendChild(renksecici)
   // document.getElementById(i).getElementsByTagName("button")[3].getElementsByClassName("formelementi").appendChild(renkalma)
-  document.getElementById(i).getElementsByTagName("button")[3].getElementsByClassName("formelementi")[0].appendChild(label_element)
-  document.getElementById(i).getElementsByTagName("button")[3].getElementsByClassName("formelementi")[0].appendChild(renksecici)
-  document.getElementById(i).getElementsByTagName("button")[3].getElementsByClassName("formelementi")[0].appendChild(renkalma)
-  console.log(document.getElementById(i).getElementsByTagName("button")[3].getElementsByClassName("formelementi")[0])
+  document.getElementById("sayfamesajlari").style.backgroundColor="black"
+  document.getElementById("sayfamesajlari").appendChild(label_element)
+  document.getElementById("sayfamesajlari").appendChild(renksecici)
+  document.getElementById("sayfamesajlari").appendChild(renkalma)
+  console.log(document.getElementById("sayfamesajlari"))
 }
-function rengialma(i){
-  console.log(document.getElementById(i).getElementsByTagName("button")[3].getElementsByTagName("button"))
+async function rengialma(i){
+  var renk = document.getElementById("sayfamesajlari").getElementsByTagName("input")[0].value
+  for (b in point_listesi){
+      if (point_listesi[b].id_nosu===i){
+        point_listesi[b].bicim.fillColor = renk
+        map.removeLayer(point_listesi[b].layer)
+        nesneyiharitayaekle(i)
+      }
+      else{
+        continue
+      }
+    } 
+await sleep(500)
+document.getElementById('sayfamesajlari').style.backgroundColor  = "unset";
+document.getElementById('sayfamesajlari').innerText ="";
+    
 }
 
 function  haritayaeklemeislevi(i){
@@ -503,9 +537,7 @@ function  haritayaeklemeislevi(i){
       }
       else{
         continue
-      }
-    }
-    }
+      }}}
 function  haritadagizleme(i){
     for (b in point_listesi){
       if (point_listesi[b].id_nosu===i){
@@ -519,7 +551,7 @@ function  haritadagizleme(i){
 function objeyeyaklas(i){
   for (b in point_listesi){
       if (point_listesi[b].id_nosu===i){
-        map.fitBounds(point_listesi[b].layer.getBounds())
+      map.fitBounds(point_listesi[b].bounds)
       }
       else{
         continue
