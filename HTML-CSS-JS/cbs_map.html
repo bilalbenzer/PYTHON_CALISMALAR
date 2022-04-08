@@ -355,8 +355,6 @@ function create_point(){
           name = "point"+(new Date()).getMilliseconds()+Math.floor(Math.random()*1000)
           window[name]= new point_object(x_coordinats=x,y_coordinats=y,object_name=name)
           a=window[name]
-          point_listesi.push(a)
-          console.log(point_listesi)
           a.haritayaekle(a.bicim)
           a.menuleriolustur()
           })
@@ -386,13 +384,11 @@ function koordinatileolustur(){
           x = document.getElementById('xbuton').value
           y = document.getElementById('ybuton').value
 
-          const point_obje = new point_object(x_coordinats=x,y_coordinats=y)
-          ;
-          point_listesi.push(point_obje)
-          point_obje.haritayaekle(point_obje.bicim)
-          point_obje.menuleriolustur()
-          console.log(point_obje.geojsonfeature)
-          console.log(point_listesi,point_listesi.length)
+          name = "point"+(new Date()).getMilliseconds()+Math.floor(Math.random()*1000)
+          window[name]= new point_object(x_coordinats=x,y_coordinats=y,object_name=name)
+          a=window[name]
+          a.haritayaekle(a.bicim)
+          a.menuleriolustur()
           document.getElementById('sayfamesajlari').innerText="Nokta oluşturuldu \n"+"X="+x+"   "+"Y="+y;
           console.log("Nokta Oluşturuldu"+x+y)
             }
