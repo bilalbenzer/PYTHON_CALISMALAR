@@ -352,11 +352,13 @@ function create_point(){
           x = (e.latlng.lat).toFixed(6);
           y = (e.latlng.lng).toFixed(6);
           document.getElementById('sayfamesajlari').innerText="Nokta oluşturuldu \n"+"X="+x+"   "+"Y="+y;
-          const point_obje = new point_object(x_coordinats=x,y_coordinats=y)
-          
-          point_listesi.push(point_obje)
-          point_obje.menuleriolustur()
-          katman_liste()
+          name = "point"+(new Date()).getMilliseconds()+Math.floor(Math.random()*1000)
+          window[name]= new point_object(x_coordinats=x,y_coordinats=y,object_name=name)
+          a=window[name]
+          point_listesi.push(a)
+          console.log(point_listesi)
+          a.haritayaekle(a.bicim)
+          a.menuleriolustur()
           })
           document.addEventListener('keydown', (event) => {
           var name = event.key;
@@ -387,70 +389,23 @@ function koordinatileolustur(){
           const point_obje = new point_object(x_coordinats=x,y_coordinats=y)
           ;
           point_listesi.push(point_obje)
+          point_obje.haritayaekle(point_obje.bicim)
+          point_obje.menuleriolustur()
           console.log(point_obje.geojsonfeature)
           console.log(point_listesi,point_listesi.length)
           document.getElementById('sayfamesajlari').innerText="Nokta oluşturuldu \n"+"X="+x+"   "+"Y="+y;
           console.log("Nokta Oluşturuldu"+x+y)
-          katman_liste()
             }
 //-------------------------------------------------------------------------------------------------------------------------------------
-var secenek=["selam"]
-function katman_liste(){
-          for (i in point_listesi){
-            
-            a = document.getElementById(point_listesi[i].id_nosu)
-            console.log(a)
-            if (a!=null){
-              if (a.name===point_listesi[i].id_nosu){
-                continue
-              }
-            }
-            // const katman = document.createElement("details");
-            // katman.setAttribute("id",id_name);
-            // katman.setAttribute("name",noktano);
-            // const summary1= document.createElement("summary");
-            // summary1.setAttribute("id",id_name_summary); 
-            // document.getElementById('layers_vektor').appendChild(katman);
-            
-            // document.getElementById(id_name).innerHTML='<button class="haritadagizleme" type="menu" >Haritada Gizle</button><button class="yaklasma" type="menu" onclick=secenek[0]="haritayayaklas">Yaklaş</button><button class="renkdegistirme" type="menu" onclick=secenek[0]="renkdegistir">Renk Değiştir</button><button class="boyutdegistirme" type="menu" onclick=secenek[0]="boyutdegistir">Boyut Değiştir</button><button class="bicimdegistirme" type="menu" onclick=secenek[0]="bicimdegistir">Biçim Değiştir</button><button class="oznitelikbilgi" type="menu" onclick=secenek[0]="ozntelikbilgi">Öznitelikleri Görüntüle ve Düzenle</button>';
-            // document.getElementById(id_name).appendChild(summary1);
-            // document.getElementById(id_name_summary).innerText=noktano;    
-            // document.getElementById(id_name).name =noktano;
-            // document.getElementById(id_name_summary).style.listStyle="none";
-            // document.getElementById(id_name_summary).style.fontSize="medium"
-            // document.getElementById(id_name_summary).style.fontWeight="bold"
-            // document.getElementById(id_name_summary).style.fontFamily="'Courier New', Courier, monospace"
-            // document.getElementById(id_name_summary).style.cursor="pointer"
-            // document.getElementById(id_name_summary).style.listStyle="none"
-            console.log(document.getElementById(point_listesi[i].id_nosu))
-          }}
-function nesneyiharitayaekle(i){
-  for (b in point_listesi){
-      if (point_listesi[b].id_nosu===i){
-      point_listesi[b].layer=  L.geoJSON(point_listesi[b].geojsonfeature,{
-      pointToLayer:function(feature,latlng){
-        return L.circleMarker(latlng,point_listesi[b].bicim)
-      }})
-      point_listesi[b].layer.addTo(map)
-      point_listesi[b].bounds=point_listesi[b].layer.getBounds()
-      console.log(point_listesi[b].bounds)}
-      else{
-        continue
-      }
-    }
-}
-function nesneyiharitadangizleme(i){
 
-}
 class point_object {
-    constructor(x_coordinats,y_coordinats,oznitelik){
+    constructor(x_coordinats,y_coordinats,object_name){
       this.geojsonfeature = {
       "type": "Feature",
       "properties": null,
       "geometry":{
         "type":"Point",
-        "coordinates":[null,null]}};
-    this.geojsonfeature.geometry.coordinates = [y_coordinats,x_coordinats];
+        "coordinates":[y_coordinats,x_coordinats]}};
     this.bicim = {
         radius: 8,
         fillColor: renk_listesi[Math.floor(Math.random()*renk_listesi.length)],
@@ -459,12 +414,49 @@ class point_object {
         opacity: 1,
         fillOpacity: 0.8
       }
-      this.layer=null
-      this.id_nosu = "point"+(new Date()).getMilliseconds()+Math.floor(Math.random()*1000)
-      this.bounds=null
+    this.id_nosu = object_name
+      
+    }
+    haritayaekle(x){
+    this.layer=L.geoJSON(this.geojsonfeature,{
+      pointToLayer:function(feature,latlng){
+        return L.circleMarker(latlng,x)}}).addTo(map)
+    this.bounds=this.layer.getBounds()
+    }
+    haritadagoster(){
+      this.layer.addTo(map)
+    }
+    haritadagizle(){
+      map.removeLayer(this.layer)
+    }
+    objeyeyaklas(){
+      map.fitBounds(this.bounds)
+    }
+    rengidegistirme(){
+  var form_element=document.createElement("form")
+  form_element.setAttribute("class","formelementi")
+  var label_element=document.createElement("label")
+  label_element.setAttribute("for","favcolor")
+  label_element.innerText="Rengi Seçiniz"
+  var renksecici=document.createElement("input")
+  renksecici.setAttribute("id","favcolor")
+  renksecici.setAttribute("type","color")
+  renksecici.setAttribute("name","favcolor")
+  renksecici.setAttribute("value","#000000")
+  var renkalma = document.createElement("input")
+  renkalma.setAttribute("type","submit")
+  renkalma.setAttribute("value","Değiştir")
+  renkalma.setAttribute("onclick","window['"+this.id_nosu+"'].rengialma('"+this.id_nosu+"')")
+  //document.getElementById(i).getElementsByTagName("button")[3].innerHTML='<form><label for="favcolor">Rengi Seçiniz:</label><input type="color" id="favcolor" name="favcolor" value="#000000"><input type="submit" value="Değiştir"></form>'
+  // document.getElementById(i).getElementsByTagName("button")[3].getElementsByClassName("formelementi").appendChild(label_element)
+  // document.getElementById(i).getElementsByTagName("button")[3].getElementsByClassName("formelementi").appendChild(renksecici)
+  // document.getElementById(i).getElementsByTagName("button")[3].getElementsByClassName("formelementi").appendChild(renkalma)
+  document.getElementById("sayfamesajlari").style.backgroundColor="black"
+  document.getElementById("sayfamesajlari").appendChild(label_element)
+  document.getElementById("sayfamesajlari").appendChild(renksecici)
+  document.getElementById("sayfamesajlari").appendChild(renkalma)
     }
     menuleriolustur(){
-      nesneyiharitayaekle(this.id_nosu)
       this.details_katman =document.createElement("details");
       this.details_katman.setAttribute("id",this.id_nosu);
       this.details_katman.setAttribute("name",this.id_nosu);
@@ -481,83 +473,30 @@ class point_object {
       document.getElementById(this.id_nosu+"_summary").style.cursor="pointer"
       document.getElementById(this.id_nosu+"_summary").style.listStyle="none"
       //butonlar
-      document.getElementById(this.id_nosu).getElementsByTagName("button")[0].setAttribute('onclick',"haritayaeklemeislevi('"+this.id_nosu+"')");
-      document.getElementById(this.id_nosu).getElementsByTagName("button")[1].setAttribute('onclick',"haritadagizleme('"+this.id_nosu+"')");
-      document.getElementById(this.id_nosu).getElementsByTagName("button")[2].setAttribute('onclick',"objeyeyaklas('"+this.id_nosu+"')")
-      document.getElementById(this.id_nosu).getElementsByTagName("button")[3].setAttribute('onclick',"renkdegistir('"+this.id_nosu+"')")
+      document.getElementById(this.id_nosu).getElementsByTagName("button")[0].setAttribute('onclick',"window['"+this.id_nosu+"'].haritadagoster()");
+      document.getElementById(this.id_nosu).getElementsByTagName("button")[1].setAttribute('onclick',"window['"+this.id_nosu+"'].haritadagizle()");
+      document.getElementById(this.id_nosu).getElementsByTagName("button")[2].setAttribute('onclick',"window['"+this.id_nosu+"'].objeyeyaklas()")
+      document.getElementById(this.id_nosu).getElementsByTagName("button")[3].setAttribute('onclick',"window['"+this.id_nosu+"'].rengidegistirme()")
+      console.log(document.getElementById(this.id_nosu).getElementsByTagName("button")[0])
     }
+    rengialma(id_no){
+    var renk = document.getElementById("sayfamesajlari").getElementsByTagName("input")[0].value
+    this.bicim.fillColor=renk
+    map.removeLayer(this.layer)
+    this.layer=L.geoJSON(this.geojsonfeature,{
+      pointToLayer:function(feature,latlng){
+        return L.circleMarker(latlng,window[id_no].bicim)}}).addTo(map)
+        bekleme()
+      }
+    
   }
-function renkdegistir(i){
-  var form_element=document.createElement("form")
-  form_element.setAttribute("class","formelementi")
-  var label_element=document.createElement("label")
-  label_element.setAttribute("for","favcolor")
-  label_element.innerText="Rengi Seçiniz"
-  var renksecici=document.createElement("input")
-  renksecici.setAttribute("id","favcolor")
-  renksecici.setAttribute("type","color")
-  renksecici.setAttribute("name","favcolor")
-  renksecici.setAttribute("value","#000000")
-  var renkalma = document.createElement("input")
-  renkalma.setAttribute("type","submit")
-  renkalma.setAttribute("value","Değiştir")
-  renkalma.setAttribute("onclick","rengialma('"+i+"')")
-  //document.getElementById(i).getElementsByTagName("button")[3].innerHTML='<form><label for="favcolor">Rengi Seçiniz:</label><input type="color" id="favcolor" name="favcolor" value="#000000"><input type="submit" value="Değiştir"></form>'
-  // document.getElementById(i).getElementsByTagName("button")[3].getElementsByClassName("formelementi").appendChild(label_element)
-  // document.getElementById(i).getElementsByTagName("button")[3].getElementsByClassName("formelementi").appendChild(renksecici)
-  // document.getElementById(i).getElementsByTagName("button")[3].getElementsByClassName("formelementi").appendChild(renkalma)
-  document.getElementById("sayfamesajlari").style.backgroundColor="black"
-  document.getElementById("sayfamesajlari").appendChild(label_element)
-  document.getElementById("sayfamesajlari").appendChild(renksecici)
-  document.getElementById("sayfamesajlari").appendChild(renkalma)
-  console.log(document.getElementById("sayfamesajlari"))
-}
-async function rengialma(i){
-  var renk = document.getElementById("sayfamesajlari").getElementsByTagName("input")[0].value
-  for (b in point_listesi){
-      if (point_listesi[b].id_nosu===i){
-        point_listesi[b].bicim.fillColor = renk
-        map.removeLayer(point_listesi[b].layer)
-        nesneyiharitayaekle(i)
-      }
-      else{
-        continue
-      }
-    } 
+async function bekleme(){
 await sleep(500)
 document.getElementById('sayfamesajlari').style.backgroundColor  = "unset";
 document.getElementById('sayfamesajlari').innerText ="";
     
 }
 
-function  haritayaeklemeislevi(i){
-    for (b in point_listesi){
-      if (point_listesi[b].id_nosu===i){
-        point_listesi[b].layer.addTo(map)
-      }
-      else{
-        continue
-      }}}
-function  haritadagizleme(i){
-    for (b in point_listesi){
-      if (point_listesi[b].id_nosu===i){
-        map.removeLayer(point_listesi[b].layer)
-      }
-      else{
-        continue
-      }
-    }
-    }
-function objeyeyaklas(i){
-  for (b in point_listesi){
-      if (point_listesi[b].id_nosu===i){
-      map.fitBounds(point_listesi[b].bounds)
-      }
-      else{
-        continue
-      }
-    }
-}
 var x
 var y
 var point
