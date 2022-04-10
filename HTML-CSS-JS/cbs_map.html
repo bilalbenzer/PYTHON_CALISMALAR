@@ -304,9 +304,7 @@ function remove_jawg_map(){
 }
 
 // sol alttaki koordinatların görünmesi için
-map.on('mousemove' , (e) =>{
-    document.getElementById('coordinat_tab').innerText ="X:"+(e.latlng.lat).toFixed(8) +"------"+ "Y:"+(e.latlng.lng).toFixed(8)
-    });
+
 // Haritanın Sol Alt Köşesinde Koordinat Gösterme
 function show_coordints() {
   map.on('mousemove' , (e) =>{
@@ -482,25 +480,85 @@ class point_object {
       document.getElementById("sayfamesajlari").appendChild(sembol_sec)
     }
     sembolsec(){
+      document.getElementById("sayfamesajlari").innerText=""
       document.getElementById("sayfamesajlari").style.backgroundColor="black"
-      document.getElementById("sayfamesajlari").innerText="Seçmek İstediğiniz Sembole Tıklayınız."
+      var ilkmetin=document.createTextNode("Eklemek İstediğiniz Sembolün Resim Urlsini Ekleyiniz.\nÖrnek:www.asd.com/sembol.png\n")
+      document.getElementById("sayfamesajlari").appendChild(ilkmetin)
+      //url ile sembol ekleme kısmı
+      var form_element=document.createElement("form")
+      form_element.setAttribute("class","formelementi")
+      var label_element=document.createElement("label")
+      label_element.setAttribute("for","alurl")
+      label_element.innerText="\nResim Urlsini Giriniz."
+      var renksecici=document.createElement("input")
+      renksecici.setAttribute("id","alurl")
+      renksecici.setAttribute("type","url")
+      renksecici.setAttribute("name","Url Al")
+      renksecici.setAttribute("value","")
+      var renkalma = document.createElement("input")
+      renkalma.setAttribute("type","submit")
+      renkalma.setAttribute("value","Uygula")
+      renkalma.setAttribute("onclick","window['"+this.id_nosu+"'].sembolurluygula('"+this.id_nosu+"')")
+      document.getElementById("sayfamesajlari").style.backgroundColor="black"
+      document.getElementById("sayfamesajlari").appendChild(label_element)
+      document.getElementById("sayfamesajlari").appendChild(renksecici)
+      document.getElementById("sayfamesajlari").appendChild(renkalma)
+      
+      //kütüphaneden sembol seçe kısmı
+      var sembolsec_detail=document.createElement("details")
+        sembolsec_detail.setAttribute("id",this.id_nosu+"detail")
+        sembolsec_detail.style.height="25px"
+        sembolsec_detail.style.width="85px"
+        sembolsec_detail.style.borderRadius="5px"
+        sembolsec_detail.style.backgroundColor="wheat"
+        sembolsec_detail.style.color="black"
+      var sembolsec_summary=document.createElement("summary")
+      sembolsec_summary.innerText="Semboller"
+        sembolsec_summary.setAttribute("id",this.id_nosu+"summary")
+        sembolsec_summary.style.width="auto"
+        sembolsec_summary.style.cursor="pointer"
+        sembolsec_summary.style.listStyle="none"
+      var sembolsec_div=document.createElement("div")
+        sembolsec_div.setAttribute("id",this.id_nosu+"div")
+        sembolsec_div.style.backgroundColor="black"
+        sembolsec_div.style.color="wheat"
+        sembolsec_div.style.width="50px"
+      document.getElementById("sayfamesajlari").appendChild(sembolsec_detail)
+      document.getElementById(this.id_nosu+"detail").appendChild(sembolsec_summary)
+      document.getElementById(this.id_nosu+"detail").appendChild(sembolsec_div)
+
+      
       for (a in symbol_list){
         window[a+"symbol"] = document.createElement("button")
         window[a+"symbol"].style.backgroundImage="url('"+symbol_list[a]+"')"
         window[a+"symbol"].style.backgroundSize="cover"
         window[a+"symbol"].style.width="50px"
         window[a+"symbol"].style.height="50px"
+        window[a+"symbol"].style.float="left"
         window[a+"symbol"].setAttribute("onclick","window['"+this.id_nosu+"'].semboluuygula('"+symbol_list[a]+"','"+this.id_nosu+"')")
-        document.getElementById("sayfamesajlari").appendChild(window[a+"symbol"])
+        document.getElementById(this.id_nosu+"div").appendChild(window[a+"symbol"])
       }
     }
+    sembolurluygula(x){
+      var sembol_url=
+      this.icon.iconUrl=document.getElementById("sayfamesajlari").getElementsByTagName("input")[0].value
+      this.icon.iconSize=[30,30]
+      console.log(this.icon)
+      this.icon_uygula = L.icon(this.icon)
+      
+      window[this.id_nosu].haritadagizle()
+      this.layer=L.geoJSON(this.geojsonfeature,{
+        pointToLayer:function(feature,latlng){
+
+          return L.marker(latlng,{icon:window[x].icon_uygula})}}).addTo(map)
+    }
+    
     semboluuygula(i,x){
       this.icon.iconUrl=i
       this.icon.iconSize=[30,30]
       this.icon_uygula = L.icon(this.icon)
       console.log(this.icon_uygula)
       window[this.id_nosu].haritadagizle()
-
       this.layer=L.geoJSON(this.geojsonfeature,{
         pointToLayer:function(feature,latlng){
           console.log(window[x])
@@ -627,8 +685,10 @@ async function katman_sil(i){
   window[i].haritadagizle()
   delete window[i]
   document.getElementById(i).remove();
-
 }
+function  sembolurluygula(){
+      console.log(document.getElementsByClassName("sayfamesajlari"))
+    }
 async function bekleme(){
   await sleep(500)
   document.getElementById('sayfamesajlari').style.backgroundColor  = "unset";
@@ -657,6 +717,7 @@ async function baslangic(){
   await sleep(500)
   document.getElementById('sayfamesajlari').style.backgroundColor  = "unset";
   document.getElementById('sayfamesajlari').innerText =""
+  show_coordints()
 }
 
 baslangic()

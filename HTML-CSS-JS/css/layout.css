@@ -204,6 +204,19 @@ body{
     opacity: 0.7;
     margin-top: 0.2%;
 }
+.semboller{
+    height: 25px;
+    position: absolute;
+    width: 80px;
+    border-radius: 10px;
+    margin-left: 50%;
+    background-color: wheat;
+}
+.semboller2{
+    width: auto;
+    cursor: pointer;
+    list-style: none;
+}
 
 #create_object{
     position: relative;
