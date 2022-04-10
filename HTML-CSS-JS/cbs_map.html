@@ -409,6 +409,11 @@ class point_object {
           opacity: 3,
           fillOpacity: 0.8}
       this.id_nosu = object_name  
+      this.icon={
+        iconUrl:null,
+        iconSize:null
+      }
+      this.icon_uygula = L.icon(this.icon)
     }
     haritayaekle(x){
       this.layer=L.geoJSON(this.geojsonfeature,{
@@ -451,7 +456,6 @@ class point_object {
       document.getElementById(this.id_nosu).getElementsByTagName("button")[2].setAttribute('onclick',"katman_sil('"+this.id_nosu+"')");
       document.getElementById(this.id_nosu).getElementsByTagName("button")[3].setAttribute('onclick',"window['"+this.id_nosu+"'].objeyeyaklas()")
       document.getElementById(this.id_nosu).getElementsByTagName("button")[4].setAttribute('onclick',"window['"+this.id_nosu+"'].stildegistirme()")
-      console.log(document.getElementById(this.id_nosu).getElementsByTagName("button")[0])
     }
     stildegistirme(){
       var nokta_buton=document.createElement("button");
@@ -460,10 +464,47 @@ class point_object {
       nokta_buton.setAttribute("onclick","window['"+this.id_nosu+"'].rengidegistirme()")
       nokta_buton.innerText="Nokta"
       sembol_buton.setAttribute("class", "sembol_buton")
+      sembol_buton.setAttribute("onclick","window['"+this.id_nosu+"'].semboldegistir()")
       sembol_buton.innerText="Sembol"
       document.getElementById("sayfamesajlari").style.backgroundColor="black"
       document.getElementById("sayfamesajlari").appendChild(nokta_buton)
       document.getElementById("sayfamesajlari").appendChild(sembol_buton)
+    }
+    semboldegistir(){
+      document.getElementById("sayfamesajlari").style.backgroundColor="black"
+      document.getElementById("sayfamesajlari").innerText=""
+      var sembol_sec = document.createElement("button");
+      sembol_sec.setAttribute("class","sembol_sec");
+      sembol_sec.setAttribute("onclick","window['"+this.id_nosu+"'].sembolsec()")
+      sembol_sec.innerText="Sembol Seç"
+      var sembol_buyukluk = document.createElement("button")
+      var sembol_saydamlik  = document.createElement("button")
+      document.getElementById("sayfamesajlari").appendChild(sembol_sec)
+    }
+    sembolsec(){
+      document.getElementById("sayfamesajlari").style.backgroundColor="black"
+      document.getElementById("sayfamesajlari").innerText="Seçmek İstediğiniz Sembole Tıklayınız."
+      for (a in symbol_list){
+        window[a+"symbol"] = document.createElement("button")
+        window[a+"symbol"].style.backgroundImage="url('"+symbol_list[a]+"')"
+        window[a+"symbol"].style.backgroundSize="cover"
+        window[a+"symbol"].style.width="50px"
+        window[a+"symbol"].style.height="50px"
+        window[a+"symbol"].setAttribute("onclick","window['"+this.id_nosu+"'].semboluuygula('"+symbol_list[a]+"','"+this.id_nosu+"')")
+        document.getElementById("sayfamesajlari").appendChild(window[a+"symbol"])
+      }
+    }
+    semboluuygula(i,x){
+      this.icon.iconUrl=i
+      this.icon.iconSize=[30,30]
+      this.icon_uygula = L.icon(this.icon)
+      console.log(this.icon_uygula)
+      window[this.id_nosu].haritadagizle()
+
+      this.layer=L.geoJSON(this.geojsonfeature,{
+        pointToLayer:function(feature,latlng){
+          console.log(window[x])
+          return L.marker(latlng,{icon:window[x].icon_uygula})}}).addTo(map)
     }
     rengidegistirme(){
       //Renk Değiştirmek İçin Gerekli Butonlar
@@ -573,10 +614,8 @@ class point_object {
         pointToLayer:function(feature,latlng){
           return L.circleMarker(latlng,window[id_no].bicim)}}).addTo(map)
       }
-    boyutdegistir(){
-      
-    }
   }
+
 async function katman_sil(i){
   document.getElementById('sayfamesajlari').style.backgroundColor  = "black";
   document.getElementById('sayfamesajlari').innerText = "Katman Siliniyor";
@@ -606,6 +645,7 @@ function sleep(ms)  {
 //baslangic fonksiyonu
 
 async function baslangic(){
+  
   await sleep(500);
   document.getElementById('sayfamesajlari').style.backgroundColor  = "black";
   document.getElementById('sayfamesajlari').innerText = "Çizim Ekranı Oluşturuluyor..";
@@ -642,7 +682,10 @@ details.forEach((targetDetail) => {
 
 
 
-  
+const symbol_list=[
+"point_sembols/tree_black.png",
+"point_sembols/airport_black.png",
+]
 var point_listesi = []
 var renk_listesi = [
 ' #f8f8ff ',
