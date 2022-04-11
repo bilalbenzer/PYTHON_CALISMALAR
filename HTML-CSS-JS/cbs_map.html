@@ -160,11 +160,13 @@ function add_opentopomap(){
     maps_for_leaflet[i].remove(map);
   }
   document.getElementById('map_screen').style.opacity = 1;
+  document.getElementById('map_screen').style.backgroundColor="unset"
   show_coordints()
 }
 function  remove_opentopomap(){
   OpenTopoMap.remove(map);
-  document.getElementById('map_screen').style.opacity = 0.5
+
+  document.getElementById('map_screen').style.backgroundColor="white"
   dont_show_coordints()
 }
 function add_stamen_watercolor() {
@@ -175,12 +177,13 @@ function add_stamen_watercolor() {
     maps_for_leaflet[i].remove(map);
   }
   document.getElementById('map_screen').style.opacity = 1;
+  document.getElementById('map_screen').style.backgroundColor="unset"
   show_coordints()
 }
 function remove_stamen_watercolor() {
   Stamen_Watercolor.remove(map);
-  document.getElementById('map_screen').style.opacity = 0.5;
-  dont_show_coordints()
+
+  document.getElementById('map_screen').style.backgroundColor="white"
 }
 function add_osm() {
   for (i in maps_for_leaflet) {
@@ -189,12 +192,14 @@ function add_osm() {
       continue;}
     maps_for_leaflet[i].remove(map);
   }
-  document.getElementById('map_screen').style.opacity = 1;
+
+  document.getElementById('map_screen').style.backgroundColor="unset"
   show_coordints()
 }
 function remove_osm() {
   osm_map.remove(map);
-  document.getElementById('map_screen').style.opacity = 0.5
+
+  document.getElementById('map_screen').style.backgroundColor="white"
   dont_show_coordints()
 }
 function add_googlestreet() {
@@ -204,13 +209,15 @@ function add_googlestreet() {
       continue;}
     maps_for_leaflet[i].remove(map);
   }
+  document.getElementById('map_screen').style.backgroundColor="unset"
   document.getElementById('map_screen').style.opacity = 1;
   show_coordints()
 }
 function remove_googlestreet() {
   googlestreets.remove(map)
-  document.getElementById('map_screen').style.opacity = 0.5;
+  document.getElementById('map_screen').style.opacity = 1
   dont_show_coordints()
+  document.getElementById('map_screen').style.backgroundColor="white"
  }
 function add_googlesatellite() {
   for (i in maps_for_leaflet) {
@@ -219,13 +226,15 @@ function add_googlesatellite() {
       continue;}
     maps_for_leaflet[i].remove(map);
   }
+  document.getElementById('map_screen').style.backgroundColor="unset"
   document.getElementById('map_screen').style.opacity = 1;
   show_coordints()
 }
 function remove_googlesatellite() {
   googlesatellite.remove(map)
-  document.getElementById('map_screen').style.opacity = 0.5;
+  document.getElementById('map_screen').style.opacity = 1
   dont_show_coordints()
+  document.getElementById('map_screen').style.backgroundColor="white"
  }
 function add_mapbox_satellite() {
   for (i in maps_for_leaflet) {
@@ -234,13 +243,15 @@ function add_mapbox_satellite() {
       continue;}
     maps_for_leaflet[i].remove(map);
   }
+  document.getElementById('map_screen').style.backgroundColor="unset"
   document.getElementById('map_screen').style.opacity = 1;
   show_coordints()
 }
 function remove_mapbox_satellite(){
   mapbox_satellite.remove(map)
-  document.getElementById('map_screen').style.opacity = 0.5;
+  document.getElementById('map_screen').style.opacity = 1
   dont_show_coordints()
+  document.getElementById('map_screen').style.backgroundColor="white"
 }
 function add_mapbox_streets() {
   for (i in maps_for_leaflet) {
@@ -251,11 +262,13 @@ function add_mapbox_streets() {
   }
   document.getElementById('map_screen').style.opacity = 1;
   show_coordints()
+  document.getElementById('map_screen').style.backgroundColor="unset"
 }
 function remove_mapbox_streets(){
   mapbox_streets.remove(map)
-  document.getElementById('map_screen').style.opacity = 0.5
+  document.getElementById('map_screen').style.opacity = 1
   dont_show_coordints()
+  document.getElementById('map_screen').style.backgroundColor="white"
 }
 function add_cardodb_darkmatter(){
   for (i in maps_for_leaflet) {
@@ -266,11 +279,13 @@ function add_cardodb_darkmatter(){
   }
   document.getElementById('map_screen').style.opacity = 1;
   show_coordints()
+  document.getElementById('map_screen').style.backgroundColor="unset"
 }
 function remove_cardodb_darkmatter(){
   CartoDB_DarkMatter.remove(map);
-  document.getElementById('map_screen').style.opacity = 0.5
+  document.getElementById('map_screen').style.opacity = 1
   dont_show_coordints()
+  document.getElementById('map_screen').style.backgroundColor="white"
 }
 function add_herev3(){
   for (i in maps_for_leaflet) {
@@ -281,11 +296,13 @@ function add_herev3(){
   }
   document.getElementById('map_screen').style.opacity = 1;
   show_coordints()
+  document.getElementById('map_screen').style.backgroundColor="unset"
 }
 function remove_herev3(){
   herev3.remove(map);
-  document.getElementById('map_screen').style.opacity = 0.5;
+  document.getElementById('map_screen').style.opacity = 1
   dont_show_coordints()
+  document.getElementById('map_screen').style.backgroundColor="white"
 }
 function add_jawg_map(){
   for (i in maps_for_leaflet) {
@@ -296,11 +313,13 @@ function add_jawg_map(){
   }
   document.getElementById('map_screen').style.opacity = 1;
   show_coordints()
+  document.getElementById('map_screen').style.backgroundColor="unset"
 }
 function remove_jawg_map(){
   jawg_map.remove(map);
-  document.getElementById('map_screen').style.opacity = 0.5;
+  document.getElementById('map_screen').style.opacity = 1
   dont_show_coordints()
+  document.getElementById('map_screen').style.backgroundColor="white"
 }
 
 // sol alttaki koordinatların görünmesi için
@@ -342,53 +361,71 @@ var myicon = L.icon({
       opacity: 1,
       fillOpacity: 0.8
       };
-
+const tekdongu=[1]
 function create_point(){
-          document.getElementById('sayfamesajlari').innerText="Çizime Başlayabilirsiniz.\nN: Koordinat Gir\nS: Bitir";
+  for (x in tekdongu){
+          document.getElementById('sayfamesajlari').innerText="Çizime Başlayabilirsiniz.\nHome: Koordinat Gir\nEnd: Bitir";
           document.getElementById('sayfamesajlari').style.backgroundColor  = "black";
           map.on('click', (e)=>{
           x = (e.latlng.lat).toFixed(6);
           y = (e.latlng.lng).toFixed(6);
-          document.getElementById('sayfamesajlari').innerText="Nokta oluşturuldu \n"+"X="+x+"   "+"Y="+y;
           name = "point"+(new Date()).getMilliseconds()+Math.floor(Math.random()*1000)
+          document.getElementById('sayfamesajlari').style.backgroundColor  = "black";
+          document.getElementById('sayfamesajlari').innerText=name+" oluşturuldu \n"+"X="+x+"   "+"Y="+y;
           window[name]= new point_object(x_coordinats=x,y_coordinats=y,object_name=name)
-          a=window[name]
-          a.haritayaekle(a.bicim)
-          a.menuleriolustur()
+          window[name].haritayaekle(window[name].bicim)
+          window[name].menuleriolustur()
+          bekleme()
+          map.off('click')
           })
           document.addEventListener('keydown', (event) => {
           var name = event.key;
           var code = event.code;
-          
-          if (code==="KeyN"){
+          for (x in tekdongu){
+          if (code==="Home"){
           document.getElementById('obje_girdi').style.backgroundColor = "black";
           document.getElementById('obje_girdi').innerHTML='<label for="xbuton">X :</label><input type="number" maxlength="999999" id="xbuton" step="0.001" value="" required><br><label for="ybuton">Y :</label><input type="number" maxlength="999999" id="ybuton" step="0.001" value="" required><input id="koordinatal" onclick="koordinatileolustur()" type="submit"  value="nokta oluştur">';
-            }
-          if (code === "KeyS") {
+          map.off('click')
+          break
+        }
+          if (code === "End") {
+            document.getElementById('sayfamesajlari').style.backgroundColor = "black";
             document.getElementById('sayfamesajlari').innerText = "İşlem Tamamlandı"
-            setTimeout(() => {  document.getElementById('sayfamesajlari').innerText = "\n..."; }, 1500);
-            setTimeout(() => {  document.getElementById('sayfamesajlari').innerText = "\n......"; }, 1500);
-            setTimeout(() => {  document.getElementById('sayfamesajlari').style.backgroundColor  = "unset"}, 1500);
-            setTimeout(() => {  document.getElementById('sayfamesajlari').innerText = "";}, 1500);
             map.off('click')
-            document.getElementById('obje_girdi').style.backgroundColor = "unset";
-            document.getElementById('obje_girdi').innerHTML=""
-              
-          }})}
+            bekleme()
+            break}
+            
+          }})
+          break }}
     // fonksiyon sonu
 //-------------------------------------------------------------------------------------------------------------------------------------
   // koordinat girerek nokta oluşturma
 function koordinatileolustur(){
-          x = document.getElementById('xbuton').value
-          y = document.getElementById('ybuton').value
-          name = "point"+(new Date()).getMilliseconds()+Math.floor(Math.random()*1000)
+var x = document.getElementById('xbuton').value
+var y = document.getElementById('ybuton').value
+  while (true){
+          if (x!=="" && y!==""){
+            name = "point"+(new Date()).getMilliseconds()+Math.floor(Math.random()*1000)
           window[name]= new point_object(x_coordinats=x,y_coordinats=y,object_name=name)
           a=window[name]
           a.haritayaekle(a.bicim)
           a.menuleriolustur()
-          document.getElementById('sayfamesajlari').innerText="Nokta oluşturuldu \n"+"X="+x+"   "+"Y="+y;
-          console.log("Nokta Oluşturuldu"+x+y)
-            }
+          document.getElementById('sayfamesajlari').innerText=name+" oluşturuldu \n"+"X="+x+"   "+"Y="+y;
+          document.getElementById('sayfamesajlari').style.backgroundColor = "black";
+          bekleme()
+          document.getElementById('obje_girdi').innerText=""
+          document.getElementById('obje_girdi').style.backgroundColor="unset"
+          break
+          }
+          else{
+            alert("X veya Y Değeri Boş Bırakılamaz.")
+            document.getElementById('obje_girdi').innerText=""
+            document.getElementById('obje_girdi').style.backgroundColor="unset"
+            create_point()
+            break
+          }
+        }
+}
 //-------------------------------------------------------------------------------------------------------------------------------------
 
 class point_object {
@@ -428,9 +465,16 @@ class point_object {
       document.getElementById(this.id_nosu).removeAttribute("open")
     }
     objeyeyaklas(){
+      var harita_var_mi=document.getElementById('map_screen').style.backgroundColor
+      
+      if (harita_var_mi==="unset"){
       map.fitBounds(this.bounds)
       document.getElementById(this.id_nosu).removeAttribute("open")
-    }
+      }
+      else{
+      alert("Katmana Yaklaşabilmek İçin Herhangi Bir Harita Servisinin Etkin Olması Gerekmektedir.")
+      }
+  }
     menuleriolustur(){
       this.details_katman =document.createElement("details");
       this.details_katman.setAttribute("id",this.id_nosu);
@@ -443,11 +487,14 @@ class point_object {
       document.getElementById(this.id_nosu+"_summary").innerText=this.id_nosu
       document.getElementById(this.id_nosu+"_summary").style.listStyle="none";
       document.getElementById(this.id_nosu+"_summary").style.fontSize="medium"
-      document.getElementById(this.id_nosu+"_summary").style.fontWeight="bold"
+      document.getElementById(this.id_nosu+"_summary").style.fontWeight="bolder"
+      document.getElementById(this.id_nosu+"_summary").style.color="black"
       document.getElementById(this.id_nosu+"_summary").style.fontFamily="'Courier New', Courier, monospace"
       document.getElementById(this.id_nosu+"_summary").style.cursor="pointer"
       document.getElementById(this.id_nosu+"_summary").style.listStyle="none"
       document.getElementById(this.id_nosu+"_summary").style.borderStyle="solid"
+      document.getElementById(this.id_nosu+"_summary").style.backgroundColor=this.bicim.fillColor
+      document.getElementById(this.id_nosu+"_summary").style.borderColor="white"
       //butonlar
       document.getElementById(this.id_nosu).getElementsByTagName("button")[0].setAttribute('onclick',"window['"+this.id_nosu+"'].haritadagoster()");
       document.getElementById(this.id_nosu).getElementsByTagName("button")[1].setAttribute('onclick',"window['"+this.id_nosu+"'].haritadagizle()");
@@ -505,6 +552,7 @@ class point_object {
       document.getElementById("sayfamesajlari").appendChild(renkalma)
       
       //kütüphaneden sembol seçe kısmı
+      var ikincimetin=document.createTextNode("Semboller Butonu İle Yerel Sembollerden Seçebilirsiniz.")
       var sembolsec_detail=document.createElement("details")
         sembolsec_detail.setAttribute("id",this.id_nosu+"detail")
         sembolsec_detail.style.height="25px"
@@ -522,20 +570,35 @@ class point_object {
         sembolsec_div.setAttribute("id",this.id_nosu+"div")
         sembolsec_div.style.backgroundColor="black"
         sembolsec_div.style.color="wheat"
-        sembolsec_div.style.width="50px"
+        sembolsec_div.style.width="100px"
+        sembolsec_div.style.marginTop="10px"
+        sembolsec_div.style.height="200px"
+        sembolsec_div.style.overflowY="scroll"
+        sembolsec_div.style.overflowX="scroll"
+        document.getElementById("sayfamesajlari").style.height="120px"
       document.getElementById("sayfamesajlari").appendChild(sembolsec_detail)
       document.getElementById(this.id_nosu+"detail").appendChild(sembolsec_summary)
       document.getElementById(this.id_nosu+"detail").appendChild(sembolsec_div)
-
-      
+      //console.log("url:--"+(Object.keys(symbol_list[i])))
+      //console.log("isim"+(Object.values(symbol_list[i])))
       for (a in symbol_list){
         window[a+"symbol"] = document.createElement("button")
-        window[a+"symbol"].style.backgroundImage="url('"+symbol_list[a]+"')"
-        window[a+"symbol"].style.backgroundSize="cover"
-        window[a+"symbol"].style.width="50px"
-        window[a+"symbol"].style.height="50px"
-        window[a+"symbol"].style.float="left"
-        window[a+"symbol"].setAttribute("onclick","window['"+this.id_nosu+"'].semboluuygula('"+symbol_list[a]+"','"+this.id_nosu+"')")
+        var labelll = document.createElement("label")
+        labelll.innerText=Object.values(symbol_list[a])
+        labelll.style.float="left"
+        labelll.style.position="static"
+        labelll.style.width="50px"
+        labelll.style.height="30px"
+        labelll.style.fontSize="medium"
+        labelll.style.marginTop="5px"
+        window[a+"symbol"].style.backgroundImage="url('"+Object.keys(symbol_list[a])+"')"
+        window[a+"symbol"].style.backgroundSize="contain"
+        window[a+"symbol"].style.width="30px"
+        window[a+"symbol"].style.height="30px"
+        window[a+"symbol"].style.float="right"
+        window[a+"symbol"].style.marginTop="5px"
+        window[a+"symbol"].setAttribute("onclick","window['"+this.id_nosu+"'].semboluuygula('"+Object.keys(symbol_list[a])+"','"+this.id_nosu+"')")
+        document.getElementById(this.id_nosu+"div").appendChild(labelll)
         document.getElementById(this.id_nosu+"div").appendChild(window[a+"symbol"])
       }
     }
@@ -549,7 +612,6 @@ class point_object {
       window[this.id_nosu].haritadagizle()
       this.layer=L.geoJSON(this.geojsonfeature,{
         pointToLayer:function(feature,latlng){
-
           return L.marker(latlng,{icon:window[x].icon_uygula})}}).addTo(map)
     }
     
@@ -563,6 +625,7 @@ class point_object {
         pointToLayer:function(feature,latlng){
           console.log(window[x])
           return L.marker(latlng,{icon:window[x].icon_uygula})}}).addTo(map)
+      document.getElementById(this.id_nosu+"detail").removeAttribute("open")
     }
     rengidegistirme(){
       //Renk Değiştirmek İçin Gerekli Butonlar
@@ -671,7 +734,8 @@ class point_object {
       this.layer=L.geoJSON(this.geojsonfeature,{
         pointToLayer:function(feature,latlng){
           return L.circleMarker(latlng,window[id_no].bicim)}}).addTo(map)
-      }
+        }
+    
   }
 
 async function katman_sil(i){
@@ -743,11 +807,14 @@ details.forEach((targetDetail) => {
 
 
 
-const symbol_list=[
-"point_sembols/tree_black.png",
-"point_sembols/airport_black.png",
-]
-var point_listesi = []
+const symbol_list={
+agac:{"point_sembols/tree_black.png":"Ağaç"},
+havaalani:{"point_sembols/airport_black.png":"Hava Alanı"},
+lamba:{"point_sembols/lamba.png":"Lamba"},
+liman:{"point_sembols/liman.png":"Liman"},
+fabrika:{"point_sembols/fabrika.png":"Fabrika"}
+}
+
 var renk_listesi = [
 ' #f8f8ff ',
 ' #f5f5f5 ',
