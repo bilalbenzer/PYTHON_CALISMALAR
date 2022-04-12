@@ -12,12 +12,14 @@
 
   </head>
   <body >
+    
         <div id="top_tab">
+          <span id="sayfamesajlari"></span>
           <div id="top_tab_opacity"></div>
           <a href="index.html">
           <button type="menu" id="go_homepage">
           </button></a>
-          <span id="sayfamesajlari"></span>
+          
           
           <details id="create_object"><summary style="font-size: small; list-style: none;padding: 5px;font-weight: bold;">Obje Oluştur</summary>
             <button class="button" type="menu" onclick="create_point()">Nokta</button>
@@ -327,11 +329,11 @@ function remove_jawg_map(){
 // Haritanın Sol Alt Köşesinde Koordinat Gösterme
 function show_coordints() {
   map.on('mousemove' , (e) =>{
-    document.getElementById('coordinat_tab').innerText ="X:"+(e.latlng.lat).toFixed(8) +"------"+ "Y:"+(e.latlng.lng).toFixed(8)
+    document.getElementById('coordinat_tab').innerText ="Enlem:"+(e.latlng.lat).toFixed(8) +"------"+ "Boylam:"+(e.latlng.lng).toFixed(8)
     });}
 function dont_show_coordints(){
   map.on('mousemove' , (e) =>{
-    document.getElementById('coordinat_tab').innerText =""
+    document.getElementById('coordinat_tab').innerText ="X:"+(e.latlng.lat).toFixed(8) +"------"+ "Y:"+(e.latlng.lng).toFixed(8)
     });}
 
 /*Nokta Oluşturma Aşamaları-leaflette:
@@ -371,7 +373,7 @@ function create_point(){
           y = (e.latlng.lng).toFixed(6);
           name = "point"+(new Date()).getMilliseconds()+Math.floor(Math.random()*1000)
           document.getElementById('sayfamesajlari').style.backgroundColor  = "black";
-          document.getElementById('sayfamesajlari').innerText=name+" oluşturuldu \n"+"X="+x+"   "+"Y="+y;
+          document.getElementById('sayfamesajlari').innerText=name+" oluşturuldu \n"+"E="+x+"   "+"B="+y;
           window[name]= new point_object(x_coordinats=x,y_coordinats=y,object_name=name)
           window[name].haritayaekle(window[name].bicim)
           window[name].menuleriolustur()
@@ -384,7 +386,7 @@ function create_point(){
           for (x in tekdongu){
           if (code==="Home"){
           document.getElementById('obje_girdi').style.backgroundColor = "black";
-          document.getElementById('obje_girdi').innerHTML='<label for="xbuton">X :</label><input type="number" maxlength="999999" id="xbuton" step="0.001" value="" required><br><label for="ybuton">Y :</label><input type="number" maxlength="999999" id="ybuton" step="0.001" value="" required><input id="koordinatal" onclick="koordinatileolustur()" type="submit"  value="nokta oluştur">';
+          document.getElementById('obje_girdi').innerHTML='<label for="xbuton">E :</label><input type="number" maxlength="999999" id="xbuton" step="0.001" value="" required><br><label for="ybuton">B :</label><input type="number" maxlength="999999" id="ybuton" step="0.001" value="" required><input id="koordinatal" onclick="koordinatileolustur()" type="submit"  value="nokta oluştur">';
           map.off('click')
           break
         }
@@ -410,7 +412,7 @@ var y = document.getElementById('ybuton').value
           a=window[name]
           a.haritayaekle(a.bicim)
           a.menuleriolustur()
-          document.getElementById('sayfamesajlari').innerText=name+" oluşturuldu \n"+"X="+x+"   "+"Y="+y;
+          document.getElementById('sayfamesajlari').innerText=name+" oluşturuldu \n"+"E="+x+"   "+"B="+y;
           document.getElementById('sayfamesajlari').style.backgroundColor = "black";
           bekleme()
           document.getElementById('obje_girdi').innerText=""
@@ -448,7 +450,6 @@ class point_object {
         iconUrl:null,
         iconSize:null
       }
-      this.icon_uygula = L.icon(this.icon)
     }
     haritayaekle(x){
       this.layer=L.geoJSON(this.geojsonfeature,{
@@ -503,6 +504,8 @@ class point_object {
       document.getElementById(this.id_nosu).getElementsByTagName("button")[4].setAttribute('onclick',"window['"+this.id_nosu+"'].stildegistirme()")
     }
     stildegistirme(){
+      document.getElementById("sayfamesajlari").style.backgroundColor="black"
+      document.getElementById("sayfamesajlari").innerText="Stil Türünü Seçiniz."
       var nokta_buton=document.createElement("button");
       var sembol_buton=document.createElement("button");
       nokta_buton.setAttribute("class","nokta_buton");
@@ -511,32 +514,23 @@ class point_object {
       sembol_buton.setAttribute("class", "sembol_buton")
       sembol_buton.setAttribute("onclick","window['"+this.id_nosu+"'].semboldegistir()")
       sembol_buton.innerText="Sembol"
-      document.getElementById("sayfamesajlari").style.backgroundColor="black"
+      
       document.getElementById("sayfamesajlari").appendChild(nokta_buton)
       document.getElementById("sayfamesajlari").appendChild(sembol_buton)
     }
     semboldegistir(){
+      
       document.getElementById("sayfamesajlari").style.backgroundColor="black"
       document.getElementById("sayfamesajlari").innerText=""
-      var sembol_sec = document.createElement("button");
-      sembol_sec.setAttribute("class","sembol_sec");
-      sembol_sec.setAttribute("onclick","window['"+this.id_nosu+"'].sembolsec()")
-      sembol_sec.innerText="Sembol Seç"
-      var sembol_buyukluk = document.createElement("button")
-      var sembol_saydamlik  = document.createElement("button")
-      document.getElementById("sayfamesajlari").appendChild(sembol_sec)
-    }
-    sembolsec(){
-      document.getElementById("sayfamesajlari").innerText=""
-      document.getElementById("sayfamesajlari").style.backgroundColor="black"
-      var ilkmetin=document.createTextNode("Eklemek İstediğiniz Sembolün Resim Urlsini Ekleyiniz.\nÖrnek:www.asd.com/sembol.png\n")
-      document.getElementById("sayfamesajlari").appendChild(ilkmetin)
+      var altsatir=document.createElement("br")
+      document.getElementById("sayfamesajlari").innerText="İnternet Üzerinden Simge Ekleyebilirsiniz.\nÖrnek:www.asd.com/sembol.png"
+      document.getElementById("sayfamesajlari").style.width="400px"
       //url ile sembol ekleme kısmı
       var form_element=document.createElement("form")
       form_element.setAttribute("class","formelementi")
       var label_element=document.createElement("label")
       label_element.setAttribute("for","alurl")
-      label_element.innerText="\nResim Urlsini Giriniz."
+      label_element.innerText="\nResim Urlsi"
       var renksecici=document.createElement("input")
       renksecici.setAttribute("id","alurl")
       renksecici.setAttribute("type","url")
@@ -550,9 +544,11 @@ class point_object {
       document.getElementById("sayfamesajlari").appendChild(label_element)
       document.getElementById("sayfamesajlari").appendChild(renksecici)
       document.getElementById("sayfamesajlari").appendChild(renkalma)
-      
+      document.getElementById("sayfamesajlari").appendChild(altsatir)
+      var ikincimetin=document.createTextNode("Semboller Butonu İle Yerel  \n Sembollerden Seçebilirsiniz.")
+
       //kütüphaneden sembol seçe kısmı
-      var ikincimetin=document.createTextNode("Semboller Butonu İle Yerel Sembollerden Seçebilirsiniz.")
+      
       var sembolsec_detail=document.createElement("details")
         sembolsec_detail.setAttribute("id",this.id_nosu+"detail")
         sembolsec_detail.style.height="25px"
@@ -560,6 +556,125 @@ class point_object {
         sembolsec_detail.style.borderRadius="5px"
         sembolsec_detail.style.backgroundColor="wheat"
         sembolsec_detail.style.color="black"
+        sembolsec_detail.style.marginLeft="40%"
+        sembolsec_detail.style.marginLeft="0px"
+      var sembolsec_summary=document.createElement("summary")
+      sembolsec_summary.innerText="Semboller"
+        sembolsec_summary.setAttribute("id",this.id_nosu+"summary")
+        sembolsec_summary.style.width="auto"
+        sembolsec_summary.style.cursor="pointer"
+        sembolsec_summary.style.listStyle="none"
+      var sembolsec_div=document.createElement("div")
+        sembolsec_div.setAttribute("id",this.id_nosu+"div")
+        sembolsec_div.style.backgroundColor="black"
+        sembolsec_div.style.color="wheat"
+        sembolsec_div.style.width="200px"
+        sembolsec_div.style.marginTop="10px"
+        sembolsec_div.style.height="200px"
+        sembolsec_div.style.overflowY="scroll"
+        sembolsec_div.style.overflowX="scroll"
+        sembolsec_div.style.marginLeft="-200px"
+        sembolsec_div.style.marginTop="-30px"
+      document.getElementById("sayfamesajlari").appendChild(ikincimetin)
+      document.getElementById("sayfamesajlari").appendChild(sembolsec_detail)
+      document.getElementById(this.id_nosu+"detail").appendChild(sembolsec_summary)
+      document.getElementById(this.id_nosu+"detail").appendChild(sembolsec_div)
+      //console.log("url:--"+(Object.keys(symbol_list[i])))
+      //console.log("isim"+(Object.values(symbol_list[i])))
+      var c
+      for (c in symbol_list){
+        var divsemboller=document.createElement("div")
+        divsemboller.setAttribute("class",c+"semboldiv")
+        divsemboller.style.width="180px"
+        divsemboller.style.height="30px"
+        divsemboller.style.borderStyle="solid"
+        divsemboller.style.border="white;2px"
+        divsemboller.style.backgroundColor="black"
+        window[c+"symbol"] = document.createElement("button")
+        var labelll = document.createElement("label")
+        labelll.innerText=Object.values(symbol_list[c])
+        labelll.style.textAlign="center"
+        labelll.style.width="auto"
+        labelll.style.height="30px"
+        labelll.style.fontSize="medium"
+        window[c+"symbol"].style.backgroundImage="url('"+Object.keys(symbol_list[c])+"')"
+        window[c+"symbol"].style.backgroundSize="contain"
+        window[c+"symbol"].style.width="30px"
+        window[c+"symbol"].style.height="30px"
+        window[c+"symbol"].style.float="right"
+        window[c+"symbol"].setAttribute("onclick","window['"+this.id_nosu+"'].semboluuygula('"+Object.keys(symbol_list[c])+"','"+this.id_nosu+"')")
+        document.getElementById(this.id_nosu+"div").appendChild(divsemboller)
+        document.getElementById(this.id_nosu+"div").getElementsByClassName(c+"semboldiv")[0].appendChild(labelll)
+        document.getElementById(this.id_nosu+"div").getElementsByClassName(c+"semboldiv")[0].appendChild(window[c+"symbol"])
+      }
+      var sembol_buyukluk_labelyazi = document.createElement("label")
+      sembol_buyukluk_labelyazi.innerText="Sembol Büyüklüğünü Ayarla\n Örnek:(30 px x 30 px)"
+      var sembol_buyukluk_label=document.createElement("label")
+      sembol_buyukluk_label.setAttribute("for","sembolbuyukluken")
+      sembol_buyukluk_label.innerText="En:(px)"
+      var enuzunluk=document.createElement("input")
+      enuzunluk.setAttribute("id","sembolbuyukluken")
+      enuzunluk.setAttribute("type","number")
+      var sembol_buyukluk_label2=document.createElement("label")
+      sembol_buyukluk_label2.setAttribute("for","sembolbuyuklukboy")
+      sembol_buyukluk_label2.innerText="Boy:(px)"
+      var boyuzunluk=document.createElement("input")
+      boyuzunluk.setAttribute("id","sembolbuyuklukboy")
+      boyuzunluk.setAttribute("type","number")
+     // var sembol_saydamlik  = document.createElement("button")
+      var semboluzunluk_al = document.createElement("input")
+      semboluzunluk_al.setAttribute("type","submit")
+      semboluzunluk_al.setAttribute("value","Uygula")
+      semboluzunluk_al.setAttribute("onclick","window['"+this.id_nosu+"'].sembolbuyuklukdegistir()")
+      document.getElementById("sayfamesajlari").appendChild(document.createElement("br"))
+      document.getElementById("sayfamesajlari").appendChild(sembol_buyukluk_labelyazi)
+      document.getElementById("sayfamesajlari").appendChild(document.createElement("br"))
+      document.getElementById("sayfamesajlari").appendChild(sembol_buyukluk_label)
+      document.getElementById("sayfamesajlari").appendChild(enuzunluk)
+      document.getElementById("sayfamesajlari").appendChild(document.createElement("br"))
+      document.getElementById("sayfamesajlari").appendChild(sembol_buyukluk_label2)
+      document.getElementById("sayfamesajlari").appendChild(boyuzunluk)
+      document.getElementById("sayfamesajlari").appendChild(document.createElement("br"))
+      document.getElementById("sayfamesajlari").appendChild(semboluzunluk_al)
+    }
+    sembolsec(){
+      var altsatir=document.createElement("br")
+      document.getElementById("sayfamesajlari").innerText=""
+      document.getElementById("sayfamesajlari").style.backgroundColor="black"
+      document.getElementById("sayfamesajlari").innerText="İnternet Üzerinden Simge Ekleyebilirsiniz.\nÖrnek:www.asd.com/sembol.png"
+      document.getElementById("sayfamesajlari").style.width="400px"
+      //url ile sembol ekleme kısmı
+      var form_element=document.createElement("form")
+      form_element.setAttribute("class","formelementi")
+      var label_element=document.createElement("label")
+      label_element.setAttribute("for","alurl")
+      label_element.innerText="\nResim Urlsi"
+      var renksecici=document.createElement("input")
+      renksecici.setAttribute("id","alurl")
+      renksecici.setAttribute("type","url")
+      renksecici.setAttribute("name","Url Al")
+      renksecici.setAttribute("value","")
+      var renkalma = document.createElement("input")
+      renkalma.setAttribute("type","submit")
+      renkalma.setAttribute("value","Uygula")
+      renkalma.setAttribute("onclick","window['"+this.id_nosu+"'].sembolurluygula('"+this.id_nosu+"')")
+      document.getElementById("sayfamesajlari").style.backgroundColor="black"
+      document.getElementById("sayfamesajlari").appendChild(label_element)
+      document.getElementById("sayfamesajlari").appendChild(renksecici)
+      document.getElementById("sayfamesajlari").appendChild(renkalma)
+      document.getElementById("sayfamesajlari").appendChild(altsatir)
+      var ikincimetin=document.createTextNode("Semboller Butonu İle Yerel  \n Sembollerden Seçebilirsiniz.")
+
+      //kütüphaneden sembol seçe kısmı
+      
+      var sembolsec_detail=document.createElement("details")
+        sembolsec_detail.setAttribute("id",this.id_nosu+"detail")
+        sembolsec_detail.style.height="25px"
+        sembolsec_detail.style.width="85px"
+        sembolsec_detail.style.borderRadius="5px"
+        sembolsec_detail.style.backgroundColor="wheat"
+        sembolsec_detail.style.color="black"
+        sembolsec_detail.style.marginLeft="40%"
       var sembolsec_summary=document.createElement("summary")
       sembolsec_summary.innerText="Semboller"
         sembolsec_summary.setAttribute("id",this.id_nosu+"summary")
@@ -575,49 +690,59 @@ class point_object {
         sembolsec_div.style.height="200px"
         sembolsec_div.style.overflowY="scroll"
         sembolsec_div.style.overflowX="scroll"
-        document.getElementById("sayfamesajlari").style.height="120px"
+      document.getElementById("sayfamesajlari").appendChild(ikincimetin)
       document.getElementById("sayfamesajlari").appendChild(sembolsec_detail)
       document.getElementById(this.id_nosu+"detail").appendChild(sembolsec_summary)
       document.getElementById(this.id_nosu+"detail").appendChild(sembolsec_div)
       //console.log("url:--"+(Object.keys(symbol_list[i])))
       //console.log("isim"+(Object.values(symbol_list[i])))
-      for (a in symbol_list){
-        window[a+"symbol"] = document.createElement("button")
+      var c
+      for (c in symbol_list){
+        window[c+"symbol"] = document.createElement("button")
         var labelll = document.createElement("label")
-        labelll.innerText=Object.values(symbol_list[a])
+        labelll.innerText=Object.values(symbol_list[c])
         labelll.style.float="left"
         labelll.style.position="static"
         labelll.style.width="50px"
         labelll.style.height="30px"
         labelll.style.fontSize="medium"
         labelll.style.marginTop="5px"
-        window[a+"symbol"].style.backgroundImage="url('"+Object.keys(symbol_list[a])+"')"
-        window[a+"symbol"].style.backgroundSize="contain"
-        window[a+"symbol"].style.width="30px"
-        window[a+"symbol"].style.height="30px"
-        window[a+"symbol"].style.float="right"
-        window[a+"symbol"].style.marginTop="5px"
-        window[a+"symbol"].setAttribute("onclick","window['"+this.id_nosu+"'].semboluuygula('"+Object.keys(symbol_list[a])+"','"+this.id_nosu+"')")
+        window[c+"symbol"].style.backgroundImage="url('"+Object.keys(symbol_list[c])+"')"
+        window[c+"symbol"].style.backgroundSize="contain"
+        window[c+"symbol"].style.width="30px"
+        window[c+"symbol"].style.height="30px"
+        window[c+"symbol"].style.float="right"
+        window[c+"symbol"].style.marginTop="5px"
+        window[c+"symbol"].setAttribute("onclick","window['"+this.id_nosu+"'].semboluuygula('"+Object.keys(symbol_list[c])+"','"+this.id_nosu+"')")
         document.getElementById(this.id_nosu+"div").appendChild(labelll)
-        document.getElementById(this.id_nosu+"div").appendChild(window[a+"symbol"])
+        document.getElementById(this.id_nosu+"div").appendChild(window[c+"symbol"])
       }
+      var islemibitir = document.createElement("button")
+      islemibitir.setAttribute("onclick","bekleme()")
+      islemibitir.innerText="Bitir"
+      islemibitir.alignItems="center"
+      document.getElementById("sayfamesajlari").appendChild(islemibitir)
     }
     sembolurluygula(x){
       var sembol_url=
       this.icon.iconUrl=document.getElementById("sayfamesajlari").getElementsByTagName("input")[0].value
-      this.icon.iconSize=[30,30]
-      console.log(this.icon)
-      this.icon_uygula = L.icon(this.icon)
-      
       window[this.id_nosu].haritadagizle()
       this.layer=L.geoJSON(this.geojsonfeature,{
         pointToLayer:function(feature,latlng){
-          return L.marker(latlng,{icon:window[x].icon_uygula})}}).addTo(map)
+          return L.marker(latlng,{icon:L.icon(window[x].icon)})}}).addTo(map)
     }
-    
+    ikonuygula(x){
+      if(x.icon.iconUrl===null){
+        
+      }
+      window[this.id_nosu].haritadagizle()
+      this.layer=L.geoJSON(this.geojsonfeature,{
+        pointToLayer:function(feature,latlng){
+          return L.marker(latlng,{icon:L.icon(x.icon)})}}).addTo(map)
+      bekleme()
+    }
     semboluuygula(i,x){
       this.icon.iconUrl=i
-      this.icon.iconSize=[30,30]
       this.icon_uygula = L.icon(this.icon)
       console.log(this.icon_uygula)
       window[this.id_nosu].haritadagizle()
@@ -626,11 +751,26 @@ class point_object {
           console.log(window[x])
           return L.marker(latlng,{icon:window[x].icon_uygula})}}).addTo(map)
       document.getElementById(this.id_nosu+"detail").removeAttribute("open")
+      document.getElementById(this.id_nosu+"_summary").style.backgroundColor="white"
+    }
+    sembolbuyuklukdegistir(){
+      var en = document.getElementById("sembolbuyukluken").value
+      var boy = document.getElementById("sembolbuyuklukboy").value
+      var iconsize=[en,boy]
+      console.log(en)
+      this.icon.iconSize=iconsize
+      window[this.id_nosu].ikonuygula(window[this.id_nosu])
+
     }
     rengidegistirme(){
       //Renk Değiştirmek İçin Gerekli Butonlar
       document.getElementById("sayfamesajlari").style.backgroundColor="black"
       document.getElementById("sayfamesajlari").innerText=""
+      document.getElementById("sayfamesajlari").style.width="auto"
+      var div1=document.createElement("div")
+      div1.setAttribute("class","div1")
+      div1.style.alignItems="center"
+      div1.style.backgroundColor="red"
       var form_element=document.createElement("form")
       form_element.setAttribute("class","formelementi")
       var label_element=document.createElement("label")
@@ -646,16 +786,22 @@ class point_object {
       renkalma.setAttribute("value","Değiştir")
       renkalma.setAttribute("onclick","window['"+this.id_nosu+"'].rengialma('"+this.id_nosu+"')")
       document.getElementById("sayfamesajlari").style.backgroundColor="black"
-      document.getElementById("sayfamesajlari").appendChild(label_element)
-      document.getElementById("sayfamesajlari").appendChild(renksecici)
-      document.getElementById("sayfamesajlari").appendChild(renkalma)
+      document.getElementById("sayfamesajlari").appendChild(div1)
+      console.log(document.getElementById("sayfamesajlari").getElementsByClassName("div1")[0])
+      document.getElementById("sayfamesajlari").getElementsByClassName("div1")[0].appendChild(label_element)
+      document.getElementById("sayfamesajlari").getElementsByClassName("div1")[0].appendChild(renksecici)
+      document.getElementById("sayfamesajlari").getElementsByClassName("div1")[0].appendChild(renkalma)
       //Büyüklük Ayarlama
       //manuel giriş kısmı
+      var div2=document.createElement("div")
+      div2.setAttribute("class","div2")
+      div2.style.alignItems="center"
+      div2.style.backgroundColor="blue"
       var form_element2 = document.createElement("form")
       form_element2.setAttribute("class","formelementi")
       var label_element2 = document.createElement("label")
       label_element2.setAttribute("for","buyukluksecim")
-      label_element2.innerText="Noktanın Yarıçapını Giriniz.\n(Şuanki Yarıçap Değeri:'"+window[this.id_nosu].bicim.radius+"')"
+      label_element2.innerText="Noktanın Yarıçapını Giriniz.(Şuanki Yarıçap Değeri:'"+window[this.id_nosu].bicim.radius+"')"
       var input1 = document.createElement("input");
       input1.setAttribute("id","buyukluksecim")
       input1.setAttribute("type","number")
@@ -666,14 +812,17 @@ class point_object {
       input2.setAttribute("type","submit")
       input2.setAttribute("value","Değiştir")
       input2.setAttribute("onclick","window['"+this.id_nosu+"'].manuelbuyuklukalma('"+this.id_nosu+"')")
-      var islemibitir = document.createElement("button")
-      islemibitir.setAttribute("onclick","bekleme()")
-      islemibitir.innerText="Bitir"
-      document.getElementById("sayfamesajlari").appendChild(form_element2)
-      document.getElementById("sayfamesajlari").appendChild(label_element2)
-      document.getElementById("sayfamesajlari").appendChild(input1)
-      document.getElementById("sayfamesajlari").appendChild(input2)
-      //saydamlık ayarlama
+      document.getElementById("sayfamesajlari").appendChild(div2)
+      console.log(document.getElementById("sayfamesajlari").getElementsByClassName("div2"))
+      document.getElementById("sayfamesajlari").getElementsByClassName("div2")[0].appendChild(form_element2)
+      document.getElementById("sayfamesajlari").getElementsByClassName("div2")[0].appendChild(label_element2)
+      document.getElementById("sayfamesajlari").getElementsByClassName("div2")[0].appendChild(input1)
+      document.getElementById("sayfamesajlari").getElementsByClassName("div2")[0].appendChild(input2)
+      //saydamlık ayarlama,
+      var div3=document.createElement("div")
+      div3.setAttribute("class","div3")
+      div3.style.alignItems="center"
+      div3.style.backgroundColor="orange"
       var form_element3 = document.createElement("form")
       form_element3.setAttribute("class","formelementi")
       var label_element3 = document.createElement("label")
@@ -686,7 +835,7 @@ class point_object {
       input3.setAttribute("min","0")
       input3.setAttribute("step","0.001")
       input3.setAttribute("maxlength","1")
-      input1.required=true;
+      input3.required=true;
       var input4= document.createElement("input")
       input4.setAttribute("type","submit")
       input4.setAttribute("value","Değiştir")
@@ -694,15 +843,12 @@ class point_object {
       var islemibitir = document.createElement("button")
       islemibitir.setAttribute("onclick","bekleme()")
       islemibitir.innerText="Bitir"
-      document.getElementById("sayfamesajlari").appendChild(form_element2)
-      document.getElementById("sayfamesajlari").appendChild(label_element2)
-      document.getElementById("sayfamesajlari").appendChild(input1)
-      document.getElementById("sayfamesajlari").appendChild(input2)
-      
-      document.getElementById("sayfamesajlari").appendChild(form_element3)
-      document.getElementById("sayfamesajlari").appendChild(label_element3)
-      document.getElementById("sayfamesajlari").appendChild(input3)
-      document.getElementById("sayfamesajlari").appendChild(input4)
+      islemibitir.alignItems="center"
+      document.getElementById("sayfamesajlari").appendChild(div3)
+      document.getElementById("sayfamesajlari").getElementsByClassName("div3")[0].appendChild(form_element3)
+      document.getElementById("sayfamesajlari").getElementsByClassName("div3")[0].appendChild(label_element3)
+      document.getElementById("sayfamesajlari").getElementsByClassName("div3")[0].appendChild(input3)
+      document.getElementById("sayfamesajlari").getElementsByClassName("div3")[0].appendChild(input4)
       document.getElementById("sayfamesajlari").appendChild(islemibitir)
       document.getElementById(this.id_nosu).removeAttribute("open")
     }
@@ -734,8 +880,9 @@ class point_object {
       this.layer=L.geoJSON(this.geojsonfeature,{
         pointToLayer:function(feature,latlng){
           return L.circleMarker(latlng,window[id_no].bicim)}}).addTo(map)
+          document.getElementById(this.id_nosu+"_summary").style.backgroundColor=renk  
         }
-    
+        
   }
 
 async function katman_sil(i){
@@ -800,13 +947,6 @@ details.forEach((targetDetail) => {
     });
   });
 });
-</script>
-<script>
-  //sınıflar
-  // harita gizleme ve eklemelerde sorun var. 
-
-
-
 const symbol_list={
 agac:{"point_sembols/tree_black.png":"Ağaç"},
 havaalani:{"point_sembols/airport_black.png":"Hava Alanı"},
@@ -814,7 +954,6 @@ lamba:{"point_sembols/lamba.png":"Lamba"},
 liman:{"point_sembols/liman.png":"Liman"},
 fabrika:{"point_sembols/fabrika.png":"Fabrika"}
 }
-
 var renk_listesi = [
 ' #f8f8ff ',
 ' #f5f5f5 ',
