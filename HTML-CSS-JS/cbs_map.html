@@ -68,7 +68,7 @@
         </div>
         <div id="coordinat_tab"></div>
         <span id="obje_girdi"></span>
-        
+        <div id="oznitelikpenceresi"></div>
   </body>
 </html>
 <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
@@ -78,17 +78,14 @@
 <script src="js/Proj4Leaflet-1.0.1/src/proj4leaflet.js"></script>
 <script src="js/Proj4Leaflet-1.0.1/lib/proj4-compressed.js"></script>
 <script>
-  //harita çeşitler
 
+//harita ekranının oluşturulması
 var map = L.map('map_screen',{
   center: [38.9637,35.2433],
   zoom: 7,
   zoomControl: false,
 });
-
-
-
-
+// harita çeşitleri
   var osm_map = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
     });
@@ -129,7 +126,7 @@ maxZoom: 16,
 ext: 'jpg'
 });
   var OpenTopoMap = L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {
-	maxZoom: 17,
+	maxZoom: 20,
 	attribution: 'Map data: &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, <a href="http://viewfinderpanoramas.org">SRTM</a> | Map style: &copy; <a href="https://opentopomap.org">OpenTopoMap</a> (<a href="https://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA</a>)'
 });
   var herev3 = L.tileLayer.provider('HEREv3.terrainDay', {
@@ -141,7 +138,7 @@ ext: 'jpg'
 })
 
 
-
+//harita çeşitlerinin nesnede belirtilmesi ( fonksiyonlar için)
 const maps_for_leaflet = {
   "OpenStreetMap":osm_map,
   "GoogleStreetsMap":googlestreets,
@@ -153,7 +150,7 @@ const maps_for_leaflet = {
   "Open Topo Map":OpenTopoMap,
   "herev3":herev3,
   "jawg map":jawg_map};
-
+// farklı haritaları yükleme fonksiyonları
 function add_opentopomap(){
   for (i in maps_for_leaflet) {
     if (i === "Open Topo Map"){
@@ -324,81 +321,67 @@ function remove_jawg_map(){
   document.getElementById('map_screen').style.backgroundColor="white"
 }
 
-// sol alttaki koordinatların görünmesi için
+
 
 // Haritanın Sol Alt Köşesinde Koordinat Gösterme
 function show_coordints() {
   map.on('mousemove' , (e) =>{
     document.getElementById('coordinat_tab').innerText ="Enlem:"+(e.latlng.lat).toFixed(8) +"------"+ "Boylam:"+(e.latlng.lng).toFixed(8)
     });}
-function dont_show_coordints(){
-  map.on('mousemove' , (e) =>{
-    document.getElementById('coordinat_tab').innerText ="X:"+(e.latlng.lat).toFixed(8) +"------"+ "Y:"+(e.latlng.lng).toFixed(8)
-    });}
 
 /*Nokta Oluşturma Aşamaları-leaflette:
 1- haritada tıklanılan yerden koordinatı alır ve point oluşturur
 2- oluşturlan point haritaya eklenir
 */
-// geojson point işaretçi ayarı //
-var geojsonMarkerOptions = {
-    radius: 8,
-    fillColor: "#ff7800",
-    color: "#000",
-    weight: 1,
-    opacity: 1,
-    fillOpacity: 0.8
-};
-// marker için icon //
-var myicon = L.icon({
-  iconUrl: "point_icon.png",
-  iconSize: [31,31]
-});
- // nokta oluşturma
- var geojson_gosterim_ayar = {
-      radius: 8,
-      fillColor: "#ff7800",
-      color: "#000",
-      weight: 1,
-      opacity: 1,
-      fillOpacity: 0.8
-      };
-const tekdongu=[1]
+
 function create_point(){
+  var tekdongu=[1]
+  //Sayfa Mesajlarında Çizime Başlamaya Dair Bildiri
+  document.getElementById('sayfamesajlari').innerText="Çizime Başlayabilirsiniz.\nHome: Koordinat Gir\nEnd: Bitir";
+  document.getElementById('sayfamesajlari').style.backgroundColor  = "black";
+  //harita üzerinde tıklama olayı ile koordinat almanın etkinleştirilmesi
+  map.on('click', (e)=>{
+  x = (e.latlng.lat).toFixed(8);
+  y = (e.latlng.lng).toFixed(8);
+  // oluşturulacak point için benzersiz bir id üretilir ve daha önceden bu id verilmiş mi kontrol edilir
+  var as
+  for (as in tekdongu ){
+    var name = "point"+(new Date()).getMilliseconds()+Math.floor(Math.random()*1000)  //benzersiz id alma
+    if ((typeof window[name])!=="object"){  //id in daha önceden var olup olmadığının kontrolü
+        document.getElementById('sayfamesajlari').style.backgroundColor  = "black"; 
+        document.getElementById('sayfamesajlari').innerText=name+" oluşturuldu \n"+"E="+x+"   "+"B="+y;//sayfa mesajlarında objenin oluştuğuna dair bilgi
+        window[name]= new point_object(x_coordinats=x,y_coordinats=y,object_name=name)  //objenin oluşturulması
+        window[name].haritayaekle(window[name].bicim) //objenin haritaya eklenmesi
+        window[name].menuleriolustur()  //objeye ait vektörler penceresindeki menülerin oluşturulması
+        bekleme() //sayfa mesajlarındaki yazının kaybolması
+        map.off('click')  //tıklama ile point eklemenin pasifleştiirlmesi
+                                          }
+    else{
+      break
+         }
+                      }
+                      }
+        )
+  document.addEventListener('keydown', (event) => {
+  var name = event.key;
+  var code = event.code;
+  
   for (x in tekdongu){
-          document.getElementById('sayfamesajlari').innerText="Çizime Başlayabilirsiniz.\nHome: Koordinat Gir\nEnd: Bitir";
-          document.getElementById('sayfamesajlari').style.backgroundColor  = "black";
-          map.on('click', (e)=>{
-          x = (e.latlng.lat).toFixed(6);
-          y = (e.latlng.lng).toFixed(6);
-          name = "point"+(new Date()).getMilliseconds()+Math.floor(Math.random()*1000)
-          document.getElementById('sayfamesajlari').style.backgroundColor  = "black";
-          document.getElementById('sayfamesajlari').innerText=name+" oluşturuldu \n"+"E="+x+"   "+"B="+y;
-          window[name]= new point_object(x_coordinats=x,y_coordinats=y,object_name=name)
-          window[name].haritayaekle(window[name].bicim)
-          window[name].menuleriolustur()
-          bekleme()
-          map.off('click')
-          })
-          document.addEventListener('keydown', (event) => {
-          var name = event.key;
-          var code = event.code;
-          for (x in tekdongu){
-          if (code==="Home"){
-          document.getElementById('obje_girdi').style.backgroundColor = "black";
-          document.getElementById('obje_girdi').innerHTML='<label for="xbuton">E :</label><input type="number" maxlength="999999" id="xbuton" step="0.001" value="" required><br><label for="ybuton">B :</label><input type="number" maxlength="999999" id="ybuton" step="0.001" value="" required><input id="koordinatal" onclick="koordinatileolustur()" type="submit"  value="nokta oluştur">';
-          map.off('click')
-          break
-        }
-          if (code === "End") {
-            document.getElementById('sayfamesajlari').style.backgroundColor = "black";
-            document.getElementById('sayfamesajlari').innerText = "İşlem Tamamlandı"
-            map.off('click')
-            bekleme()
-            break}
-            
-          }})
-          break }}
+  if (code==="Home"){
+  document.getElementById('obje_girdi').style.backgroundColor = "black";
+  document.getElementById('obje_girdi').innerHTML='<label for="xbuton">E :</label><input type="number" maxlength="999999" id="xbuton" step="0.001" value="" required><br><label for="ybuton">B :</label><input type="number" maxlength="999999" id="ybuton" step="0.001" value="" required><input id="koordinatal" onclick="koordinatileolustur()" type="submit"  value="nokta oluştur">';
+  map.off('click')
+  break
+  }
+  if (code === "End") {
+  document.getElementById('sayfamesajlari').style.backgroundColor = "black";
+  document.getElementById('sayfamesajlari').innerText = "İşlem Tamamlandı"
+  map.off('click')
+  bekleme()
+  break}
+
+  }})
+}
     // fonksiyon sonu
 //-------------------------------------------------------------------------------------------------------------------------------------
   // koordinat girerek nokta oluşturma
@@ -432,9 +415,15 @@ var y = document.getElementById('ybuton').value
 
 class point_object {
     constructor(x_coordinats,y_coordinats,object_name){
+      this.properties={
+        "featureid":object_name,
+        "Geometri Tipi":"Nokta",
+        "X Koordinatı(Enlem)":x_coordinats,
+        "Y Koordinatı(Boylam)":y_coordinats,
+      }
       this.geojsonfeature = {
       "type": "Feature",
-      "properties": null,
+      "properties": this.properties,
       "geometry":{
         "type":"Point",
         "coordinates":[y_coordinats,x_coordinats]}};
@@ -451,6 +440,40 @@ class point_object {
         iconSize:null
       }
     }
+    oznitelikgoruntulemeveduzenleme(){
+      var sdd
+      for (sdd in this.properties){
+          var kolonbir=document.createElement("div")
+          kolonbir.setAttribute("id",sdd)
+          kolonbir.style.width="auto"
+          kolonbir.style.height="auto"
+          kolonbir.style.float="left"
+          kolonbir.style.backgroundColor="black"
+          kolonbir.style.overflowX="scroll"
+          kolonbir.style.fontSize="medium"
+          kolonbir.style.fontWeight="bold"
+          var fds=document.createElement("button")
+          fds.innerText=sdd
+          fds.style.color="red"
+          fds.style.backgroundColor="black"
+          fds.style.width="140px"
+          fds.style.height="50px"
+          document.getElementById("oznitelikpenceresi").appendChild(kolonbir)
+          document.getElementById(sdd).appendChild(fds)
+          document.getElementById(sdd).appendChild(document.createElement("br"))
+          var dfs = document.createElement("button")
+          var genislik = document.getElementById(sdd).getElementsByTagName("button")[0].clientWidth
+          dfs.innerText=this.properties[sdd]
+          dfs.style.color="white"
+          dfs.style.width="140px"
+          dfs.style.height="50px"
+          dfs.style.backgroundColor="black"
+          document.getElementById(sdd).appendChild(dfs)
+          console.log(document.getElementById(sdd).getElementsByTagName("button")[0].clientWidth)
+          console.log(document.getElementById(sdd).getElementsByTagName("button")[1].clientWidth)
+          console.log(document.getElementById(sdd).getElementsByTagName("button")[1].style.width)
+    }
+  }
     haritayaekle(x){
       this.layer=L.geoJSON(this.geojsonfeature,{
         pointToLayer:function(feature,latlng){
@@ -502,6 +525,7 @@ class point_object {
       document.getElementById(this.id_nosu).getElementsByTagName("button")[2].setAttribute('onclick',"katman_sil('"+this.id_nosu+"')");
       document.getElementById(this.id_nosu).getElementsByTagName("button")[3].setAttribute('onclick',"window['"+this.id_nosu+"'].objeyeyaklas()")
       document.getElementById(this.id_nosu).getElementsByTagName("button")[4].setAttribute('onclick',"window['"+this.id_nosu+"'].stildegistirme()")
+      document.getElementById(this.id_nosu).getElementsByTagName("button")[5].setAttribute('onclick',"window['"+this.id_nosu+"'].oznitelikgoruntulemeveduzenleme()")
     }
     stildegistirme(){
       document.getElementById("sayfamesajlari").style.backgroundColor="black"
@@ -637,92 +661,6 @@ class point_object {
       document.getElementById("sayfamesajlari").appendChild(document.createElement("br"))
       document.getElementById("sayfamesajlari").appendChild(semboluzunluk_al)
     }
-    sembolsec(){
-      var altsatir=document.createElement("br")
-      document.getElementById("sayfamesajlari").innerText=""
-      document.getElementById("sayfamesajlari").style.backgroundColor="black"
-      document.getElementById("sayfamesajlari").innerText="İnternet Üzerinden Simge Ekleyebilirsiniz.\nÖrnek:www.asd.com/sembol.png"
-      document.getElementById("sayfamesajlari").style.width="400px"
-      //url ile sembol ekleme kısmı
-      var form_element=document.createElement("form")
-      form_element.setAttribute("class","formelementi")
-      var label_element=document.createElement("label")
-      label_element.setAttribute("for","alurl")
-      label_element.innerText="\nResim Urlsi"
-      var renksecici=document.createElement("input")
-      renksecici.setAttribute("id","alurl")
-      renksecici.setAttribute("type","url")
-      renksecici.setAttribute("name","Url Al")
-      renksecici.setAttribute("value","")
-      var renkalma = document.createElement("input")
-      renkalma.setAttribute("type","submit")
-      renkalma.setAttribute("value","Uygula")
-      renkalma.setAttribute("onclick","window['"+this.id_nosu+"'].sembolurluygula('"+this.id_nosu+"')")
-      document.getElementById("sayfamesajlari").style.backgroundColor="black"
-      document.getElementById("sayfamesajlari").appendChild(label_element)
-      document.getElementById("sayfamesajlari").appendChild(renksecici)
-      document.getElementById("sayfamesajlari").appendChild(renkalma)
-      document.getElementById("sayfamesajlari").appendChild(altsatir)
-      var ikincimetin=document.createTextNode("Semboller Butonu İle Yerel  \n Sembollerden Seçebilirsiniz.")
-
-      //kütüphaneden sembol seçe kısmı
-      
-      var sembolsec_detail=document.createElement("details")
-        sembolsec_detail.setAttribute("id",this.id_nosu+"detail")
-        sembolsec_detail.style.height="25px"
-        sembolsec_detail.style.width="85px"
-        sembolsec_detail.style.borderRadius="5px"
-        sembolsec_detail.style.backgroundColor="wheat"
-        sembolsec_detail.style.color="black"
-        sembolsec_detail.style.marginLeft="40%"
-      var sembolsec_summary=document.createElement("summary")
-      sembolsec_summary.innerText="Semboller"
-        sembolsec_summary.setAttribute("id",this.id_nosu+"summary")
-        sembolsec_summary.style.width="auto"
-        sembolsec_summary.style.cursor="pointer"
-        sembolsec_summary.style.listStyle="none"
-      var sembolsec_div=document.createElement("div")
-        sembolsec_div.setAttribute("id",this.id_nosu+"div")
-        sembolsec_div.style.backgroundColor="black"
-        sembolsec_div.style.color="wheat"
-        sembolsec_div.style.width="100px"
-        sembolsec_div.style.marginTop="10px"
-        sembolsec_div.style.height="200px"
-        sembolsec_div.style.overflowY="scroll"
-        sembolsec_div.style.overflowX="scroll"
-      document.getElementById("sayfamesajlari").appendChild(ikincimetin)
-      document.getElementById("sayfamesajlari").appendChild(sembolsec_detail)
-      document.getElementById(this.id_nosu+"detail").appendChild(sembolsec_summary)
-      document.getElementById(this.id_nosu+"detail").appendChild(sembolsec_div)
-      //console.log("url:--"+(Object.keys(symbol_list[i])))
-      //console.log("isim"+(Object.values(symbol_list[i])))
-      var c
-      for (c in symbol_list){
-        window[c+"symbol"] = document.createElement("button")
-        var labelll = document.createElement("label")
-        labelll.innerText=Object.values(symbol_list[c])
-        labelll.style.float="left"
-        labelll.style.position="static"
-        labelll.style.width="50px"
-        labelll.style.height="30px"
-        labelll.style.fontSize="medium"
-        labelll.style.marginTop="5px"
-        window[c+"symbol"].style.backgroundImage="url('"+Object.keys(symbol_list[c])+"')"
-        window[c+"symbol"].style.backgroundSize="contain"
-        window[c+"symbol"].style.width="30px"
-        window[c+"symbol"].style.height="30px"
-        window[c+"symbol"].style.float="right"
-        window[c+"symbol"].style.marginTop="5px"
-        window[c+"symbol"].setAttribute("onclick","window['"+this.id_nosu+"'].semboluuygula('"+Object.keys(symbol_list[c])+"','"+this.id_nosu+"')")
-        document.getElementById(this.id_nosu+"div").appendChild(labelll)
-        document.getElementById(this.id_nosu+"div").appendChild(window[c+"symbol"])
-      }
-      var islemibitir = document.createElement("button")
-      islemibitir.setAttribute("onclick","bekleme()")
-      islemibitir.innerText="Bitir"
-      islemibitir.alignItems="center"
-      document.getElementById("sayfamesajlari").appendChild(islemibitir)
-    }
     sembolurluygula(x){
       var sembol_url=
       this.icon.iconUrl=document.getElementById("sayfamesajlari").getElementsByTagName("input")[0].value
@@ -733,7 +671,7 @@ class point_object {
     }
     ikonuygula(x){
       if(x.icon.iconUrl===null){
-        
+        alert("İkon Seçmediniz.")
       }
       window[this.id_nosu].haritadagizle()
       this.layer=L.geoJSON(this.geojsonfeature,{

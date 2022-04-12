@@ -453,4 +453,10 @@ body{
     color: wheat;
     margin: 2px;
 }
-
+#oznitelikpenceresi{
+    width: 900px;
+    height: 200px;
+    position: absolute;
+    margin-top: 780px;
+    margin-left: 500px;
+}
