@@ -418,8 +418,8 @@ class point_object {
       this.properties={
         "featureid":object_name,
         "Geometri Tipi":"Nokta",
-        "X Koordinatı(Enlem)":x_coordinats,
-        "Y Koordinatı(Boylam)":y_coordinats,
+        "X Koordinatı(Enlem)":parseFloat(x_coordinats),
+        "Y Koordinatı(Boylam)":parseFloat(y_coordinats),
       }
       this.geojsonfeature = {
       "type": "Feature",
@@ -427,6 +427,7 @@ class point_object {
       "geometry":{
         "type":"Point",
         "coordinates":[y_coordinats,x_coordinats]}};
+      this.gecerli_isaret="nokta"
       this.bicim = {
           radius: 8,
           fillColor: renk_listesi[Math.floor(Math.random()*renk_listesi.length)],
@@ -437,43 +438,27 @@ class point_object {
       this.id_nosu = object_name  
       this.icon={
         iconUrl:null,
-        iconSize:null
+        iconSize:null,
       }
     }
-    oznitelikgoruntulemeveduzenleme(){
-      var sdd
-      for (sdd in this.properties){
-          var kolonbir=document.createElement("div")
-          kolonbir.setAttribute("id",sdd)
-          kolonbir.style.width="auto"
-          kolonbir.style.height="auto"
-          kolonbir.style.float="left"
-          kolonbir.style.backgroundColor="black"
-          kolonbir.style.overflowX="scroll"
-          kolonbir.style.fontSize="medium"
-          kolonbir.style.fontWeight="bold"
-          var fds=document.createElement("button")
-          fds.innerText=sdd
-          fds.style.color="red"
-          fds.style.backgroundColor="black"
-          fds.style.width="140px"
-          fds.style.height="50px"
-          document.getElementById("oznitelikpenceresi").appendChild(kolonbir)
-          document.getElementById(sdd).appendChild(fds)
-          document.getElementById(sdd).appendChild(document.createElement("br"))
-          var dfs = document.createElement("button")
-          var genislik = document.getElementById(sdd).getElementsByTagName("button")[0].clientWidth
-          dfs.innerText=this.properties[sdd]
-          dfs.style.color="white"
-          dfs.style.width="140px"
-          dfs.style.height="50px"
-          dfs.style.backgroundColor="black"
-          document.getElementById(sdd).appendChild(dfs)
-          console.log(document.getElementById(sdd).getElementsByTagName("button")[0].clientWidth)
-          console.log(document.getElementById(sdd).getElementsByTagName("button")[1].clientWidth)
-          console.log(document.getElementById(sdd).getElementsByTagName("button")[1].style.width)
+    objeyiyenile(x){
+      console.log(x.icon.iconUrl)
+      if(x.gecerli_isaret==="nokta"){
+        window[this.id_nosu].haritadagizle()
+        this.layer=L.geoJSON(this.geojsonfeature,{
+        pointToLayer:function(feature,latlng){
+          return L.circleMarker(latlng,x.bicim)}}).addTo(map)
+      bekleme()
+      }
+      else{
+      window[this.id_nosu].haritadagizle()
+      this.layer=L.geoJSON(this.geojsonfeature,{
+        pointToLayer:function(feature,latlng){
+          return L.marker(latlng,{icon:L.icon(x.icon),
+          opacity:x.bicim.fillOpacity})}}).addTo(map)
+      bekleme()
+        }
     }
-  }
     haritayaekle(x){
       this.layer=L.geoJSON(this.geojsonfeature,{
         pointToLayer:function(feature,latlng){
@@ -585,9 +570,12 @@ class point_object {
       var sembolsec_summary=document.createElement("summary")
       sembolsec_summary.innerText="Semboller"
         sembolsec_summary.setAttribute("id",this.id_nosu+"summary")
-        sembolsec_summary.style.width="auto"
+        sembolsec_summary.style.width="100px"
         sembolsec_summary.style.cursor="pointer"
         sembolsec_summary.style.listStyle="none"
+        sembolsec_summary.style.backgroundColor="black"
+        sembolsec_summary.style.color="white"
+        sembolsec_summary.style.border="solid 5px white"
       var sembolsec_div=document.createElement("div")
         sembolsec_div.setAttribute("id",this.id_nosu+"div")
         sembolsec_div.style.backgroundColor="black"
@@ -660,34 +648,70 @@ class point_object {
       document.getElementById("sayfamesajlari").appendChild(boyuzunluk)
       document.getElementById("sayfamesajlari").appendChild(document.createElement("br"))
       document.getElementById("sayfamesajlari").appendChild(semboluzunluk_al)
+      var sembolsaydamlik_yazi=document.createElement("label")
+      sembolsaydamlik_yazi.innerText="Sembol Saydamlığını Ayarla (0-1)"
+      sembolsaydamlik_yazi.setAttribute("for","sembolsaydamlik")
+      var sembolsaydamlik_al=document.createElement("input")
+      sembolsaydamlik_al.setAttribute("id","sembolsaydamlik")
+      sembolsaydamlik_al.setAttribute("type","number")
+      sembolsaydamlik_al.setAttribute("value","1")
+      sembolsaydamlik_al.setAttribute("step","0.001")
+      var sembolsaydamlik_buton=document.createElement("input")
+      sembolsaydamlik_buton.setAttribute("value","Uygula")
+      sembolsaydamlik_buton.setAttribute("type","submit")
+      sembolsaydamlik_buton.setAttribute("onclick","window['"+this.id_nosu+"'].sembolsaydamlikdegistir()")
+      document.getElementById("sayfamesajlari").appendChild(document.createElement("br"))
+      document.getElementById("sayfamesajlari").appendChild(sembolsaydamlik_yazi)
+      document.getElementById("sayfamesajlari").appendChild(document.createElement("br"))
+      document.getElementById("sayfamesajlari").appendChild(sembolsaydamlik_al)
+      document.getElementById("sayfamesajlari").appendChild(document.createElement("br"))
+      document.getElementById("sayfamesajlari").appendChild(sembolsaydamlik_buton)
+    }
+    sembolsaydamlikdegistir(){
+      var saydamlikdegeri=document.getElementById("sembolsaydamlik").value
+      if (0<=parseFloat(saydamlikdegeri) && parseFloat(saydamlikdegeri)<=1){
+        this.bicim.fillOpacity=saydamlikdegeri
+        window[this.id_nosu].objeyiyenile(window[this.id_nosu])
+      }
+      else{
+        alert("Girilen Değer 0-1 e Eşit Veya Arasında Olmalı")
+      }
     }
     sembolurluygula(x){
-      var sembol_url=
+      this.gecerli_isaret="sembol"
       this.icon.iconUrl=document.getElementById("sayfamesajlari").getElementsByTagName("input")[0].value
       window[this.id_nosu].haritadagizle()
       this.layer=L.geoJSON(this.geojsonfeature,{
         pointToLayer:function(feature,latlng){
-          return L.marker(latlng,{icon:L.icon(window[x].icon)})}}).addTo(map)
+          return L.marker(latlng,{icon:L.icon(window[x].icon),
+          opacity:window[x].icon.iconOpacity})}}).addTo(map)
     }
     ikonuygula(x){
-      if(x.icon.iconUrl===null){
-        alert("İkon Seçmediniz.")
+      if(x.gecerli_isaret==="nokta"){
+        window[this.id_nosu].haritadagizle()
+        this.layer=L.geoJSON(this.geojsonfeature,{
+        pointToLayer:function(feature,latlng){
+          return L.marker(latlng,x.bicim)}}).addTo(map)
+      bekleme()
       }
+      else{
       window[this.id_nosu].haritadagizle()
       this.layer=L.geoJSON(this.geojsonfeature,{
         pointToLayer:function(feature,latlng){
-          return L.marker(latlng,{icon:L.icon(x.icon)})}}).addTo(map)
+          return L.marker(latlng,{icon:L.icon(x.icon),
+          opacity:x.bicim.fillOpacity}
+          )}}).addTo(map)
       bekleme()
+    }
     }
     semboluuygula(i,x){
       this.icon.iconUrl=i
-      this.icon_uygula = L.icon(this.icon)
-      console.log(this.icon_uygula)
+      this.gecerli_isaret="sembol"
       window[this.id_nosu].haritadagizle()
       this.layer=L.geoJSON(this.geojsonfeature,{
         pointToLayer:function(feature,latlng){
-          console.log(window[x])
-          return L.marker(latlng,{icon:window[x].icon_uygula})}}).addTo(map)
+          return L.marker(latlng,{icon:L.icon(window[x].icon),
+          opacity:window[x].bicim.fillOpacity})}}).addTo(map)
       document.getElementById(this.id_nosu+"detail").removeAttribute("open")
       document.getElementById(this.id_nosu+"_summary").style.backgroundColor="white"
     }
@@ -792,6 +816,7 @@ class point_object {
     }
     manuelbuyuklukalma(id_no){
       var buyuklukdegeri = document.getElementById("sayfamesajlari").getElementsByTagName("input")[2].value
+      this.gecerli_isaret="nokta"
       this.bicim.radius=buyuklukdegeri
       map.removeLayer(this.layer)
       this.layer=L.geoJSON(this.geojsonfeature,{
@@ -801,6 +826,7 @@ class point_object {
     saydamlikdegistir(id_no){
       var saydamlikdegeri=(document.getElementById("sayfamesajlari").getElementsByTagName("input")[4].value)
       if (0<=parseFloat(saydamlikdegeri) && parseFloat(saydamlikdegeri)<=1){
+        this.gecerli_isaret="nokta"
         this.bicim.fillOpacity=saydamlikdegeri
         map.removeLayer(this.layer)
       this.layer=L.geoJSON(this.geojsonfeature,{
@@ -814,13 +840,472 @@ class point_object {
     rengialma(id_no){
       var renk = document.getElementById("sayfamesajlari").getElementsByTagName("input")[0].value
       this.bicim.fillColor=renk
+      this.gecerli_isaret="nokta"
       map.removeLayer(this.layer)
       this.layer=L.geoJSON(this.geojsonfeature,{
         pointToLayer:function(feature,latlng){
           return L.circleMarker(latlng,window[id_no].bicim)}}).addTo(map)
           document.getElementById(this.id_nosu+"_summary").style.backgroundColor=renk  
         }
+    oznitelikkolonduzenle(i){
+      //bilgilerin sayfa mesajlarına yazılması
+      var sayfamesajlari=document.getElementById("sayfamesajlari")
+      sayfamesajlari.style.backgroundColor="black"
+      var labelbir = document.createElement("label")
+      labelbir.innerText="Kolon Adı:"
+      labelbir.setAttribute("for","kolonadiduzenle")
+      var kolonadigir=document.createElement("input")
+      kolonadigir.setAttribute("id","kolonadiduzenle")
+      kolonadigir.setAttribute("type","Kolon Adı")
+      kolonadigir.setAttribute("value",i)
+      sayfamesajlari.appendChild(labelbir)
+      sayfamesajlari.appendChild(kolonadigir)
+      sayfamesajlari.appendChild(document.createElement("br"))
+      // veri tipinin seçimi
+      var div_tip=document.createElement("div")
+      div_tip.setAttribute("id","tipsecim")
+      var labeliki=document.createElement("label")
+      labeliki.innerText="Veri Tipi:"
+      labeliki.setAttribute("for","cevap")
+      var veritip_bir=document.createElement("input")
+      veritip_bir.setAttribute("type","radio")
+      veritip_bir.setAttribute("class","cevap")
+      veritip_bir.setAttribute("name","cevap1")
+      veritip_bir.setAttribute("value","text")
+      var veritip_iki=document.createElement("input")
+      veritip_iki.setAttribute("type","radio")
+      veritip_iki.setAttribute("class","cevap")
+      veritip_iki.setAttribute("name","cevap1")
+      veritip_iki.setAttribute("value","tam sayı")
+      var veritip_uc=document.createElement("input")
+      veritip_uc.setAttribute("type","radio")
+      veritip_uc.setAttribute("class","cevap")
+      veritip_uc.setAttribute("name","cevap1")
+      veritip_uc.setAttribute("value","ondalıklı sayı")
+      sayfamesajlari.appendChild(div_tip)
+      document.getElementById("tipsecim").appendChild(document.createTextNode("Metin"))
+      document.getElementById("tipsecim").appendChild(veritip_bir)
+      document.getElementById("tipsecim").appendChild(document.createTextNode("Tam Sayı"))
+      document.getElementById("tipsecim").appendChild(veritip_iki)
+      document.getElementById("tipsecim").appendChild(document.createTextNode("Ondalıklı Sayı"))
+      document.getElementById("tipsecim").appendChild(veritip_uc)
+      document.getElementById("tipsecim").appendChild(document.createElement("br"))
+      var uygula_buton=document.createElement("input")
+      uygula_buton.setAttribute("type","submit")
+      uygula_buton.innerText="Uygula"
+      uygula_buton.setAttribute("onclick","window['"+this.id_nosu+"'].oznitelikdegisiklikuygula('"+i+"')")
+      document.getElementById("tipsecim").appendChild(uygula_buton)
+    }
+    oznitelikdegisiklikuygula(i){
+      /////burada kaldık
+      var a = document.getElementById("kolonadiduzenle").value
+      if (a!==i && a!==""){
+        this.properties[a]=this.properties[i]
+        delete this.properties[i]
+        console.log("\""+i+"\" Kolonunun İsmi \""+a+ "\" Olarak Değiştirildi")
+        try {
+          var veri_tip=document.querySelector('input[name = cevap1]:checked').value
+          if (document.querySelector('input[name = cevap1]:checked').value==="text"){
+            this.properties[a]=this.properties[a].toString()
+          }
+          else if(document.querySelector('input[name = cevap1]:checked').value==="tam sayı"){
+            console.log("tam sayı ifi çalıştı")
+            this.properties[a]=parseInt(this.properties[a])
+            if (isNaN(this.properties[a])){
+              this.properties[a]=null
+            }
+          }
+          else if(document.querySelector('input[name = cevap1]:checked').value==="ondalıklı sayı"){
+            console.log("ondalıklı sayı ifi çalıştı")
+            this.properties[a]=parseFloat(this.properties[a])
+            if (isNaN(this.properties[a])){
+              this.properties[a]=null
+            }
+          }
+          window[this.id_nosu].oznitelikgoruntulemeveduzenleme()
+          window[this.id_nosu].objeyiyenile(window[this.id_nosu])
+          }
+          catch(err){
+            console.log("Tip Seçilmeden İşlem Yapıldı. Kolon Tipi Aynı Kaldı")
+            this.properties[a]=this.properties[a]
+            window[this.id_nosu].objeyiyenile(window[this.id_nosu])
+            window[this.id_nosu].oznitelikgoruntulemeveduzenleme()
+          }
+      }
+      else if (a===""){
+        alert("Kolon Adı Boş Bırakılamaz.")
+      }
+      else{
+        console.log(i+" Kolonunun İsmi Sabit Kaldı")
+        try {
+          var veri_tip=document.querySelector('input[name = cevap1]:checked').value
+          if (document.querySelector('input[name = cevap1]:checked').value==="text"){
+            this.properties[i]=this.properties[i].toString()
+          }
+          else if(document.querySelector('input[name = cevap1]:checked').value==="tam sayı"){
+            console.log("tam sayı ifi çalıştı")
+            this.properties[i]=parseInt(this.properties[i])
+            if (isNaN(this.properties[i])){
+              this.properties[i]=null
+            }
+          }
+          else if(document.querySelector('input[name = cevap1]:checked').value==="ondalıklı sayı"){
+            console.log("ondalıklı sayı ifi çalıştı")
+            this.properties[i]=parseFloat(this.properties[i])
+            if (isNaN(this.properties[i])){
+              this.properties[i]=null
+            }
+          }
+          window[this.id_nosu].objeyiyenile(window[this.id_nosu])
+          window[this.id_nosu].oznitelikgoruntulemeveduzenleme()
+          console.log(this.properties)
+          }
+          catch(err){
+            console.log("Tip Seçilmeden İşlem Yapıldı. Kolon Tipi Aynı Kaldı")
+            this.properties[i]=this.properties[i]
+            window[this.id_nosu].objeyiyenile(window[this.id_nosu])
+            window[this.id_nosu].oznitelikgoruntulemeveduzenleme()
+          }
+      }
+      bekleme()
+      document.getElementById("oznitelikpenceresi").innerText=""
+      document.getElementById("oznitelikpenceresi").style.backgroundColor="unset"
+
+    }
+    oznitelikgoruntulemeveduzenleme(){
+      document.getElementById("oznitelikpenceresi").innerText=""
+      document.getElementById("oznitelikpenceresi").style.overflowX="scroll"
+      var sdd
+      var ustsekme=document.createElement("div")
+      ustsekme.innerText=this.id_nosu
+      ustsekme.setAttribute("id",this.id_nosu+"kapat")
+      ustsekme.style.height="30px"
+      ustsekme.style.backgroundColor="white"
+      ustsekme.style.border="5px solid black"
+      ustsekme.style.textAlign="center"
+      ustsekme.style.fontSize="large"
+      ustsekme.style.fontWeight="bolder"
+      var kapatbuton=document.createElement("button")
+      kapatbuton.setAttribute("onclick","window['"+this.id_nosu+"'].oznitelikpenceresikapat()")
+      kapatbuton.setAttribute("value","Kapat")
+      kapatbuton.style.width="100px"
+      kapatbuton.style.height="30px"
+      kapatbuton.innerText="Kapat"
+      kapatbuton.style.float="right"
+      document.getElementById("oznitelikpenceresi").appendChild(ustsekme)
+      document.getElementById(this.id_nosu+"kapat").appendChild(kapatbuton)
+      for (sdd in this.properties){
         
+          var kolonbir=document.createElement("div")
+          kolonbir.setAttribute("id",sdd)
+          kolonbir.style.width="auto"
+          kolonbir.style.height="180px"
+          kolonbir.style.float="left"
+          kolonbir.style.backgroundColor="black"
+          kolonbir.style.overflowX="scroll"
+          kolonbir.style.fontSize="medium"
+          kolonbir.style.fontWeight="bold"
+        //kolon adı ile ilgili menü
+        
+          var kolonmenu = document.createElement("details")
+          kolonmenu.setAttribute("id",sdd+"details")
+          kolonmenu.style.width="140px"
+          kolonmenu.style.height="50px"
+          var kolonmenu_summary=document.createElement("summary")
+          kolonmenu_summary.innerText=sdd
+          kolonmenu_summary.style.cursor="pointer"
+          kolonmenu_summary.style.listStyle="none"
+          kolonmenu_summary.style.color="red"
+          kolonmenu_summary.style.backgroundColor="black"
+          kolonmenu_summary.style.width="140px"
+          kolonmenu_summary.style.height="50px"
+          kolonmenu_summary.setAttribute("id",sdd+"summary")
+            // var fds=document.createElement("button")
+            // fds.innerText=sdd
+            // fds.style.color="red"
+            // fds.style.backgroundColor="black"
+            // fds.style.width="140px"
+            // fds.style.height="50px"
+          document.getElementById("oznitelikpenceresi").appendChild(kolonbir)
+          document.getElementById(sdd).appendChild(kolonmenu)
+          document.getElementById(sdd+"details").appendChild(kolonmenu_summary)
+          var menudiv=document.createElement("div")
+          menudiv.setAttribute("id",sdd+"menudiv")
+          menudiv.style.width="200px"
+          menudiv.style.height="110px"
+          menudiv.style.border="red solid 5px"
+          menudiv.style.marginLeft="0px"
+          menudiv.style.position="absolute"
+          menudiv.style.backgroundColor="black"
+          menudiv.style.overflowY="scroll"
+          var kolonmenu_duzenle=document.createElement("button")
+          kolonmenu_duzenle.setAttribute("value","Düzenle")
+          kolonmenu_duzenle.innerText="Düzenle"
+          var kolonmenu_sil=document.createElement("button")
+          kolonmenu_sil.setAttribute("value","Sil")
+          kolonmenu_sil.innerText="Sil"
+          var kolonmenu_ozellikler=document.createElement("button")
+          kolonmenu_ozellikler.setAttribute("value","Özellikler")
+          kolonmenu_ozellikler.innerText="Özellikler"
+          var saga_kolon_ekle=document.createElement("button")
+          saga_kolon_ekle.setAttribute("value","Sağına Kolon Ekle")
+          saga_kolon_ekle.innerText="Sağına Kolon Ekle"
+          saga_kolon_ekle.setAttribute("onclick","window['"+this.id_nosu+"'].sagakolonekle('"+sdd+"')")
+          kolonmenu_ozellikler.setAttribute("onclick","window['"+this.id_nosu+"'].oznitelikmenuozellikler('"+sdd+"')")
+          if (sdd!=="featureid" && sdd !=="Geometri Tipi" && sdd !=="X Koordinatı(Enlem)" && sdd !== "Y Koordinatı(Boylam)"){
+            kolonmenu_duzenle.setAttribute("onclick","window['"+this.id_nosu+"'].oznitelikkolonduzenle('"+sdd+"')")
+            kolonmenu_sil.setAttribute("onclick","window['"+this.id_nosu+"'].oznitelikkolonsil('"+sdd+"')")
+            
+          }
+          else{
+            kolonmenu_duzenle.setAttribute("onclick","alert('"+sdd+"' +' kolonu düzenlenemez')")
+            kolonmenu_sil.setAttribute("onclick","alert('"+sdd+"'+' kolonu düzenlenemez')")
+          }
+          document.getElementById(sdd+"details").appendChild(menudiv)
+          document.getElementById(sdd+"menudiv").appendChild(kolonmenu_duzenle)
+          document.getElementById(sdd+"menudiv").appendChild(document.createElement("br"))
+          document.getElementById(sdd+"menudiv").appendChild(kolonmenu_sil)
+          document.getElementById(sdd+"menudiv").appendChild(document.createElement("br"))
+          document.getElementById(sdd+"menudiv").appendChild(kolonmenu_ozellikler)
+          document.getElementById(sdd+"menudiv").appendChild(document.createElement("br"))
+          document.getElementById(sdd+"menudiv").appendChild(saga_kolon_ekle)
+          document.getElementById(sdd).appendChild(document.createElement("br"))
+          var kolonicerik_detail=document.createElement("details")
+          kolonicerik_detail.setAttribute("id",sdd+"kolonicerik_detail")
+          kolonicerik_detail.style.width="140px"
+          kolonicerik_detail.style.height="50px"
+          var dfs = document.createElement("summary")
+          var genislik = document.getElementById(sdd).getElementsByTagName("details")[0].clientWidth
+          dfs.setAttribute("id",sdd+"iceriksummary")
+          dfs.innerText=this.properties[sdd]
+          dfs.style.color="white"
+          dfs.style.width="140px"
+          dfs.style.height="50px"
+          dfs.style.cursor="pointer"
+          dfs.style.listStyle="none"
+          dfs.style.backgroundColor="black"
+          document.getElementById(sdd).appendChild(kolonicerik_detail)
+          document.getElementById(sdd+"kolonicerik_detail").appendChild(dfs)
+          var kolonicerik_menu=document.createElement("button")
+          kolonicerik_menu.innerText="Düzenle"
+          kolonicerik_menu.style.width="auto"
+          kolonicerik_menu.style.hei="auto"
+          kolonicerik_menu.style.border="solid red 5px"
+          kolonicerik_menu.style.marginLeft="0px"
+          kolonicerik_menu.style.position="absolute"
+          kolonicerik_menu.style.color="white"
+          kolonicerik_menu.style.backgroundColor="black"
+          kolonicerik_menu.setAttribute("onclick","window['"+this.id_nosu+"'].kolonicerikdegistir('"+sdd+"')")
+          if (sdd!=="featureid" && sdd !=="Geometri Tipi" && sdd !=="X Koordinatı(Enlem)" && sdd !== "Y Koordinatı(Boylam)"){
+            kolonicerik_menu.setAttribute("onclick","window['"+this.id_nosu+"'].oznitelikicerikdegistir('"+sdd+"')")
+          }
+          else{
+            kolonicerik_menu.setAttribute("onclick","alert('"+sdd+"'+' kolonu düzenlenemez')")
+          }
+          document.getElementById(sdd+"kolonicerik_detail").appendChild(kolonicerik_menu)
+        //kolona ait div
+    }
+  }
+    oznitelikmenuozellikler(k){
+      var sayfamesajlari=document.getElementById("sayfamesajlari")
+      sayfamesajlari.style.backgroundColor="black"
+      sayfamesajlari.innerText=""
+      var kolonadi=document.createElement("label")
+      kolonadi.innerText="Kolon Adı=     "+k
+      var kolontip=document.createElement("label")
+      if (typeof this.properties[k]==="string"){
+        kolontip.innerText="Kolon Veri Tipi=     Metin"
+      }
+      else if (Number.isInteger(this.properties[k])===true){
+        kolontip.innerText="Kolon Veri Tipi=     Tam Sayı"
+      }
+      else if (typeof this.properties[k]!=="string" && Number.isInteger(this.properties[k])===false ){
+        kolontip.innerText="Kolon Veri Tipi=     Ondalıklı Sayı"
+      }
+      document.getElementById("sayfamesajlari").appendChild(kolonadi)
+      document.getElementById("sayfamesajlari").appendChild(document.createElement("br"))
+      document.getElementById("sayfamesajlari").appendChild(kolontip)
+      document.getElementById("sayfamesajlari").appendChild(document.createElement("br"))
+      var kapatbutonu=document.createElement("button")
+      kapatbutonu.setAttribute("value","Kapat")
+      kapatbutonu.setAttribute("onclick","bekleme()")
+      kapatbutonu.innerText="Kapat"
+      document.getElementById("sayfamesajlari").appendChild(kapatbutonu)
+    }
+    oznitelikkolonsil(l){
+      delete this.properties[l]
+      window[this.id_nosu].oznitelikgoruntulemeveduzenleme()
+      window[this.id_nosu].objeyiyenile(window[this.id_nosu])
+    }
+    sagakolonekle(v){
+      //bilgilerin sayfa mesajlarına yazılması
+      var sayfamesajlari=document.getElementById("sayfamesajlari")
+      sayfamesajlari.style.backgroundColor="black"
+      var labelbir = document.createElement("label")
+      labelbir.innerText="Kolon Adı:"
+      labelbir.setAttribute("for","kolonadiduzenle")
+      var kolonadigir=document.createElement("input")
+      kolonadigir.setAttribute("id","kolonadiduzenle")
+      kolonadigir.setAttribute("type","Kolon Adı")
+      sayfamesajlari.appendChild(labelbir)
+      sayfamesajlari.appendChild(kolonadigir)
+      sayfamesajlari.appendChild(document.createElement("br"))
+      // veri tipinin seçimi
+      var div_tip=document.createElement("div")
+      div_tip.setAttribute("id","tipsecim")
+      var labeliki=document.createElement("label")
+      labeliki.innerText="Veri Tipi:"
+      labeliki.setAttribute("for","cevap")
+      var veritip_bir=document.createElement("input")
+      veritip_bir.setAttribute("type","radio")
+      veritip_bir.setAttribute("class","cevap")
+      veritip_bir.setAttribute("name","cevap1")
+      veritip_bir.setAttribute("value","text")
+      var veritip_iki=document.createElement("input")
+      veritip_iki.setAttribute("type","radio")
+      veritip_iki.setAttribute("class","cevap")
+      veritip_iki.setAttribute("name","cevap1")
+      veritip_iki.setAttribute("value","tam sayı")
+      var veritip_uc=document.createElement("input")
+      veritip_uc.setAttribute("type","radio")
+      veritip_uc.setAttribute("class","cevap")
+      veritip_uc.setAttribute("name","cevap1")
+      veritip_uc.setAttribute("value","ondalıklı sayı")
+      sayfamesajlari.appendChild(div_tip)
+      document.getElementById("tipsecim").appendChild(document.createTextNode("Metin"))
+      document.getElementById("tipsecim").appendChild(veritip_bir)
+      document.getElementById("tipsecim").appendChild(document.createTextNode("Tam Sayı"))
+      document.getElementById("tipsecim").appendChild(veritip_iki)
+      document.getElementById("tipsecim").appendChild(document.createTextNode("Ondalıklı Sayı"))
+      document.getElementById("tipsecim").appendChild(veritip_uc)
+      document.getElementById("tipsecim").appendChild(document.createElement("br"))
+      var nitelikalmalabeli=document.createElement("label")
+      nitelikalmalabeli.setAttribute("for","nitelikalma")
+      nitelikalmalabeli.innerText="Nitelik: (Secilen Veri Tipine Dikkat Ediniz"
+      var nitelikalmainput=document.createElement("input")
+      nitelikalmainput.setAttribute("id","nitelikalma")
+      nitelikalmainput.setAttribute("value","Nitelik")
+      document.getElementById("tipsecim").appendChild(nitelikalmalabeli)
+      document.getElementById("tipsecim").appendChild(document.createElement("br"))
+      document.getElementById("tipsecim").appendChild(nitelikalmainput)
+      document.getElementById("tipsecim").appendChild(document.createElement("br"))
+      //ekle butonu
+      var uygula_buton=document.createElement("input")
+      uygula_buton.setAttribute("type","submit")
+      uygula_buton.innerText="Ekle"
+      uygula_buton.setAttribute("onclick","window['"+this.id_nosu+"'].sagakolonekleson('"+v+"')")
+      document.getElementById("tipsecim").appendChild(uygula_buton)
+    }
+    sagakolonekleson(m){
+      var kolonadi = document.getElementById("kolonadiduzenle").value
+      var kolonniteligi=document.getElementById("nitelikalma").value
+      console.log(m)
+      var key_list=Object.keys(this.properties)
+      var iii
+      try {
+          var veri_tip=document.querySelector('input[name = cevap1]:checked').value
+          if (document.querySelector('input[name = cevap1]:checked').value==="text"){
+            kolonniteligi=kolonniteligi.toString()
+          }
+          else if(document.querySelector('input[name = cevap1]:checked').value==="tam sayı"){
+            console.log("tam sayı ifi çalıştı")
+            kolonniteligi=parseInt(kolonniteligi)
+            if (isNaN(kolonniteligi)){
+              kolonniteligi=null
+
+            }
+          }
+          else if(document.querySelector('input[name = cevap1]:checked').value==="ondalıklı sayı"){
+            console.log("ondalıklı sayı ifi çalıştı")
+            kolonniteligi=parseFloat(kolonniteligi)
+            if (isNaN(kolonniteligi)){
+              kolonniteligi=null
+            }
+          }
+          for (iii in key_list){
+            if (key_list[iii]===m){
+              var kolonindexi=parseInt(iii)+1
+              console.log(kolonindexi)
+              var keyValues=Object.entries(this.properties)
+              keyValues.splice(kolonindexi,0,[kolonadi,kolonniteligi])
+              this.properties=null
+              this.properties=Object.fromEntries(keyValues)
+            }
+          }
+          window[this.id_nosu].oznitelikgoruntulemeveduzenleme()
+          window[this.id_nosu].objeyiyenile(window[this.id_nosu])
+          }
+          catch(err){
+            for (iii in key_list){
+            if (key_list[iii]===m){
+              var kolonindexi=parseInt(iii)+1
+              console.log(kolonindexi)
+              var keyValues=Object.entries(this.properties)
+              keyValues.splice(kolonindexi,0,[kolonadi,null])
+              this.properties=null
+              this.properties=Object.fromEntries(keyValues)
+            }
+          }
+            console.log("Tip Seçilmeden İşlem Yapıldı. Kolon Tipi Aynı Kaldı")
+            console.log(this.properties )
+            window[this.id_nosu].objeyiyenile(window[this.id_nosu])
+            window[this.id_nosu].oznitelikgoruntulemeveduzenleme()
+          }
+    }
+    oznitelikicerikdegistir(i){
+      var sayfamesajlari=document.getElementById("sayfamesajlari")
+      sayfamesajlari.innerText=""
+      sayfamesajlari.style.backgroundColor="black"
+      var kolonicerik_bilgi=document.createElement("label")
+      kolonicerik_bilgi.setAttribute("for","kolonicerikal")
+      console.log(Number.isInteger(this.properties[i]))
+      var icerikalma=document.createElement("input")
+      icerikalma.setAttribute("id","kolonicerikal")
+
+      if (typeof this.properties[i]==="string"){
+        kolonicerik_bilgi.innerText="Kolon Veri Tipi: Metin"
+        icerikalma.setAttribute("type","text")
+        icerikalma.setAttribute("value",this.properties[i])
+      }
+      else if (Number.isInteger(this.properties[i])===true){
+        kolonicerik_bilgi.innerText="Kolon Veri Tipi: Tam Sayı"
+        icerikalma.setAttribute("type","number")
+        icerikalma.setAttribute("value",this.properties[i])
+      }
+      else if (typeof this.properties[i]!=="string" && Number.isInteger(this.properties[i])===false ){
+        kolonicerik_bilgi.innerText="Kolon Veri Tipi: Ondalıklı Sayı"
+        icerikalma.setAttribute("type","number")
+        icerikalma.setAttribute("step","0.001")
+        icerikalma.setAttribute("value",this.properties[i])
+
+      }
+      sayfamesajlari.appendChild(kolonicerik_bilgi)
+      sayfamesajlari.appendChild(document.createElement("br"))
+      sayfamesajlari.appendChild(icerikalma)
+      var degistir_buton=document.createElement("input")
+      degistir_buton.setAttribute("type","submit")
+      degistir_buton.setAttribute("value","Değiştir")
+      degistir_buton.setAttribute("onclick","window['"+this.id_nosu+"'].oznitelikicerikdegistir_butonlaal('"+i+"','"+kolonicerik_bilgi.innerText+"')")
+      sayfamesajlari.appendChild(degistir_buton)
+    }
+    oznitelikicerikdegistir_butonlaal(i,b){
+      var aaa=document.getElementById("kolonicerikal").value
+      if (b==="Kolon Veri Tipi: Metin"){
+        this.properties[i]=aaa.toString()
+      }
+      else if (b==="Kolon Veri Tipi: Tam Sayı"){
+        this.properties[i]=parseInt(aaa)
+      }
+      else if (b==="Kolon Veri Tipi: Ondalıklı Sayı"){
+        this.properties[i]=parseFloat(aaa)
+      }
+    document.getElementById(i+"iceriksummary").innerText=this.properties[i]
+    bekleme()
+    }    
+    oznitelikpenceresikapat(){
+      document.getElementById("oznitelikpenceresi").innerText=""
+      document.getElementById("oznitelikpenceresi").style.backgroundColor="unset  "
+    }
   }
 
 async function katman_sil(i){
@@ -842,6 +1327,7 @@ async function bekleme(){
   await sleep(500)
   document.getElementById('sayfamesajlari').style.backgroundColor  = "unset";
   document.getElementById('sayfamesajlari').innerText ="";
+  
 }
 
 var x
@@ -861,18 +1347,19 @@ async function baslangic(){
 
   await sleep(2500);
   document.getElementById('map_screen').style.backgroundColor = "white";
+  show_coordints()
   await sleep(800);
   document.getElementById('sayfamesajlari').innerText ="............";
   await sleep(500)
   document.getElementById('sayfamesajlari').style.backgroundColor  = "unset";
   document.getElementById('sayfamesajlari').innerText =""
-  show_coordints()
+  
 }
 
 baslangic()
 
 // Fetch all the details element. // üst sekmelerden birini açınca diğerinin kapanması
-const details = document.querySelectorAll("#create_object,#up_data,#down_data,#map_services");
+const details = document.querySelectorAll("details");
 
 // Add the onclick listeners.
 details.forEach((targetDetail) => {
