@@ -1,0 +1,51 @@
+#nav{
+    border-radius: 25px;
+    opacity: 0.6;
+    background-color: hsl(0, 5%, 74%);
+    width: 100%;
+    height: 30px;
+}
+#homepage{
+    height: 100%;
+    float: left;
+    width: 25%;
+    text-align: center;
+    color: black;
+    font-weight: bolder;
+    font-size: 25px;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    padding-top: 0%;
+}
+#gis_view{
+    height: 100%;
+    float: left;
+    width: 25%;
+    text-align: center;
+    color: black;
+    font-weight: bolder;
+    font-size: 25px;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    padding-top: 0%;
+}
+#about_us{
+    height: 100%;
+    float: left;
+    width: 25%;
+    text-align: center;
+    color: black;
+    font-weight: bolder;
+    font-size: 25px;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    padding-top: 0%;
+}
+#contact{
+    height: 100%;
+    float: left;
+    width: 25%;
+    text-align: center;
+    color: black;
+    font-weight: bolder;
+    font-size: 25px;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    padding-top: 0%;
+}
