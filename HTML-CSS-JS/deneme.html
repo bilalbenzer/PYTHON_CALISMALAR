@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
+</head>
+<body>
+    <div id="map" style="width: 50%;height: 500px;">
+        
+    </div>
+    <div id="coordinat_tab"
+        style="width: 500px;height: 100px; background-color: black; color: wheat;float: left;position: static;"></div>
+</body>
+</html>
+<script src="https://unpkg.com/leaflet@1.8.0/dist/leaflet-src.js"></script>
+<script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.8.0/proj4.js"></script>
+<script src="PROJ4LEAFLET/src/proj4leaflet.js"></script>
+<script src="PROJ4LEAFLET/proj4-compressed.js"></script>
+<script src="js/leaflet-providers.js"></script>
+<script>
+
+function range(start, end) {
+  return Array.from({ length: end - start + 1 }, (_, i) => i)
+}
+
+var min_x = 36.48291208
+var max_x =63.51708792
+
+var i
+const resolutions_epsg2320 = [((max_x-min_x)/256)]
+for (i in range(1,17)){
+    var cozunurluk = resolutions_epsg2320[i]/2
+    resolutions_epsg2320.push(cozunurluk)
+}
+
+var kose1 = L.latLng(31.7255037522,43.0736429052)
+var kose2 = L.latLng(35.2142040312,51.755659549)
+var bounds = L.latLngBounds(kose1, kose2);
+
+//from https://epsg.io/2320;
+//Center coordinates
+//-766397.04 6050171.84
+//Projected bounds:
+//-3202726.46 4669275.42
+//557218.62 7904921.43
+//WGS84 bounds:
+//-9.56 34.88
+//31.59 71.21
+
+// def epsg 2320 with proj4
+var epsg_2320 = new L.Proj.CRS (
+    "EPSG:2320",
+    "+proj=tmerc +lat_0=0 +lon_0=30 +k=1 +x_0=500000 +y_0=0 +ellps=intl +units=m +no_defs",
+    {
+        resolutions : resolutions_epsg2320,
+        origin : [0,0],
+        bounds : L.latLngBounds([36.48291208, 	39.921961302],[63.51708792, 	46.6391616543])
+}
+)
+var guneybati = L.latLng(36.48291208, 	39.921961302)
+var northEast = L.latLng(63.51708792, 	46.6391616543)
+var bounds_s = L.Bounds([36.48291208, 	39.921961302],[63.51708792, 	46.6391616543]);
+console.log(L.latLngBounds([36.48291208, 	39.921961302],[63.51708792, 	46.6391616543]))
+
+var layer =L.tileLayer('https://api.geosition.com/tile/osm-bright-3006/{z}/{x}/{y}.png', {
+	maxZoom: epsg_2320.options.resolutions.length,
+    continuousWorld: true,
+    worldCopyJump: false,
+    crs: epsg_2320,
+	attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>, Imagery &copy; <a href="http://www.kartena.se/">Kartena</a>',
+})
+console.log(layer)
+// map options
+var mapoptions = {
+    center : [31.7255037522,43.0736429052],
+    zoom : 1,
+    maxZoom: epsg_2320.options.resolutions.length,
+    continuousWorld: true,
+    worldCopyJump: false,
+    crs: epsg_2320,
+    layers : [layer]
+};
+
+//map scren on map_cbs div
+var map = L.map('map',
+    mapoptions,
+    
+  );
+// convert x y from latlng for epsg 2320
+var bngprojection = "+proj=tmerc +lat_0=0 +lon_0=30 +k=1 +x_0=500000 +y_0=0 +ellps=intl +units=m +no_defs"
+map.on('mousemove' , (e) =>{
+        var latlng = e.latlng;
+        var bngcoords = proj4(bngprojection, [ latlng.lat,latlng.lng]);
+        document.getElementById('coordinat_tab').innerText ="Enlem:"+(e.latlng.lat).toFixed(8) +"------"+ "Boylam:"+(e.latlng.lng).toFixed(8)+"\n"
+        + "X:-----"+bngcoords[0]+"------Y:-----"+bngcoords[1];
+       });
+//tilelayer
+
+
+//map setview
+
+</script>

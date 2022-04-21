@@ -1,31 +1,26 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <link rel="icon" href="static/icon.png" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="stylesheet" href="css/layout.css">
-    <title>ANASAYFA</title>
-  </head>
-  <body >
-      <div id="header"> 
+import React from 'react'
+import logo from './static/logo.png'
+import { Link } from 'react-router-dom'
+
+export default function Home() {
+  return (
+    <React.Fragment>
+        <div id="header"> 
         <div id="main_title">
-          <div class="background">
+          <div className="background">
           </div>
           <h1 id="main_head" >COĞRAFİ BİLGİ SİSTEMLERİ WEB UYGULAMASI</h1>
         </div>
-        <div class="logo2">
-          <img class="logo3" 
-          src="static/logo.png" alt="logo">
+        <div className="logo2">
+          <img className="logo3" src={logo} alt="logo"/>
         </div>
       </div>
       <div id="nav"> 
-        <ul style="list-style-type: none;">
-          <a href="index.html">
-          <li id="homepage" >ANASAYFA </li>
-        </a>
-        <a href="cbs_map.html">
-          <li id="gis_view">HARİTA</li></a>
+        <ul style={{listStyle:"none"}}>
+          <li id="homepage" ><Link to="/">ANASAYFA</Link></li>
+
+
+          <li id="gis_view"><Link to="/Cbs_Map">HARİTA</Link></li>
           <li id="about_us">HAKKIMIZDA</li>
           <li id="contact">İLETİŞİM</li>
         </ul>
@@ -45,5 +40,6 @@
       <div id="footer"> 
         <p id="altyazi">Bu website, Bilal Benzer tarafından oluşturulmuştur.</p>
       </div>
-  </body>
-</html>
+    </React.Fragment>
+  )
+}
