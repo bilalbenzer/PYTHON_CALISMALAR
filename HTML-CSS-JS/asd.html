@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
+</head>
+<body>
+    <div id="map" style="width: 50%;height: 500px;">
+        
+    </div>
+    <div id="coordinat_tab"
+        style="width: 500px;height: 100px; background-color: black; color: wheat;float: left;position: static;"></div>
+</body>
+</html>
+<script src="https://unpkg.com/leaflet@1.8.0/dist/leaflet-src.js"></script>
+<script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.8.0/proj4.js"></script>
+<script src="PROJ4LEAFLET/src/proj4leaflet.js"></script>
+<script src="PROJ4LEAFLET/proj4-compressed.js"></script>
+<script src="js/leaflet-providers.js"></script>
+
+
+<script>
+
+
+// 38066.8071289063		5056907.24249268	sol üst
+
+// 38066.8071289063		3842467.31384277	sol alt
+
+// 1837237.07208252 	5056907.24249268	sağ üst
+
+// 1837237.07208252 	3842467.31384277	sağ alt
+
+   //StandardizedRenderingPixelSize = 0.00028
+   //ScaleDenominator (SD) = 5.0601127250000006E8
+
+const resolutions_asdasd = new Array(11);
+const matrixIds = new Array(11);
+for (let z = 0; z < 19; ++z) {
+  // generate resolutions and matrixIds arrays for this WMTS
+  resolutions_asdasd[z] = 14687.28546875 / Math.pow(2, z);
+  matrixIds[z] = z;
+}
+console.log(Math.pow(2,1))
+function range(start, end) {
+  return Array.from({ length: end - start + 1 }, (_, i) => i)
+}
+
+var min_x = -3202726.46;
+var max_x =557218.62;
+
+
+var i;
+const resolutions_epsg2320 = [(max_x-min_x)/256];
+for (i in range(1,17)){
+    var cozunurluk = resolutions_epsg2320[i]/2
+    resolutions_epsg2320.push(cozunurluk)
+};
+
+var epsg_2320 = new L.Proj.CRS (
+    "EPSG:2320",
+    "+proj=tmerc +lat_0=0 +lon_0=30 +k=1 +x_0=500000 +y_0=0 +ellps=intl +towgs84=-87,-98,-121,0,0,0,0 +units=m +no_defs ",
+    {
+        resolutions: resolutions_epsg2320,
+        origin : [-3202726.46 ,4669275.42	],
+         }
+    )
+
+var map = L.map('map',{
+    crs : epsg_2320,
+    center : [28,15],
+    zoom: 3,
+    continuousWorld: true,
+    worldCopyJump: false
+  });
+ 
+  var osm_map = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+      });
+map.addLayer(osm_map)
+
+var bngprojection = "+proj=tmerc +lat_0=0 +lon_0=30 +k=1 +x_0=500000 +y_0=0 +ellps=intl +towgs84=-87,-98,-121,0,0,0,0 +units=m +no_defs "
+map.on('mousemove' , (e) =>{
+        var latlng = e.latlng;
+        var bngcoords = proj4(bngprojection, [ latlng.lng,latlng.lat]);
+        document.getElementById('coordinat_tab').innerText ="Enlem:"+(e.latlng.lat).toFixed(8) +"------"+ "Boylam:"+(e.latlng.lng).toFixed(8)+"\n"
+        + "X:-----"+bngcoords[0]+"------Y:-----"+bngcoords[1];
+       });
+
+</script>

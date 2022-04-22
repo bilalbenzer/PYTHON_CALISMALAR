@@ -1,16 +1,16 @@
 import React from 'react'
-import Helmet from 'react-helmet';
 import { Link } from 'react-router-dom'
 import './static/layout.css'
+import 'https://unpkg.com/leaflet@1.7.1/dist/leaflet.css'
+import 'https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css' 
+import 'https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js'
+import maps_ from './js/maps'
+
 
 export default function Cbs_Map() {
   return (
+    <div>
     <React.Fragment>
-      <Helmet>
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
-        <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
-      </Helmet>
         <div id="top_tab">
           <span id="sayfamesajlari"></span>
           <div id="top_tab_opacity"></div>
@@ -65,17 +65,10 @@ export default function Cbs_Map() {
         <div id="coordinat_tab"></div>
         <span id="obje_girdi"></span>
         <div id="oznitelikpenceresi"></div>
-        <Helmet>
-        <script src="./js/cbs_map.js" type="text/javascript" />
-        <script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script>
-        <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script>
-        <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
-        <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
-        <script src="./js/leaflet-providers.js"></script>
-        <script src="./js/maps.js"></script>
-        <script src="./js/create_point.js"></script>
-        </Helmet>
+
         </React.Fragment>
+        <maps_></maps_>
+        </div>
   )
 }
 
