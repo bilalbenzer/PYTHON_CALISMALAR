@@ -13,7 +13,7 @@
         
     </div>
     <div id="coordinat_tab"
-        style="width: 500px;height: 100px; background-color: black; color: wheat;float: left;position: static;"></div>
+        style="width: 500px;height: 100px; background-color: black; color: wheat;float: left;position: static;text-align: center;"></div>
 </body>
 </html>
 <script src="https://unpkg.com/leaflet@1.8.0/dist/leaflet-src.js"></script>
@@ -25,18 +25,18 @@
 
 
 <script>
-
-
-// 38066.8071289063		5056907.24249268	sol üst
-
-// 38066.8071289063		3842467.31384277	sol alt
-
-// 1837237.07208252 	5056907.24249268	sağ üst
-
-// 1837237.07208252 	3842467.31384277	sağ alt
-
    //StandardizedRenderingPixelSize = 0.00028
    //ScaleDenominator (SD) = 5.0601127250000006E8
+
+
+
+// 38066.8071289063		5056907.24249268	sol üst (topleft)
+
+// 38066.8071289063		3842467.31384277	sol alt (bottomleft)
+
+// 1837237.07208252 	5056907.24249268	sağ üst (topright)
+
+// 1837237.07208252 	3842467.31384277	sağ alt (bottomright)
 
 const resolutions_asdasd = new Array(11);
 const matrixIds = new Array(11);
@@ -45,50 +45,50 @@ for (let z = 0; z < 19; ++z) {
   resolutions_asdasd[z] = 14687.28546875 / Math.pow(2, z);
   matrixIds[z] = z;
 }
-console.log(Math.pow(2,1))
 function range(start, end) {
   return Array.from({ length: end - start + 1 }, (_, i) => i)
-}
+};
 
-var min_x = -3202726.46;
-var max_x =557218.62;
-
-
+const origin = [38066.8071289063 ,3842467.31384277];
+const resolutions_epsg2320 = [(origin[1]-origin[0])/256];
 var i;
-const resolutions_epsg2320 = [(max_x-min_x)/256];
 for (i in range(1,17)){
-    var cozunurluk = resolutions_epsg2320[i]/2
-    resolutions_epsg2320.push(cozunurluk)
+    var cozunurluk = resolutions_epsg2320[i]/2;
+    resolutions_epsg2320.push(cozunurluk);
 };
 
 var epsg_2320 = new L.Proj.CRS (
     "EPSG:2320",
-    "+proj=tmerc +lat_0=0 +lon_0=30 +k=1 +x_0=500000 +y_0=0 +ellps=intl +towgs84=-87,-98,-121,0,0,0,0 +units=m +no_defs ",
-    {
-        resolutions: resolutions_epsg2320,
-        origin : [-3202726.46 ,4669275.42	],
+    "+proj=tmerc +lat_0=0 +lon_0=30 +k=1 +x_0=500000 +y_0=0 +ellps=intl +towgs84=-87,-98,-121,0,0,0,0 +units=m +no_defs ", 
+    {   resolutions: resolutions_epsg2320,
+        origin:[38066.8071289063,3842467.31384277],
+        bounds: L.bounds([38066.8071289063	, 3842467.31384277  ], [1837237.07208252, 5056907.24249268])
          }
-    )
-
+    );
+console.log(epsg_2320.options.origin)
 var map = L.map('map',{
     crs : epsg_2320,
-    center : [28,15],
-    zoom: 3,
+    center : [35,38],
+    zoom: 7,
     continuousWorld: true,
-    worldCopyJump: false
+    worldCopyJump: false,
+    resolutions : resolutions_epsg2320
   });
- 
-  var osm_map = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-      });
-map.addLayer(osm_map)
+
+  var googlestreets =L.tileLayer('http://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}',{
+      maxZoom: 20,
+      subdomains:['mt0','mt1','mt2','mt3'],
+      crs:epsg_2320,
+      resolutions:resolutions_epsg2320
+   });
+   googlestreets.addTo(map)
+
 
 var bngprojection = "+proj=tmerc +lat_0=0 +lon_0=30 +k=1 +x_0=500000 +y_0=0 +ellps=intl +towgs84=-87,-98,-121,0,0,0,0 +units=m +no_defs "
 map.on('mousemove' , (e) =>{
         var latlng = e.latlng;
         var bngcoords = proj4(bngprojection, [ latlng.lng,latlng.lat]);
-        document.getElementById('coordinat_tab').innerText ="Enlem:"+(e.latlng.lat).toFixed(8) +"------"+ "Boylam:"+(e.latlng.lng).toFixed(8)+"\n"
-        + "X:-----"+bngcoords[0]+"------Y:-----"+bngcoords[1];
+        document.getElementById('coordinat_tab').innerText ="Boylam:"+(e.latlng.lat).toFixed(8) +"------"+ "Enlem:"+(e.latlng.lng).toFixed(8)+"\n"
+        + "Y:.......|"+bngcoords[0]+"|           .......X:.......|"+bngcoords[1]+"|";
        });
-
 </script>
