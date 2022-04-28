@@ -7,8 +7,8 @@
     <!-- referans dosyaları / css -->
     <link rel="stylesheet" href="css/layout.css">
     <!-- leaflet eklentisi ve leafletle ilgili css -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
-    <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
+    <link rel="stylesheet" href="sources/leaflet.css" />
+    <link rel="stylesheet" href="sources/Control.Geocoder.css" />
 
   </head>
   <body >
@@ -66,30 +66,35 @@
         <div id="coordinat_tab"></div>
         <span id="obje_girdi"></span>
         <div id="oznitelikpenceresi"></div>
+        <div id="koordinatsistem">
+          <details id="crsdetails">
+            <summary id="crssummary"></summary>
+            
+          </details>
+        </div>
   </body>
 </html>
-<script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script>
-  <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script>
-<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
-<script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
-<script src="js/leaflet-providers.js"></script>
+<!-- sources -->
+<script src="sources/leaflet.js"></script>
+<script src="sources/proj4-compressed.js"></script>
+<script src="sources/proj4.js"></script>
+<script src="sources/proj4leaflet.js"></script>
+<script src="sources/Control_Geocoder.js"></script>
+<script src="sources/leaflet-providers.js"></script>
+
+
+
+<!-- scriptler -->
 <script src="js/maps.js"></script>
 <script src="js/create_point.js"></script>
+
 <script>
-
-
-
-
 async function bekleme(){
   await sleep(500)
   document.getElementById('sayfamesajlari').style.backgroundColor  = "unset";
   document.getElementById('sayfamesajlari').innerText ="";
   
 }
-
-var x
-var y
-var point
 // bekletme fonksiyonu
 function sleep(ms)  {
   return new Promise(resolve => setTimeout(resolve, ms));
@@ -105,19 +110,18 @@ async function baslangic(){
   await sleep(2500);
   document.getElementById('map_screen').style.backgroundColor = "white";
   show_coordints()
+  
   await sleep(800);
   document.getElementById('sayfamesajlari').innerText ="............";
   await sleep(500)
   document.getElementById('sayfamesajlari').style.backgroundColor  = "unset";
   document.getElementById('sayfamesajlari').innerText =""
-  
 }
 
-baslangic()
+
 
 // Fetch all the details element. // üst sekmelerden birini açınca diğerinin kapanması
 const details = document.querySelectorAll("details");
-
 // Add the onclick listeners.
 details.forEach((targetDetail) => {
   targetDetail.addEventListener("click", () => {
@@ -132,4 +136,5 @@ details.forEach((targetDetail) => {
 
 
 
+baslangic()
 </script>

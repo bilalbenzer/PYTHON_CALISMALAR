@@ -1,9 +1,89 @@
+function range(start, end) {
+  return Array.from({ length: end - start + 1 }, (_, i) => i)
+};
+
+const origin = [38066.8071289063 ,3842467.31384277];
+const resolutions = [(origin[1]-origin[0])/256];
+var i;
+for (i in range(1,17)){
+    var cozunurluk = resolutions[i]/2;
+    resolutions.push(cozunurluk);
+};
+var gecerli_koordinat = "EPSG:3857"
+const koordinat_sistemleri = {
+  "EPSG:3857":L.CRS.EPSG3857,
+  "EPSG:2319":new L.Proj.CRS (
+            "EPSG:2319",
+            "+proj=tmerc +lat_0=0 +lon_0=27 +k=1 +x_0=500000 +y_0=0 +ellps=intl +towgs84=-87,-98,-121,0,0,0,0 +units=m +no_defs", 
+            {resolutions: resolutions,
+                origin:[38066.8071289063,3842467.31384277],
+                }),
+  "EPSG:2320":new L.Proj.CRS (
+            "EPSG:2320",
+            "+proj=tmerc +lat_0=0 +lon_0=30 +k=1 +x_0=500000 +y_0=0 +ellps=intl +towgs84=-87,-98,-121,0,0,0,0 +units=m +no_defs ", 
+            {resolutions: resolutions,
+                origin:[38066.8071289063,3842467.31384277],
+                }),
+  "EPSG:2321":new L.Proj.CRS (
+            "EPSG:2321",
+            "+proj=tmerc +lat_0=0 +lon_0=33 +k=1 +x_0=500000 +y_0=0 +ellps=intl +towgs84=-87,-98,-121,0,0,0,0 +units=m +no_defs ", 
+            {resolutions: resolutions,
+                origin:[38066.8071289063,3842467.31384277],
+                }),
+  "EPSG:2322":new L.Proj.CRS (
+            "EPSG:2322",
+            "+proj=tmerc +lat_0=0 +lon_0=36 +k=1 +x_0=500000 +y_0=0 +ellps=intl +towgs84=-87,-98,-121,0,0,0,0 +units=m +no_defs ", 
+            {resolutions: resolutions,
+                origin:[38066.8071289063,3842467.31384277],
+                }),   
+   "EPSG:2323":new L.Proj.CRS (
+            "EPSG:2323",
+            "+proj=tmerc +lat_0=0 +lon_0=39 +k=1 +x_0=500000 +y_0=0 +ellps=intl +towgs84=-87,-98,-121,0,0,0,0 +units=m +no_defs", 
+            {resolutions: resolutions,
+                origin:[38066.8071289063,3842467.31384277],
+                }),   
+   "EPSG:2324":new L.Proj.CRS (
+            "EPSG:2324",
+            "+proj=tmerc +lat_0=0 +lon_0=42 +k=1 +x_0=500000 +y_0=0 +ellps=intl +towgs84=-87,-98,-121,0,0,0,0 +units=m +no_defs", 
+            {resolutions: resolutions,
+                origin:[38066.8071289063,3842467.31384277],
+                }),       
+   "EPSG:2325":new L.Proj.CRS (
+            "EPSG:2325",
+            "+proj=tmerc +lat_0=0 +lon_0=45 +k=1 +x_0=500000 +y_0=0 +ellps=intl +towgs84=-87,-98,-121,0,0,0,0 +units=m +no_defs", 
+            {resolutions: resolutions,
+                origin:[38066.8071289063,3842467.31384277],
+                }),
+   "EPSG:7931":new L.Proj.CRS (
+            "EPSG:7931",
+            "+proj=tmerc +lat_0=0 +lon_0=27 +k=1 +x_0=500000 +y_0=0 +ellps=GRS80 +units=m +no_defs", 
+            {resolutions: resolutions,
+                origin:[38066.8071289063,3842467.31384277],
+                }),                 
+}
+function koordinat_degistirme(i){
+  var i = i
+
+  if (i==="EPSG:3857"){
+    gecerli_koordinat="EPSG:3857"
+  }
+}
+
 //harita ekranının oluşturulması
-var map = L.map('map_screen',{
-    center: [38.9637,35.2433],
-    zoom: 7,
-    zoomControl: false,
-  });
+var map
+function map_create(i){
+  if (i==="EPSG:3857"){
+      map = L.map('map_screen',{
+              center: [38.9637,35.2433],
+              zoom: 7,
+              zoomControl: false,
+              drawControl: true,
+            })
+    }
+}
+
+//draw geommety 
+
   // harita çeşitleri
     var osm_map = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -79,13 +159,11 @@ var map = L.map('map_screen',{
     }
     document.getElementById('map_screen').style.opacity = 1;
     document.getElementById('map_screen').style.backgroundColor="unset";
-    show_coordints();
   }
   function  remove_opentopomap(){
     OpenTopoMap.remove(map);
   
     document.getElementById('map_screen').style.backgroundColor="white";
-    dont_show_coordints();
   }
   function add_stamen_watercolor() {
     for (var i in maps_for_leaflet) {
@@ -96,11 +174,9 @@ var map = L.map('map_screen',{
     }
     document.getElementById('map_screen').style.opacity = 1;
     document.getElementById('map_screen').style.backgroundColor="unset";
-    show_coordints();
   }
   function remove_stamen_watercolor() {
     Stamen_Watercolor.remove(map);
-  
     document.getElementById('map_screen').style.backgroundColor="white";
   }
   function add_osm() {
@@ -112,13 +188,11 @@ var map = L.map('map_screen',{
     }
   
     document.getElementById('map_screen').style.backgroundColor="unset";
-    show_coordints();
   }
   function remove_osm() {
     osm_map.remove(map);
   
     document.getElementById('map_screen').style.backgroundColor="white";
-    dont_show_coordints();
   }
   function add_googlestreet() {
     for (var i in maps_for_leaflet) {
@@ -129,12 +203,10 @@ var map = L.map('map_screen',{
     }
     document.getElementById('map_screen').style.backgroundColor="unset";
     document.getElementById('map_screen').style.opacity = 1;
-    show_coordints();
   }
   function remove_googlestreet() {
     googlestreets.remove(map);
     document.getElementById('map_screen').style.opacity = 1;
-    dont_show_coordints();
     document.getElementById('map_screen').style.backgroundColor="white";
    }
   function add_googlesatellite() {
@@ -146,12 +218,10 @@ var map = L.map('map_screen',{
     }
     document.getElementById('map_screen').style.backgroundColor="unset";
     document.getElementById('map_screen').style.opacity = 1;
-    show_coordints();
   }
   function remove_googlesatellite() {
     googlesatellite.remove(map);
     document.getElementById('map_screen').style.opacity = 1;
-    dont_show_coordints();
     document.getElementById('map_screen').style.backgroundColor="white";
    }
   function add_mapbox_satellite() {
@@ -163,12 +233,10 @@ var map = L.map('map_screen',{
     }
     document.getElementById('map_screen').style.backgroundColor="unset";
     document.getElementById('map_screen').style.opacity = 1;
-    show_coordints();
   }
   function remove_mapbox_satellite(){
     mapbox_satellite.remove(map);
     document.getElementById('map_screen').style.opacity = 1;
-    dont_show_coordints();
     document.getElementById('map_screen').style.backgroundColor="white";
   }
   function add_mapbox_streets() {
@@ -179,13 +247,12 @@ var map = L.map('map_screen',{
       maps_for_leaflet[i].remove(map);
     }
     document.getElementById('map_screen').style.opacity = 1;
-    show_coordints();
+    
     document.getElementById('map_screen').style.backgroundColor="unset";
   }
   function remove_mapbox_streets(){
     mapbox_streets.remove(map);
     document.getElementById('map_screen').style.opacity = 1;
-    dont_show_coordints();
     document.getElementById('map_screen').style.backgroundColor="white";
   }
   function add_cardodb_darkmatter(){
@@ -196,13 +263,11 @@ var map = L.map('map_screen',{
       maps_for_leaflet[i].remove(map);
     }
     document.getElementById('map_screen').style.opacity = 1;
-    show_coordints();
     document.getElementById('map_screen').style.backgroundColor="unset";
   }
   function remove_cardodb_darkmatter(){
     CartoDB_DarkMatter.remove(map);
     document.getElementById('map_screen').style.opacity = 1;
-    dont_show_coordints();
     document.getElementById('map_screen').style.backgroundColor="white";
   }
   function add_herev3(){
@@ -213,13 +278,11 @@ var map = L.map('map_screen',{
       maps_for_leaflet[i].remove(map);
     }
     document.getElementById('map_screen').style.opacity = 1;
-    show_coordints();
     document.getElementById('map_screen').style.backgroundColor="unset";
   }
   function remove_herev3(){
     herev3.remove(map);
     document.getElementById('map_screen').style.opacity = 1;
-    dont_show_coordints();
     document.getElementById('map_screen').style.backgroundColor="white";
   }
   function add_jawg_map(){
@@ -230,18 +293,25 @@ var map = L.map('map_screen',{
       maps_for_leaflet[i].remove(map);
     }
     document.getElementById('map_screen').style.opacity = 1;
-    show_coordints();
     document.getElementById('map_screen').style.backgroundColor="unset";
   }
   function remove_jawg_map(){
     jawg_map.remove(map);
     document.getElementById('map_screen').style.opacity = 1;
-    dont_show_coordints();
     document.getElementById('map_screen').style.backgroundColor="white";
   }
   
   // Haritanın Sol Alt Köşesinde Koordinat Gösterme
-  function show_coordints() {
-    map.on('mousemove' , (e) =>{
-      document.getElementById('coordinat_tab').innerText ="Enlem:"+(e.latlng.lat).toFixed(8) +"------"+ "Boylam:"+(e.latlng.lng).toFixed(8);
-      });}
+function show_coordints() {
+    
+  if (gecerli_koordinat==="EPSG:3857"){
+    map_create(gecerli_koordinat)
+      map.on('mousemove' , (e) =>{
+        document.getElementById('coordinat_tab').innerText ="Enlem:"+(e.latlng.lat).toFixed(8) +"------"+ "Boylam:"+(e.latlng.lng).toFixed(8);
+        });
+        document.getElementById("crssummary").innerText="WGS 84/ World Mercator (EPSG:3857)"
+        koordinat_degistirme("EPSG:3857")}
+        
+      }
+
+      

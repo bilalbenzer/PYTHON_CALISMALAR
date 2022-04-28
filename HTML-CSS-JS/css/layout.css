@@ -460,3 +460,21 @@ body{
     margin-top: 750px;
     margin-left: 500px;
 }
+#koordinatsistem{
+    width: auto;
+    height: 20px;
+    position: absolute;
+    background-color: black;
+    margin-top: 920px;
+    opacity: 0.7;
+}
+#crssummary{
+    width: auto;
+    height: 20px;
+    background-color: black;
+    color: wheat;
+    cursor: pointer;
+    list-style: none;
+    font-size: 20px;
+    font-family: 'Courier New', Courier, monospace;;
+}
