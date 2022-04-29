@@ -400,12 +400,12 @@ body{
 #coordinat_tab{
     color: wheat;
     background-color: black;
-    width: auto;
-    height: 20px;
+    width: 700px;
+    height: auto;
     z-index: 3;
     position: static;
     float: left;
-    margin-top: 70px;
+    margin-top: 60px;
     opacity: 0.7;
     font-size: 20px;
     font-family: 'Courier New', Courier, monospace;
@@ -458,7 +458,7 @@ body{
     height: 220px;
     position: absolute;
     margin-top: 750px;
-    margin-left: 500px;
+    margin-left: 700px;
 }
 #koordinatsistem{
     width: auto;

@@ -33,16 +33,16 @@
             <button class="button" type="menu">Ncz</button>
             <button class="button" type="menu">Kml</button></details>
             <details id="map_services"><summary style="font-size: small; list-style: none;padding: 5px;font-weight: bold;">Harita Servisleri</summary>
-              <button class="button1" onclick="add_osm()" ondblclick="remove_osm()" type="menu">Open Street Map</button>
-              <button class="button2"type="menu"onclick="add_googlestreet()" ondblclick="remove_googlestreet()">Google Street Map</button>
-              <button class="button2"type="menu"onclick="add_googlesatellite()" ondblclick="remove_googlesatellite()">Google Satellite Map</button>
-              <button class="button3" type="menu" onclick="add_cardodb_darkmatter()" ondblclick="remove_cardodb_darkmatter()" >Carto Dark Matter</button>
-              <button class="button4" type="menu" onclick="add_mapbox_satellite()" ondblclick="remove_mapbox_satellite()">MapBox Satellite</button>
-              <button class="button4" type="menu" onclick="add_mapbox_streets()" ondblclick="remove_mapbox_streets()">MapBox Streets</button>
-              <button class="button4" type="menu" onclick="add_stamen_watercolor()" ondblclick="remove_stamen_watercolor()">Stamen Watercolor</button>
-              <button class="button4" type="menu" onclick="add_opentopomap()" ondblclick="remove_opentopomap()">Opentopo map</button>
-              <button class="button4" type="menu" onclick="add_herev3()" ondblclick="remove_herev3()">Here Map V3</button>
-              <button class="button4" type="menu" onclick="add_jawg_map()" ondblclick="remove_jawg_map()">Jawg Map</button></details>
+              <button class="button1" onclick="add_tilelayer('OpenStreetMap')" ondblclick="maps_for_leaflet['OpenStreetMap'].remove(map)" type="menu">Open Street Map</button>
+              <button class="button2"type="menu"onclick="add_tilelayer('GoogleStreetsMap')" ondblclick="maps_for_leaflet['GoogleStreetsMap'].remove(map)">Google Street Map</button>
+              <button class="button2"type="menu"onclick="add_tilelayer('GoogleSatelliteMap')" ondblclick="maps_for_leaflet['GoogleSatelliteMap'].remove(map)">Google Satellite Map</button>
+              <button class="button3" type="menu" onclick="add_tilelayer('CartoDbDarkMatter')" ondblclick="maps_for_leaflet['CartoDbDarkMatter'].remove(map)" >Carto Dark Matter</button>
+              <button class="button4" type="menu" onclick="add_tilelayer('Mapbox Satellite')" ondblclick="maps_for_leaflet['Mapbox Satellite'].remove(map)">MapBox Satellite</button>
+              <button class="button4" type="menu" onclick="add_tilelayer('Mapbox Streets')" ondblclick="maps_for_leaflet['Mapbox Streets'].remove(map)">MapBox Streets</button>
+              <button class="button4" type="menu" onclick="add_tilelayer('WatStamenercolor')" ondblclick="maps_for_leaflet['WatStamenercolor'].remove(map)">Stamen Watercolor</button>
+              <button class="button4" type="menu" onclick="add_tilelayer('Open Topo Map')" ondblclick="maps_for_leaflet['Open Topo Map'].remove(map)">Opentopo map</button>
+              <button class="button4" type="menu" onclick="add_tilelayer('herev3')" ondblclick="maps_for_leaflet['herev3'].remove(map)">Here Map V3</button>
+              <button class="button4" type="menu" onclick="add_tilelayer('jawg map')" ondblclick="maps_for_leaflet['jawg map'].remove(map)">Jawg Map</button></details>
             <button id="button12" type="menu" onclick='map.flyTo([38.9637,35.2433],7)' style="font-size: small; list-style: none;padding: 5px;font-weight: bold;">Haritayı Yenile</button>
         </div>
         <div id="map_view_background"></div>
@@ -69,7 +69,21 @@
         <div id="koordinatsistem">
           <details id="crsdetails">
             <summary id="crssummary"></summary>
-            
+            <button class="crs" onclick="koordinat_degistirme('EPSG:3857')">EPSG:3857 WGS 84 / Pseudo-Mercator</button>
+            <button class="crs" onclick="koordinat_degistirme('EPSG:2319')">EPSG:2319 ED50/TM27</button>
+            <button class="crs" onclick="koordinat_degistirme('EPSG:2320')">EPSG:2320 ED50/TM30</button>
+            <button class="crs" onclick="koordinat_degistirme('EPSG:2321')">EPSG:2321 ED50/TM33</button>
+            <button class="crs" onclick="koordinat_degistirme('EPSG:2322')">EPSG:2322 ED50/TM36</button>
+            <button class="crs" onclick="koordinat_degistirme('EPSG:2323')">EPSG:2323 ED50/TM39</button>
+            <button class="crs" onclick="koordinat_degistirme('EPSG:2324')">EPSG:2324 ED50/TM42</button>
+            <button class="crs" onclick="koordinat_degistirme('EPSG:2325')">EPSG:2325 ED50/TM45</button>
+            <button class="crs" onclick="koordinat_degistirme('SR-ORG:7931')">SR-ORG:7931 ITRF96/TM27</button>
+            <button class="crs" onclick="koordinat_degistirme('SR-ORG:7932')">SR-ORG:7932 ITRF96/TM30</button>
+            <button class="crs" onclick="koordinat_degistirme('SR-ORG:7933')">SR-ORG:7933 ITRF96/TM33</button>
+            <button class="crs" onclick="koordinat_degistirme('SR-ORG:7934')">SR-ORG:7934 ITRF96/TM36</button>
+            <button class="crs" onclick="koordinat_degistirme('SR-ORG:7935')">SR-ORG:7935 ITRF96/TM39</button>
+            <button class="crs" onclick="koordinat_degistirme('SR-ORG:7936')">SR-ORG:7936 ITRF96/TM42</button>
+            <button class="crs" onclick="koordinat_degistirme('SR-ORG:7937')">SR-ORG:7937 ITRF96/TM45</button>            
           </details>
         </div>
   </body>
@@ -102,20 +116,19 @@ function sleep(ms)  {
 //baslangic fonksiyonu
 
 async function baslangic(){
-  
   await sleep(500);
   document.getElementById('sayfamesajlari').style.backgroundColor  = "black";
   document.getElementById('sayfamesajlari').innerText = "Çizim Ekranı Oluşturuluyor..";
 
   await sleep(2500);
   document.getElementById('map_screen').style.backgroundColor = "white";
-  show_coordints()
-  
+
   await sleep(800);
   document.getElementById('sayfamesajlari').innerText ="............";
   await sleep(500)
   document.getElementById('sayfamesajlari').style.backgroundColor  = "unset";
   document.getElementById('sayfamesajlari').innerText =""
+  show_coordints()
 }
 
 
@@ -135,6 +148,7 @@ details.forEach((targetDetail) => {
 });
 
 
-
 baslangic()
+
+
 </script>
