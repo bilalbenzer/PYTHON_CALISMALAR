@@ -409,7 +409,7 @@ body{
     opacity: 0.7;
     font-size: 20px;
     font-family: 'Courier New', Courier, monospace;
-    text-align: center;
+    text-align:left;
 }
 #obje_girdi{
     font-weight: bolder;
@@ -477,4 +477,16 @@ body{
     list-style: none;
     font-size: 20px;
     font-family: 'Courier New', Courier, monospace;;
+}
+.crs{
+    background-color: black;
+    color: wheat;
+    border:solid white 2px;
+    width: 500px;
+}
+#butonlarmenu{
+    width: 500px;
+    height: auto;
+    background-color: black;
+    margin-top: -430px;
 }

@@ -140,11 +140,15 @@ function koordinat_degistirme(i){
       map_create(i)
       show_coordints()
       document.getElementById("crsdetails").open=false
-      break
+      for (j in range(1,map_layers_id_nolari.length)){
+        var obje = map_layers_id_nolari[j]
+        obje.objeyiyenile(obje)
+      }
     }
     else if(i===a && i!=="EPSG:3857"){
       try{
         maps_for_leaflet[gecerli_tilelayer].remove(map)
+        gecerli_tilelayer=""
       }
       catch{
       }
@@ -154,10 +158,14 @@ function koordinat_degistirme(i){
       map_create(i)
       show_coordints()
       document.getElementById("crsdetails").open=false
-      break
+      for (j in range(1,map_layers_id_nolari.length)){
+        var obje = map_layers_id_nolari[j]
+        obje.objeyiyenile(obje)
+      }
     }
   }
 }
+
 //harita ekranının oluşturulması
 var mapoptions = {  
   center: [38.9637,35.2433],
@@ -172,12 +180,20 @@ function map_create(i){
   for (a in koordinat_sistemleri){
     if (i===a){
       if (i==="EPSG:3857"){
-        map.options = mapoptions
-        map.options.crs = L.CRS.EPSG3857
+        map.clearAllEventListeners() 
+        map.off()
+        map.remove()
+        mapoptions.crs=L.CRS.EPSG3857
+        map = new L.map("map_screen",
+        mapoptions)
       }
       else{
-        map.options = mapoptions
-        map.options.crs = koordinat_sistemleri[i]
+        map.clearAllEventListeners() 
+        map.off()
+        map.remove()
+        mapoptions.crs=koordinat_sistemleri[i]
+        map = new L.map("map_screen",
+        mapoptions)
       }
     }
   }
@@ -185,9 +201,9 @@ function map_create(i){
 
 //draw geommety 
 
-  // harita çeşitleri
+// harita çeşitleri
 
-  //harita çeşitlerinin nesnede belirtilmesi ( fonksiyonlar için)
+//harita çeşitlerinin nesnede belirtilmesi ( fonksiyonlar için)
   const maps_for_leaflet = {
     "OpenStreetMap":L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -256,12 +272,14 @@ function map_create(i){
     alert("WGS84 Dışındaki Projeksiyonlarda Harita Desteği Henüz Mevcut Değildir.")
   }
   }
-
-  console.log(map)
+function remove_tile_layer(x){
+  maps_for_leaflet[x].remove(map)
+  gecerli_tilelayer=""
+}
   // Haritanın Sol Alt Köşesinde Koordinat Gösterme
 function show_coordints() { 
   if (gecerli_koordinat==="EPSG:3857"){
-      map.flyTo([38.9637,35.2433],7)
+      map.flyTo([38.9637,35.2433],7)  //koordinat sistemi değiştirilirse otomatik olarak Türkiye görünüme harita yenlienir
       map.clearAllEventListeners()
       map.on('mousemove' , (e) =>{
         document.getElementById('coordinat_tab').innerText ="Enlem:"+(e.latlng.lat).toFixed(8) +"------"+ "Boylam:"+(e.latlng.lng).toFixed(8);
@@ -270,18 +288,21 @@ function show_coordints() {
   else{
     for (m in koordinat_sistemleri){
       if (gecerli_koordinat===m){
-          map.flyTo([38.9637,35.2433],7)
+          map.flyTo([38.9637,35.2433],4)  //koordinat sistemi değiştirilirse otomatik olarak Türkiye görünüme harita yenlienir
           map.clearAllEventListeners()   
           map.on('mousemove' , (e) =>{
             var latlng = e.latlng;
             var bngcoords = proj4(koordinat_donusum_parametre[gecerli_koordinat], [ latlng.lng,latlng.lat]);
-            document.getElementById('coordinat_tab').innerText ="Boylam:"+(e.latlng.lat).toFixed(8) +"------"+ "Enlem:"+(e.latlng.lng).toFixed(8)+"\n"
-            + "Y:"+bngcoords[0]+"------"+"X:"+bngcoords[1];
+            document.getElementById('coordinat_tab').innerText ="Enlem:"+(e.latlng.lat).toFixed(8) +"------"+ "Boylam:"+(e.latlng.lng).toFixed(8)+"\n"
+            + "X:"+bngcoords[0]+"------"+"Y:"+bngcoords[1];
            });
       }
     }
   }
 }
+const map_layers = []
+const map_layers_tum= []
+const map_layers_id_nolari = []
 
-
-      
+console.log(map)
+console.log(map_layers_id_nolari)

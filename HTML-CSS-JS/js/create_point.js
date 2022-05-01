@@ -98,6 +98,7 @@ function create_point(){
   //--------------point objesine ait class-----------------------------------------------------------------------------------------------------------------------
   
 class point_object {
+      
       constructor(x_coordinats,y_coordinats,object_name){
         this.properties={     //--->objenin öznitelik bilgilerinin tutulduğu nesne
           "featureid":object_name,
@@ -154,21 +155,28 @@ class point_object {
         document.getElementById(this.id_nosu).getElementsByTagName("button")[4].setAttribute('onclick',"window['"+this.id_nosu+"'].stildegistirme()");
         document.getElementById(this.id_nosu).getElementsByTagName("button")[5].setAttribute('onclick',"window['"+this.id_nosu+"'].oznitelikgoruntulemeveduzenleme()");
       }
-      
       objeyiyenile(x){
         // objenin bilgilerinde değişiklik olduğu zaman bu fonksiyon çalışır ve obje yeniden yeni özelliklerle haritaya eklenir
-        if(x.gecerli_isaret==="nokta"){ //noktanın geçerli stili nokta ise bu if çalışır ve nokta, noktasal olarak tekrar eklenir
-          window[this.id_nosu].haritadagizle() ; //nokta ilk olarak haritadan kaldırılır
-          this.layer=L.geoJSON(this.geojsonfeature,{  // yeni özellikler ile tekrar haritaya eklenir
-          pointToLayer:function(feature,latlng){
-            return L.circleMarker(latlng,x.bicim);}}).addTo(map);// obje, noktassal gösterimde olduğu için circlemarker kullanılır  // haritaya eklendikten sonra üst ortadaki sayfa mesajları kapatılır 
-        }
+        if(this.gecerli_isaret==="nokta"){ //noktanın geçerli stili nokta ise bu if çalışır ve nokta, noktasal olarak tekrar eklenir
+          window[this.id_nosu].haritadagizle() //nokta ilk olarak haritadan kaldırılır
+          this.layer=L.geoJSON(this.geojsonfeature,{ 
+           // yeni özellikler ile tekrar haritaya eklenir
+            pointToLayer:function(feature,latlng){
+            return L.circleMarker(latlng,window[x.id_nosu].bicim);}}).addTo(map)// obje, noktassal gösterimde olduğu için circlemarker kullanılır  // haritaya eklendikten sonra üst ortadaki sayfa mesajları kapatılır 
+          var a =Object.keys(this.layer._layers)[0]
+          map_layers.push(parseInt(a))
+          map_layers.push(parseInt(a)+1)
+          }
         else{ //geçerli stil sembol ise bu blok çalışır
         window[this.id_nosu].haritadagizle();
         this.layer=L.geoJSON(this.geojsonfeature,{
           pointToLayer:function(feature,latlng){
             return L.marker(latlng,{icon:L.icon(x.icon),  // obje sembol gösteriminde olduğu için l.marker kullanılarak eklenir
             opacity:x.bicim.fillOpacity});}}).addTo(map);
+            console.log("seçenek 2 çalıştı")
+            var a =Object.keys(this.layer._layers)[0]
+            map_layers.push(parseInt(a))
+            map_layers.push(parseInt(a)+1)
           }
       }
       haritayaekle(x){  //obje ilk kez oluşturulurken bu fonksiyon çalıştırılır ve obje haritaya eklenir
@@ -176,16 +184,37 @@ class point_object {
           pointToLayer:function(feature,latlng){
             return L.circleMarker(latlng,x);}}).addTo(map);
         this.bounds=this.layer.getBounds() ; //objeye yakınlaşma işlevinin gerçekleşmesi için bu kısım ile obje çerçevvesinin koordinatları bounds değişkeine atanır
+        var a =Object.keys(this.layer._layers)[0]
+        map_layers.push(parseInt(a))
+        map_layers.push(parseInt(a)+1)
+        map_layers_id_nolari.push(window[this.id_nosu])
+        if (map_layers_tum.length===0){
+          map_layers_tum.push(parseInt(a)+2)
+        }
+        
       }
       //--------------------- objenin haritada gizlenmesi için aşağıdaki fonksiyon çalışır
       haritadagizle(){
-        map.removeLayer(this.layer) ;
+        map.removeLayer(this.layer)
+        var a =Object.keys(this.layer._layers)[0]
+        var b = parseInt(a)+1
+        map_layers.splice(map_layers.indexOf(a),1)
+        map_layers.splice(map_layers.indexOf(b),1)
+      }
+      haritadansil(){
+        map_layers_id_nolari.splice(map_layers_id_nolari.indexOf(this.id_nosu),1)
+        var a =Object.keys(this.layer._layers)[0]
+        map.removeLayer(map._layers[a])
+        map_layers.splice(map_layers.indexOf(a),1)
+        var b = parseInt(a)+1
+        map.removeLayer(map._layers[b])
+        map_layers.splice(map_layers.indexOf(b),1)
+
       }
       // ---------------------objeye yaklaşmak için aşağıdaki fonksiyon kullanılır
       objeyeyaklas(){
-        var harita_var_mi=document.getElementById('map_screen').style.backgroundColor;
         // objeye yaklaşılabilmesi için map'de etkin bir harita servisinin olması gerekmektedir.
-        if (harita_var_mi==="unset"){
+        if (gecerli_tilelayer!==""){
         map.fitBounds(this.bounds);  //map'de etkin harita varsa fitbounds ile objeye yaklaşılır
         }
         else{
@@ -501,6 +530,7 @@ class point_object {
         this.bicim.fillColor=renk;
         this.gecerli_isaret="nokta";
         this.objeyiyenile(window[this.id_nosu]);
+        document.getElementById(this.id_nosu+"_summary").style.backgroundColor=this.bicim.fillColor;
           }
       // katman menüsünde, öznitelik görüntüle ve düzenle butonu ile aşağıdaki fonksiyonlar çalışır
       oznitelikgoruntulemeveduzenleme(){
@@ -968,7 +998,7 @@ class point_object {
     await sleep(500);
     document.getElementById('sayfamesajlari').style.backgroundColor  = "unset";
     document.getElementById('sayfamesajlari').innerText = "";
-    window[i].haritadagizle();
+    window[i].haritadansil();
     delete window[i];
     document.getElementById(i).remove();
   }
