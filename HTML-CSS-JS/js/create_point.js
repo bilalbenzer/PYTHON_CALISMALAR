@@ -33,72 +33,86 @@ function create_point(){
    }
         );
      // klavye kısayollarının etkinleştirilmesi
-    document.addEventListener('keydown', (event) => {
-    var name = event.key;
+    document.addEventListener('keydown', function abc(event)  {
     var code = event.code;
-    
-    for (var x in tekdongu){
+
       // home tuşunun basılması durumunda elle korodinat girme fonksiyonu çalıştırılır
     if (code==="Home"){
     document.getElementById('obje_girdi').style.backgroundColor = "black";
-    document.getElementById('obje_girdi').innerHTML='<label for="xbuton">E :</label><input type="number" maxlength="999999" id="xbuton" step="0.001" value="" required><br><label for="ybuton">B :</label><input type="number" maxlength="999999" id="ybuton" step="0.001" value="" required><input id="koordinatal" onclick="koordinatileolustur()" type="submit"  value="nokta oluştur">';
-    map.off('click');
-    break;
+    document.getElementById('obje_girdi').innerHTML='<label for="xbuton">E :</label><input type="number" maxlength="999999" id="xbuton" step="0.001" value="" required><br><label for="ybuton">B :</label><input type="number" maxlength="999999" id="ybuton" step="0.001" value="" required><input id="koordinatal" type="submit"  value="nokta oluştur">';
+    document.getElementById("koordinatal").setAttribute("onclick","koordinatileolustur('"+"olustur"+"')")
+    document.removeEventListener("keydown",abc)
     }
     // end tuşuna basılması durumunda nokta oluşturma işlemi tamamlanır
-    if (code === "End") {
+    else if (code==="End") {
     document.getElementById('sayfamesajlari').style.backgroundColor = "black";
     document.getElementById('sayfamesajlari').innerText = "İşlem Tamamlandı";
-    map.off('click');
+    document.removeEventListener("keydown",abc)
     bekleme();
-    break;}
-    }});
+    }
+    });
   }
   
   //-------------------------------------------------------------------------------------------------------------------------------------
     // koordinat girerek nokta oluşturma
-  function koordinatileolustur(){
-  var x = document.getElementById('xbuton').value;
-  var y = document.getElementById('ybuton').value;
-    while (true){
-            // x veya y girişlerinin boş olmaması durumunda aşağıdaki if bloğu çalışır
-            if (x!=="" && y!==""){
-              //benzersiz bir id oluşturulur ve var olup olmadığı kontrol edilir
-            name = "point"+(new Date()).getMilliseconds()+Math.floor(Math.random()*1000);
-            if ((typeof window[name])!=="object"){  //id in daha önceden var olup olmadığının kontrolü
-              document.getElementById('sayfamesajlari').style.backgroundColor  = "black"; 
-              document.getElementById('sayfamesajlari').innerText=name+" oluşturuldu \n"+"E="+x+"   "+"B="+y;//sayfa mesajlarında objenin oluştuğuna dair bilgi
-              window[name]= new point_object(x_coordinats=x,y_coordinats=y,object_name=name);  //objenin oluşturulması
-              window[name].haritayaekle(window[name].bicim); //objenin haritaya eklenmesi
-              window[name].menuleriolustur();  //objeye ait vektörler penceresindeki menülerin oluşturulması
-              bekleme(); //sayfa mesajlarındaki yazının kaybolması
-              document.getElementById('obje_girdi').innerText="";
-              document.getElementById('obje_girdi').style.backgroundColor="unset";
-              }
-            else{
-              // atanan id ye ait bir obje varsa uyarı çıkar
-              alert("Bu İd'ye Sahip Bir Obje Bulunmakta.");
+  function koordinatileolustur(n,m){
+  var w = n
+  var q = m
+  if (w==="olustur"){
+      var x = document.getElementById('xbuton').value;
+      var y = document.getElementById('ybuton').value;
+      while (true){
+                // x veya y girişlerinin boş olmaması durumunda aşağıdaki if bloğu çalışır
+                if (x!=="" && y!==""){
+                  //benzersiz bir id oluşturulur ve var olup olmadığı kontrol edilir
+                name = "point"+(new Date()).getMilliseconds()+Math.floor(Math.random()*1000);
+                if ((typeof window[name])!=="object"){  //id in daha önceden var olup olmadığının kontrolü
+                  document.getElementById('sayfamesajlari').style.backgroundColor  = "black"; 
+                  document.getElementById('sayfamesajlari').innerText=name+" oluşturuldu \n"+"E="+x+"   "+"B="+y;//sayfa mesajlarında objenin oluştuğuna dair bilgi
+                  window[name]= new point_object(x_coordinats=x,y_coordinats=y,object_name=name);  //objenin oluşturulması
+                  window[name].haritayaekle(window[name].bicim); //objenin haritaya eklenmesi
+                  window[name].menuleriolustur();  //objeye ait vektörler penceresindeki menülerin oluşturulması
+                  bekleme(); //sayfa mesajlarındaki yazının kaybolması
+                  document.getElementById('obje_girdi').innerText="";
+                  document.getElementById('obje_girdi').style.backgroundColor="unset";
+                  }
+                else{
+                  // atanan id ye ait bir obje varsa uyarı çıkar
+                  alert("Bu İd'ye Sahip Bir Obje Bulunmakta.");
+                    break;
+                    }
                 break;
                 }
-            break;
+                else{
+                  alert("X veya Y Değeri Boş Bırakılamaz.");
+                  document.getElementById('obje_girdi').innerText="";
+                  document.getElementById('obje_girdi').style.backgroundColor="unset";
+                  break;
+                }
+                  bekleme();
+                  document.getElementById('obje_girdi').innerText="";
+                  document.getElementById('obje_girdi').style.backgroundColor="unset";
+                  break;
+              }
             }
-            else{
-              alert("X veya Y Değeri Boş Bırakılamaz.");
-              document.getElementById('obje_girdi').innerText="";
-              document.getElementById('obje_girdi').style.backgroundColor="unset";
-              break;
-            }
-          
-          bekleme();
-          document.getElementById('obje_girdi').innerText="";
-          document.getElementById('obje_girdi').style.backgroundColor="unset";
-          break;
-          }
-        }
+  else if(w==="duzenle"){
+    var x = document.getElementById('xbuton').value;
+    var y = document.getElementById('ybuton').value;
+    document.getElementById("sayfamesajlari").innerText="Objenin Yeni Koordinatını Sol Tıklayarak Gösteriniz.\nManuel Koordinat Girmek İçin Home Tuşuna Basınız.\nBitirmek İçin End Tuşuna Basınız."+"\n"+"X:"+x+"Y:"+y
+    window[q].properties["X Koordinatı(Enlem)"]=parseFloat(x)
+    window[q].properties["Y Koordinatı(Boylam)"]=parseFloat(y)
+    window[q].geojsonfeature.geometry.coordinates = [y,x]
+    window[q].objeyiyenile(window[q])
+    document.getElementById('obje_girdi').innerText="";
+    document.getElementById('obje_girdi').style.backgroundColor="unset";
+    bekleme()
+
+
+  }      
+      }
   //--------------point objesine ait class-----------------------------------------------------------------------------------------------------------------------
   
 class point_object {
-      
       constructor(x_coordinats,y_coordinats,object_name){
         this.properties={     //--->objenin öznitelik bilgilerinin tutulduğu nesne
           "featureid":object_name,
@@ -134,7 +148,7 @@ class point_object {
         this.summary_katman = document.createElement("summary");
         this.summary_katman.setAttribute("id",this.id_nosu+"_summary");
         document.getElementById("layers_vektor").appendChild(this.details_katman);
-        document.getElementById(this.id_nosu).innerHTML='<button class="haritadagosterme" type="menu" >Haritada Göster</button><button class="haritadagizleme" type="menu" >Haritada Gizle</button><button class="sil" type="menu">Katmanı Sil</button><button class="yaklasma" type="menu" >Yaklaş</button><button class="stildegistir" type="menu" >Stil Değiştir</button><button class="oznitelikbilgi" type="menu" >Öznitelikleri Görüntüle ve Düzenle</button>';
+        document.getElementById(this.id_nosu).innerHTML='<button class="haritadagosterme" type="menu" >Haritada Göster</button><button class="haritadagizleme" type="menu" >Haritada Gizle</button><button class="sil" type="menu">Katmanı Sil</button><button class="duzenle" type="menu">Katmanı Düzenle</button><button class="yaklasma" type="menu" >Yaklaş</button><button class="stildegistir" type="menu" >Stil Değiştir</button><button class="oznitelikbilgi" type="menu" >Öznitelikleri Görüntüle ve Düzenle</button>';
         document.getElementById(this.id_nosu).appendChild(this.summary_katman);
         document.getElementById(this.id_nosu+"_summary").innerText=this.id_nosu;
         document.getElementById(this.id_nosu+"_summary").style.listStyle="none";
@@ -151,9 +165,10 @@ class point_object {
         document.getElementById(this.id_nosu).getElementsByTagName("button")[0].setAttribute('onclick',"window['"+this.id_nosu+"'].objeyiyenile(window['"+this.id_nosu+"'])");
         document.getElementById(this.id_nosu).getElementsByTagName("button")[1].setAttribute('onclick',"window['"+this.id_nosu+"'].haritadagizle()");
         document.getElementById(this.id_nosu).getElementsByTagName("button")[2].setAttribute('onclick',"katman_sil('"+this.id_nosu+"')");
-        document.getElementById(this.id_nosu).getElementsByTagName("button")[3].setAttribute('onclick',"window['"+this.id_nosu+"'].objeyeyaklas()");
-        document.getElementById(this.id_nosu).getElementsByTagName("button")[4].setAttribute('onclick',"window['"+this.id_nosu+"'].stildegistirme()");
-        document.getElementById(this.id_nosu).getElementsByTagName("button")[5].setAttribute('onclick',"window['"+this.id_nosu+"'].oznitelikgoruntulemeveduzenleme()");
+        document.getElementById(this.id_nosu).getElementsByTagName("button")[3].setAttribute('onclick',"window['"+this.id_nosu+"'].katmanduzenle(window['"+this.id_nosu+"'])");
+        document.getElementById(this.id_nosu).getElementsByTagName("button")[4].setAttribute('onclick',"window['"+this.id_nosu+"'].objeyeyaklas()");
+        document.getElementById(this.id_nosu).getElementsByTagName("button")[5].setAttribute('onclick',"window['"+this.id_nosu+"'].stildegistirme()");
+        document.getElementById(this.id_nosu).getElementsByTagName("button")[6].setAttribute('onclick',"window['"+this.id_nosu+"'].oznitelikgoruntulemeveduzenleme()");
       }
       objeyiyenile(x){
         // objenin bilgilerinde değişiklik olduğu zaman bu fonksiyon çalışır ve obje yeniden yeni özelliklerle haritaya eklenir
@@ -191,7 +206,7 @@ class point_object {
         if (map_layers_tum.length===0){
           map_layers_tum.push(parseInt(a)+2)
         }
-        
+        console.log(this.layer)
       }
       //--------------------- objenin haritada gizlenmesi için aşağıdaki fonksiyon çalışır
       haritadagizle(){
@@ -222,6 +237,43 @@ class point_object {
         alert("Katmana Yaklaşabilmek İçin Herhangi Bir Harita Servisinin Etkin Olması Gerekmektedir.");
         }
     }
+    katmanduzenle(t){
+      document.getElementById("sayfamesajlari").style.backgroundColor="black";
+      document.getElementById("sayfamesajlari").innerText="Objenin Yeni Koordinatını Sol Tıklayarak Gösteriniz.\nManuel Koordinat Girmek İçin Home Tuşuna Basınız.\nBitirmek İçin End Tuşuna Basınız.";
+      map.on('click', (e)=>{
+      x_noktasi = (e.latlng.lat).toFixed(8);
+      y_noktasi = (e.latlng.lng).toFixed(8);
+      sleep(1000);
+      document.getElementById("sayfamesajlari").innerText="Objenin Yeni Koordinatını Sol Tıklayarak Gösteriniz.\nManuel Koordinat Girmek İçin Home Tuşuna Basınız.\nBitirmek İçin End Tuşuna Basınız."+"\n"+"X:"+x_noktasi+"Y:"+y_noktasi;
+      this.properties["X Koordinatı(Enlem)"]=parseFloat(x_noktasi)
+      this.properties["Y Koordinatı(Boylam)"]=parseFloat(y_noktasi)
+      this.geojsonfeature.geometry.coordinates = [y_noktasi,x_noktasi]
+      this.objeyiyenile(window[this.id_nosu])
+      bekleme()
+      map.off("click")
+    }
+      
+      );
+    
+    // klavye kısayollarının etkinleştirilmesi
+    document.addEventListener('keydown', function abc(event)  {
+    var code = event.code;
+        // home tuşunun basılması durumunda elle korodinat girme fonksiyonu çalıştırılır
+      if (code==="Home"){
+            document.getElementById('obje_girdi').style.backgroundColor = "black";
+            document.getElementById('obje_girdi').innerHTML='<label for="xbuton">E :</label><input type="number" maxlength="999999" id="xbuton" step="0.001" value="" required><br><label for="ybuton">B :</label><input type="number" maxlength="999999" id="ybuton" step="0.001" value="" required><input id="koordinatal" type="submit"  value="nokta oluştur">';
+            document.getElementById("koordinatal").setAttribute("onclick","koordinatileolustur('duzenle','"+t.id_nosu+"')")
+            document.removeEventListener("keydown",abc)
+            
+      }
+      // end tuşuna basılması durumunda nokta oluşturma işlemi tamamlanır
+      if (code === "End") {
+            document.getElementById('sayfamesajlari').style.backgroundColor = "black";
+            document.getElementById('sayfamesajlari').innerText = "İşlem Tamamlandı";
+            document.removeEventListener("keydown",abc)
+            bekleme()
+      }});
+      }
         //point menüüsnden stil değiştir butonu, aşağıdaki fonksiyonu çalıştırır
       stildegistirme(){
         document.getElementById("sayfamesajlari").style.backgroundColor="black";
@@ -1026,7 +1078,7 @@ const symbol_list={
     liman:{"point_sembols/liman.png":"Liman"},
     fabrika:{"point_sembols/fabrika.png":"Fabrika"}
     };
-    var renk_listesi = [
+var renk_listesi = [
     ' #f8f8ff ',
     ' #f5f5f5 ',
     ' #dcdcdc ',

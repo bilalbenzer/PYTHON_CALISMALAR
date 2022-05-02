@@ -5,6 +5,7 @@ function range(start, end) {
 const origin = [38066.8071289063 ,3842467.31384277];
 const resolutions = [(origin[1]-origin[0])/256];
 var i;
+
 for (i in range(1,17)){
     var cozunurluk = resolutions[i]/2;
     resolutions.push(cozunurluk);
@@ -304,5 +305,5 @@ const map_layers = []
 const map_layers_tum= []
 const map_layers_id_nolari = []
 
-console.log(map)
-console.log(map_layers_id_nolari)
+var x_noktasi
+var y_noktasi

@@ -442,7 +442,7 @@ body{
     width: 100%;
 }
 
-.oznitelikbilgi,.sil,.haritadagosterme,.haritadagizleme,.yaklasma,.stildegistir{
+.oznitelikbilgi,.sil,.haritadagosterme,.haritadagizleme,.yaklasma,.stildegistir,.duzenle{
     position: static;
     width: 180px;
     height: auto;
