@@ -3,6 +3,7 @@
 2- oluşturlan point haritaya eklenir
 */
 function create_point(){
+    document.getElementById("oznitelikpenceresi").innerHTML="";
     
     var tekdongu=[1];
     //Sayfa Mesajlarında Çizime Başlamaya Dair Bildiri
@@ -17,12 +18,13 @@ function create_point(){
     for (as in tekdongu ){
       var name = "point"+(new Date()).getMilliseconds()+Math.floor(Math.random()*1000);  //benzersiz id alma
       if ((typeof window[name])!=="object"){  //id in daha önceden var olup olmadığının kontrolü
-          document.getElementById("vektor").setAttribute("open","open");
+          document.getElementById("vektor").open = true
           document.getElementById('sayfamesajlari').style.backgroundColor  = "black"; 
           document.getElementById('sayfamesajlari').innerText=name+" oluşturuldu \n"+"E="+x+"   "+"B="+y;//sayfa mesajlarında objenin oluştuğuna dair bilgi
           window[name]= new point_object(x_coordinats=x,y_coordinats=y,object_name=name); //objenin oluşturulması
           window[name].haritayaekle(window[name].bicim);//objenin haritaya eklenmesi
           window[name].menuleriolustur();  //objeye ait vektörler penceresindeki menülerin oluşturulması
+          window[name].oznitelikgoruntulemeveduzenleme();
           bekleme(); //sayfa mesajlarındaki yazının kaybolması
           map.off('click');  //tıklama ile point eklemenin pasifleştiirlmesi
           }
@@ -137,7 +139,7 @@ class point_object {
         this.id_nosu = object_name   ; //create point fonksiyonunda oluşan id, burada objeye ait id_nosu olarak geçer
         this.icon={ //objenin sembol ayarları bu nesneye gider
           iconUrl:null,
-          iconSize:null,
+          iconSize:[50,50],
         };
       }
       //obje, create point ile luşturulurken menüler de bu fonksiyon çağırılarak oluşturulur. 
@@ -162,6 +164,7 @@ class point_object {
         document.getElementById(this.id_nosu+"_summary").style.backgroundColor=this.bicim.fillColor;
         document.getElementById(this.id_nosu+"_summary").style.borderColor="white";
         //butonlar ve kullanılacakları işlevler
+        
         document.getElementById(this.id_nosu).getElementsByTagName("button")[0].setAttribute('onclick',"window['"+this.id_nosu+"'].objeyiyenile(window['"+this.id_nosu+"'])");
         document.getElementById(this.id_nosu).getElementsByTagName("button")[1].setAttribute('onclick',"window['"+this.id_nosu+"'].haritadagizle()");
         document.getElementById(this.id_nosu).getElementsByTagName("button")[2].setAttribute('onclick',"katman_sil('"+this.id_nosu+"')");
@@ -193,6 +196,7 @@ class point_object {
             map_layers.push(parseInt(a))
             map_layers.push(parseInt(a)+1)
           }
+          this.bounds=this.layer.getBounds()
       }
       haritayaekle(x){  //obje ilk kez oluşturulurken bu fonksiyon çalıştırılır ve obje haritaya eklenir
         this.layer=L.geoJSON(this.geojsonfeature,{
@@ -206,7 +210,6 @@ class point_object {
         if (map_layers_tum.length===0){
           map_layers_tum.push(parseInt(a)+2)
         }
-        console.log(this.layer)
       }
       //--------------------- objenin haritada gizlenmesi için aşağıdaki fonksiyon çalışır
       haritadagizle(){

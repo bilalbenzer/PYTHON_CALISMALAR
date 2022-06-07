@@ -301,6 +301,14 @@ function show_coordints() {
     }
   }
 }
+function haritayi_yenile(){
+  if (gecerli_koordinat==="EPSG:3857"){
+    map.flyTo([38.9637,35.2433],7)}
+  else{
+    map.flyTo([38.9637,35.2433],4)
+  }
+  
+}
 const map_layers = []
 const map_layers_tum= []
 const map_layers_id_nolari = []

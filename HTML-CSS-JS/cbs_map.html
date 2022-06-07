@@ -20,6 +20,7 @@
           </button></a>
           <details id="create_object"><summary style="font-size: small; list-style: none;padding: 5px;font-weight: bold;">Obje Oluştur</summary>
             <button class="button" type="menu" onclick="create_point()">Nokta</button>
+            <button class="button" type="menu" onclick="multi_create_point()">Çoklu Nokta</button>
             <button class="button"type="menu">Çizgi</button>
             <button class="button" type="menu">Çokgen</button></details>
           <details id="up_data"><summary style="font-size: small; list-style: none;padding: 5px;font-weight: bold;" >Vektör Veri Yükle</summary>
@@ -43,13 +44,13 @@
               <button class="button4" type="menu" onclick="add_tilelayer('Open Topo Map')" ondblclick="remove_tile_layer('Open Topo Map')">Opentopo map</button>
               <button class="button4" type="menu" onclick="add_tilelayer('herev3')" ondblclick="remove_tile_layer('herev3')">Here Map V3</button>
               <button class="button4" type="menu" onclick="add_tilelayer('jawg map')" ondblclick="remove_tile_layer('jawg map')">Jawg Map</button></details>
-            <button id="button12" type="menu" onclick='map.flyTo([38.9637,35.2433],7)' style="font-size: small; list-style: none;padding: 5px;font-weight: bold;">Haritayı Yenile</button>
+            <button id="button12" type="menu" onclick="haritayi_yenile()" style="font-size: small; list-style: none;padding: 5px;font-weight: bold;">Haritayı Yenile</button>
         </div>
         <div id="map_view_background"></div>
         <div id="map_screen"></div>
         <div id="map_view">
           <div id="left_tabs">
-            <details id="vektor"><summary id="vektor_text">Vektörler</summary>
+            <details id="vektor" open><summary id="vektor_text">Vektörler</summary>
             <div id="layers_vektor">
             </div></details>
             <details id="raster"><summary id="raster_text">Rasterlar</summary>
@@ -104,6 +105,7 @@
 <!-- scriptler -->
 <script src="js/maps.js"></script>
 <script src="js/create_point.js"></script>
+<script src="js/create_multi_point.js"></script>
 
 <script>
 async function bekleme(){
@@ -138,6 +140,7 @@ async function baslangic(){
 
 // Fetch all the details element. // üst sekmelerden birini açınca diğerinin kapanması
 const details = document.querySelectorAll("details");
+
 // Add the onclick listeners.
 details.forEach((targetDetail) => {
   targetDetail.addEventListener("click", () => {
@@ -145,6 +148,7 @@ details.forEach((targetDetail) => {
     details.forEach((detail) => {
       if (detail !== targetDetail) {
         detail.removeAttribute("open");
+        document.getElementById("vektor").open = true
       }
     });
   });
