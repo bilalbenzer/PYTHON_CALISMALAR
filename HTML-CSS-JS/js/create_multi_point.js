@@ -24,7 +24,7 @@ function multi_create_point(){
           window[name]= new multi_point(x_coordinats=x,y_coordinats=y,object_name=name2,class_name=name); //alınan koordinat ve alınan rastgele obje adına göre çoklu point sınıfı oluşturulur
           document.getElementById('sayfamesajlari').innerText="Point oluşturuldu \n"+"E="+x+"   "+"B="+y;//sayfa mesajlarında objenin oluştuğuna dair bilgi
           window[name].menuleriolustur()
-          window[name].haritayaekle(window[name].geojsonfutures)
+          window[name].haritayaekle(window[name].object_stil[window[name2].bicim])
         }
       else if ((typeof window[name])=="object" && (window[name].geojsonfutures.length > 0)) {
         document.getElementById("vektor").open = true
@@ -34,7 +34,7 @@ function multi_create_point(){
             alert("tekrar deneyiniz")}
         else{
             window[name].point_ekle(x_coordinats=x,y_coordinats=y,object_name=name2)
-            window[name].haritayaekle(window[name].geojsonfutures)
+            window[name].haritayaekle(object_stil[window[name2].bicim])
             console.log(window[name].geojsonfutures)
         }
         }
@@ -82,25 +82,21 @@ function multi_create_point(){
         this.id_nosu = class_name 
         this.geojsonfutures=[this.object_name]
         this.object_id_list = [object_name]
-        this.object_stil = {object_name:{bicim:{radius: 8,
-          fillColor: renk_listesi[Math.floor(Math.random()*renk_listesi.length)], //her oluşan obje bu algoritma ile rastgele bir renk alır
-          color: "#000",  //dış çizginin renki
-          weight: 1,  //dış çizginin kalınlığı
-          opacity: 3, //dış çizginin opaklığı
-          fillOpacity: 0.8},
-          ikon:{ //objenin sembol ayarları bu nesneye gider
-            iconUrl:null,
-            iconSize:[50,50],
-          },
-          gecerli_isaret:"nokta",
-          id:object_name}}
+        var x = class_name.toString()
+        window[x]
+        console.log(window[x])
+
+        this.object_stil = [window[class_name]]
+        
+        this.object_stil[window[class_name].bicim]
         this.objeler_ozellikleri=[
                 this.object_stil]
         console.log(this.objeler_ozellikleri)
         console.log(this.geojsonfutures)
     }
     point_ekle(x_coordinats,y_coordinats,object_name){
-      var stil = {object_name:{bicim:{radius: 8,
+
+      window[object_name] =  {bicim:{radius: 8,
         fillColor: renk_listesi[Math.floor(Math.random()*renk_listesi.length)], //her oluşan obje bu algoritma ile rastgele bir renk alır
         color: "#000",  //dış çizginin renki
         weight: 1,  //dış çizginin kalınlığı
@@ -109,7 +105,10 @@ function multi_create_point(){
         ikon:{ //objenin sembol ayarları bu nesneye gider
           iconUrl:null,
           iconSize:[50,50],
-        }}}
+        }}
+        console.log(window[object_name])
+      var stil = []
+      stil.push(window[object_name])
       this.object_id_list.push(object_name)
       this.objeler_ozellikleri.push(stil)
       this.geojsonfutures.push({
@@ -122,6 +121,7 @@ function multi_create_point(){
             "type":"Point",
             "coordinates":[y_coordinats,x_coordinats]}
       })
+      console.log(this.objeler_ozellikleri)
     }
     menuleriolustur(){
       this.details_katman =document.createElement("details");
@@ -159,5 +159,6 @@ function multi_create_point(){
           return L.circleMarker(latlng,x)
         }
       }).addTo(map)
+      console.log(this.layer)
     }
   }
