@@ -1,23 +1,17 @@
 
-function multi_create_point(){
+function multi_create_point(a){
     document.getElementById("oznitelikpenceresi").innerHTML="";
-    var tekdongu=[1];
-    //Sayfa Mesajlarında Çizime Başlamaya Dair Bildiri
-    document.getElementById('sayfamesajlari').innerText="Çizime Başlayabilirsiniz.\nHome: Koordinat Gir\nEnd: Bitir";
+    var name = a
     document.getElementById('sayfamesajlari').style.backgroundColor  = "black";
-    sureli_bekletme(2000)
-    var name = "multipoint"+(new Date()).getMilliseconds()+Math.floor(Math.random()*1000);//benzersiz id alma
-    if ((typeof window[name])!=="object"){
-        document.getElementById('sayfamesajlari').style.backgroundColor  = "black";
-        document.getElementById('sayfamesajlari').innerText="Çoklu Point Katmanı oluşturuldu\n"+name;//sayfa mesajlarında objenin oluştuğuna dair bilgi
-      }
+    document.getElementById('sayfamesajlari').innerText="Çoklu Point Katmanı oluşturuldu\n"+name;//sayfa mesajlarında objenin oluştuğuna dair bilgi
     //harita üzerinde tıklama olayı ile koordinat almanın etkinleştirilmesi
     map.on('click', (e)=>{
     x = (e.latlng.lat).toFixed(8);
     y = (e.latlng.lng).toFixed(8);
     // oluşturulacak point için benzersiz bir id üretilir ve daha önceden bu id verilmiş mi kontrol edilir
+    console.log("asdasd")
       if ((typeof window[name])!=="object"){  //id in daha önceden var olup olmadığının kontrolü
-          
+          console.log("asdasdasdasd")
           document.getElementById("vektor").open = true //katman penceresi sürekli açık olacak
           document.getElementById('sayfamesajlari').style.backgroundColor  = "black"; 
           var name2 = "point"+(new Date()).getMilliseconds()+Math.floor(Math.random()*1000);//benzersiz obje id alma

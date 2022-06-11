@@ -2,38 +2,107 @@
 1- haritada tıklanılan yerden koordinatı alır ve point oluşturur /// elle koordinat girerek de oluşturulabilir
 2- oluşturlan point haritaya eklenir
 */
-function create_point(){
+var alfabe_harfler = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","r","s","t","u","v","x","w","y","z",
+                      "A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","R","S","T","U","X","W","Y","Y","Z",
+                    "1","2","3","4","5","6","7","8","9","0"]  
+function katman_adi_olusturma(x){ //oluşturulacak obje için kullanıcıdan katman adı istenir.
+  document.getElementById("sayfamesajlari").style.backgroundColor="black";
+  document.getElementById("sayfamesajlari").innerText="Katman Adını Giriniz.";
+  var formelement = document.createElement("form");
+  formelement.setAttribute("class","formelementi");
+  var isimal = document.createElement("input");
+  isimal.setAttribute("id","isimal");
+  isimal.setAttribute("name","Katman Adı");
+  isimal.setAttribute("value","katman");
+  var isimgonder = document.createElement("input");
+  isimgonder.setAttribute("id","isimgonder");
+  isimgonder.setAttribute("type","submit");
+  isimgonder.setAttribute("value","Uygula");
+  // katman adı hangi işlem için kullanılıcaksa ilgili işlem, ilgili fonksiyona bildirilir
+  if (x==="createpoint"){
+  isimgonder.setAttribute("onclick","ad_kontrol('createpoint')");}
+  else if (x==="createmultipoint"){
+    isimgonder.setAttribute("onclick","ad_kontrol('createmultipoint')")
+  }
+  var kapat = document.createElement("button");
+  kapat.setAttribute("onclick","bekleme()");
+  kapat.innerText="Kapat"
+  document.getElementById("sayfamesajlari").appendChild(isimal);
+  document.getElementById("sayfamesajlari").appendChild(isimgonder);
+  document.getElementById("sayfamesajlari").appendChild(kapat)
+}
+function ad_kontrol(x){ //kullanıcıdan gelen katman adı, bir kontrolden geçer. Katman Adı boşluk-rakam veya özel karakterle başlayamaz. İçerisinde özel karakter ve boşluk içeremez.
+                        //aykırı bir durumda kullanıcıya uyarı verilir ve tekrar giriş penceresi açılır
+  var a = document.getElementById("isimal").value
+    if (alfabe_harfler.includes(a[0])===true && isNaN(parseFloat(a[0]))===true && typeof window[a]!=="object"){
+      var kontrol_durum
+      for (var c in range(0,(a.length-1))){
+          if (alfabe_harfler.includes(a[c])===true){
+            kontrol_durum="sorun yok"
+          }
+          else {
+            alert("Girdiğiniz Katman Adı Özel Karakter ve Boşluk İçeremez.")
+            kontrol_durum="sorun var"
+            if (x==="createpoint"){
+            katman_adi_olusturma("createpoint")
+            }
+            else{
+            katman_adi_olusturma("createmultipoint")
+            }
+            break
+          }
+        }
+      if (kontrol_durum==="sorun yok"){
+        if (x==="createpoint"){
+          create_point(a)
+          }
+        else if(x==="createmultipoint"){
+          multi_create_point(a)
+          }
+      }
+      
+    } 
+    // katman adı daha önceden kullanılmışsa uyarı verilir ve farklı bir ad girmesi istenir
+    else if (typeof window[a]==="object"){
+      alert("Bu Katman Adı İle Daha Önce Bir Katman Oluşturuldu. Farklı Bir Ad Deneyiniz.")
+      if (x==="createpoint"){
+        katman_adi_olusturma("createpoint")
+        }
+        else{
+          katman_adi_olusturma("createmultipoint")
+        }
+    }
+    else {
+      alert("Katman Adı Özel Karakter,sayı ve boşluk ile başlayamaz.\nTekrar Deneyiniz.")
+      if (x==="createpoint"){
+        katman_adi_olusturma("createpoint")
+        }
+        else{
+          katman_adi_olusturma("createmultipoint")
+        }
+    }
+}
+function create_point(a){
     document.getElementById("oznitelikpenceresi").innerHTML="";
-    
-    var tekdongu=[1];
+    var a = a
     //Sayfa Mesajlarında Çizime Başlamaya Dair Bildiri
-    document.getElementById('sayfamesajlari').innerText="Çizime Başlayabilirsiniz.\nHome: Koordinat Gir\nEnd: Bitir";
+    document.getElementById('sayfamesajlari').innerText=a+" Katmanı Oluşturuldu.\nÇizime Başlayabilirsiniz.\nHome: Koordinat Gir\nEnd: Bitir";
     document.getElementById('sayfamesajlari').style.backgroundColor  = "black";
     //harita üzerinde tıklama olayı ile koordinat almanın etkinleştirilmesi
-    map.on('click', (e)=>{
-    x = (e.latlng.lat).toFixed(8);
-    y = (e.latlng.lng).toFixed(8);
-    // oluşturulacak point için benzersiz bir id üretilir ve daha önceden bu id verilmiş mi kontrol edilir
-    var as;
-    for (as in tekdongu ){
+      map.on('click', (e)=>{
+      x = (e.latlng.lat).toFixed(8);
+      y = (e.latlng.lng).toFixed(8);
       var name = "point"+(new Date()).getMilliseconds()+Math.floor(Math.random()*1000);  //benzersiz id alma
-      if ((typeof window[name])!=="object"){  //id in daha önceden var olup olmadığının kontrolü
-          document.getElementById("vektor").open = true
-          document.getElementById('sayfamesajlari').style.backgroundColor  = "black"; 
-          document.getElementById('sayfamesajlari').innerText=name+" oluşturuldu \n"+"E="+x+"   "+"B="+y;//sayfa mesajlarında objenin oluştuğuna dair bilgi
-          window[name]= new point_object(x_coordinats=x,y_coordinats=y,object_name=name); //objenin oluşturulması
-          window[name].haritayaekle(window[name].bicim);//objenin haritaya eklenmesi
-          window[name].menuleriolustur();  //objeye ait vektörler penceresindeki menülerin oluşturulması
-          window[name].oznitelikgoruntulemeveduzenleme();
-          bekleme(); //sayfa mesajlarındaki yazının kaybolması
-          map.off('click');  //tıklama ile point eklemenin pasifleştiirlmesi
-          }
-      else{
-        alert("Bu İd'ye Sahip Bir Obje Bulunmakta.");   
-           }
-   }
-   }
-        );
+      document.getElementById("vektor").open = true
+      document.getElementById('sayfamesajlari').style.backgroundColor  = "black"; 
+      document.getElementById('sayfamesajlari').innerText=name+" oluşturuldu \n"+"E="+x+"   "+"B="+y;//sayfa mesajlarında objenin oluştuğuna dair bilgi
+      window[a]= new point_object(x_coordinats=x,y_coordinats=y,object_name=a); //objenin oluşturulması
+      window[a].haritayaekle(window[a].bicim);//objenin haritaya eklenmesi
+      window[a].menuleriolustur();  //objeye ait vektörler penceresindeki menülerin oluşturulması
+      window[a].oznitelikgoruntulemeveduzenleme();
+      bekleme(); //sayfa mesajlarındaki yazının kaybolması
+      map.off('click');  //tıklama ile point eklemenin pasifleştiirlmesi
+    }) 
      // klavye kısayollarının etkinleştirilmesi
     document.addEventListener('keydown', function abc(event)  {
     var code = event.code;
@@ -117,7 +186,7 @@ function create_point(){
 class point_object {
       constructor(x_coordinats,y_coordinats,object_name){
         this.properties={     //--->objenin öznitelik bilgilerinin tutulduğu nesne
-          "featureid":object_name,
+          "featureid":"point"+(new Date()).getMilliseconds()+Math.floor(Math.random()*1000),
           "Geometri Tipi":"Nokta",
           "X Koordinatı(Enlem)":parseFloat(x_coordinats),
           "Y Koordinatı(Boylam)":parseFloat(y_coordinats),
@@ -1053,6 +1122,7 @@ class point_object {
     await sleep(500);
     document.getElementById('sayfamesajlari').style.backgroundColor  = "unset";
     document.getElementById('sayfamesajlari').innerText = "";
+    window[i].oznitelikpenceresikapat()
     window[i].haritadansil();
     delete window[i];
     document.getElementById(i).remove();
