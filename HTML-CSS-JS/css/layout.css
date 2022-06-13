@@ -110,10 +110,10 @@
 #updates_and_news{
     border-radius: 25px;
     background-color: aliceblue;
-    opacity: 0.5;
+    opacity: 0.7;
     color: rgb(255, 0, 0);
     float: left;
-    width: 15%;
+    width: 20%;
     height: auto;
     font-size: 20pt;
     font-family:Georgia, 'Times New Roman', Times, serif;
@@ -134,18 +134,17 @@
 /* SAYFA SONU */*
 #footer{
     background-color: aliceblue;
-    opacity: 0.9;
+    opacity: 0.7;
     border-radius: 25px;
-    margin-top: 1%;
+    margin-top: 15%;
     float: left;
     width: 100%;
 }
 #altyazi{
-    float: left;
+    text-align: center;
     color: black;
     font-size: large;
-    font-family: 'Times New Roman', Times, serif;
-    font-weight: bolder;
+    font-weight:bolder;
 }
 
 /* CBS ARAYÜZÜ İLE İLGİLİ KISIMLAR */
