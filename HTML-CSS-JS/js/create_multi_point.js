@@ -95,6 +95,8 @@ function multi_create_point(a){
       }
       this.objeler_properties_geometry[object_name.toString()+"_ozellikler"] = window[object_name+"_ozellikler"]
       this.objeler_bicim[object_name.toString()+"_bicim"] = window[object_name+"_bicim"]
+      this.bounds = []
+      this.coordinats = []
     }
 
     menuleriolustur(){
@@ -119,7 +121,7 @@ function multi_create_point(a){
       document.getElementById(this.id_nosu+"_summary").style.borderColor="white";
       //butonlar ve kullanılacakları işlevler
       
-      document.getElementById(this.id_nosu).getElementsByTagName("button")[0].setAttribute('onclick',"window['"+this.id_nosu+"'].objeyiyenile(window['"+this.id_nosu+"'])");
+      document.getElementById(this.id_nosu).getElementsByTagName("button")[0].setAttribute('onclick',"window['"+this.id_nosu+"'].objeyiyenile()");
       document.getElementById(this.id_nosu).getElementsByTagName("button")[1].setAttribute('onclick',"window['"+this.id_nosu+"'].haritadagizle()");
       document.getElementById(this.id_nosu).getElementsByTagName("button")[2].setAttribute('onclick',"katman_sil('"+this.id_nosu+"')");
       document.getElementById(this.id_nosu).getElementsByTagName("button")[3].setAttribute('onclick',"window['"+this.id_nosu+"'].katmanduzenle(window['"+this.id_nosu+"'])");
@@ -127,6 +129,7 @@ function multi_create_point(a){
       document.getElementById(this.id_nosu).getElementsByTagName("button")[5].setAttribute('onclick',"window['"+this.id_nosu+"'].stildegistirme()");
       document.getElementById(this.id_nosu).getElementsByTagName("button")[6].setAttribute('onclick',"window['"+this.id_nosu+"'].oznitelikgoruntulemeveduzenleme()");
     }
+
     haritayaekle(x,y){
       var asd = L.geoJSON(this.objeler_properties_geometry[y],{
         pointToLayer:function(feature,latlng){
@@ -136,11 +139,65 @@ function multi_create_point(a){
       this.layers.push(asd)
       for (var c in this.layers){
         this.layers[c].addTo(map)
+        var x = Object.keys(this.layers[c]._layers)[0]
+        this.coordinats.push([this.layers[c]._layers[x]._latlng.lat,this.layers[c]._layers[x]._latlng.lng])
+        if (map_layers.includes(parseInt(x))===false){
+          map_layers.push(parseInt(x))
+          
+        }
+      if (map_layers_id_nolari.includes(window[this.id_nosu])===false){
+        map_layers_id_nolari.push(window[this.id_nosu])
+      }        
       }
+      
+    }
+    objeyiyenile(){
+      window[this.id_nosu].haritadagizle()
+      for (var c in this.layers){
+        this.layers[c].addTo(map)
+        var x = Object.keys(this.layers[c]._layers)[0]
+        if (map_layers.includes(parseInt(x))===false){
+          map_layers.push(parseInt(x))
+        }
+      if (map_layers_id_nolari.includes(window[this.id_nosu])===false){
+        map_layers_id_nolari.push(window[this.id_nosu])
+      }        
+      }
+      
     }
     haritadagizle(){
       for (var x in this.layers){
         map.removeLayer(this.layers[x])
+        var c = parseInt(Object.keys(this.layers[x]._layers)[0])
+        if (map_layers.includes(c)===true){
+          var indexx = map_layers.indexOf(c)
+          map_layers.splice(indexx,1)
+        }
+      if (map_layers_id_nolari.includes(window[this.id_nosu])===true){
+        map_layers_id_nolari.splice(window[this.id_nosu],1)
+      } 
       }
     }
+    haritadagoster(){
+      for (var x in this.layers){
+        map.addLayer(this.layers[x])
+      }
+    }
+    haritadansil(){
+      for (var x in this.layers){
+        map.removeLayer(this.layers[x])
+        var c = parseInt(Object.keys(this.layers[x]._layers)[0])
+        if (map_layers.includes(c)===true){
+          var indexx = map_layers.indexOf(c)
+          map_layers.splice(indexx,1)
+        }
+      if (map_layers_id_nolari.includes(window[this.id_nosu])===true){
+        map_layers_id_nolari.splice(window[this.id_nosu],1)
+      } 
+      }
+    }
+    objeyeyaklas(){  
+      map.fitBounds(this.coordinats)    
+    }
+    //oznitelikpenceresikapat(){}
   }

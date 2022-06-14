@@ -271,6 +271,7 @@ class point_object {
         this.layer=L.geoJSON(this.geojsonfeature,{
           pointToLayer:function(feature,latlng){
             return L.circleMarker(latlng,x);}}).addTo(map);
+        console.log(this.layer)
         this.bounds=this.layer.getBounds() ; //objeye yakınlaşma işlevinin gerçekleşmesi için bu kısım ile obje çerçevvesinin koordinatları bounds değişkeine atanır
         var a =Object.keys(this.layer._layers)[0]
         map_layers.push(parseInt(a))
